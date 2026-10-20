@@ -1,91 +1,141 @@
+'use client';
+
+import React, { useState } from 'react';
+import { ProjectCategory, ProjectItem } from '@/types/portfolio';
 import { TopNavbar } from '@/components/layout/TopNavbar';
 import { AmbientBackground } from '@/components/hero/AmbientBackground';
 import { HeroTypography } from '@/components/hero/HeroTypography';
-import { heroStackedCategories } from '@/data/portfolio-data';
-import { getWhatsAppUrl } from '@/utils/contact-links';
-import { ArrowUpRight, Play, Eye } from 'lucide-react';
+import { CategoryCardStack } from '@/components/hero/CategoryCardStack';
+import { CursorLens } from '@/components/interactive/CursorLens';
+import { PlaybookModal } from '@/components/playbook/PlaybookModal';
+import { QuickContactModal } from '@/components/contact/QuickContactModal';
+import { MagneticButton } from '@/components/interactive/MagneticButton';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 export default function Home() {
-  return (
-    <div className="relative min-h-screen bg-[#080808] text-[#f5f5f7] flex flex-col justify-between selection:bg-amber-400 selection:text-black overflow-x-hidden">
-      {/* 1. Header Global Purrweb (4 Kolom) */}
-      <TopNavbar />
+  const [isPlaybookOpen, setIsPlaybookOpen] = useState(false);
+  const [playbookFilter, setPlaybookFilter] = useState<ProjectCategory | 'all'>('motion-graphic');
 
-      {/* 2. Ambient Dark Mesh Background with Subtle Noise */}
+  const [isContactOpen, setIsContactOpen] = useState(false);
+  const [contactCategory, setContactCategory] = useState<ProjectCategory>('motion-graphic');
+  const [contactProjectTitle, setContactProjectTitle] = useState<string | undefined>(undefined);
+
+  // Buka katalog playbook dengan filter spesifik
+  const handleOpenPlaybook = (category: ProjectCategory | 'all' = 'motion-graphic') => {
+    setPlaybookFilter(category);
+    setIsPlaybookOpen(true);
+  };
+
+  // Buka kontak modal dengan konteks kategori/proyek
+  const handleOpenContact = (category: ProjectCategory = 'motion-graphic', projectTitle?: string) => {
+    setContactCategory(category);
+    setContactProjectTitle(projectTitle);
+    setIsContactOpen(true);
+  };
+
+  const handleScrollToWorks = () => {
+    const el = document.getElementById('section-works');
+    el?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <div className="relative min-h-screen bg-transparent text-[#f5f5f7] flex flex-col selection:bg-amber-400 selection:text-black overflow-x-hidden">
+      {/* 1. Custom Interactive Magnifying Lens Cursor (True Optical Lens with RGB Aberration) */}
+      <CursorLens />
+
+      {/* 2. Global Purrweb 4-Column Top Navigation */}
+      <TopNavbar
+        onOpenPlaybook={() => handleOpenPlaybook('all')}
+        onOpenContacts={() => handleOpenContact('motion-graphic')}
+      />
+
+      {/* 3. Deep Navy Spotlight & Film Grain Ambient Mesh Background */}
       <AmbientBackground />
 
-      {/* 3. Hero Section dengan Kinetic Typography & Metadata Bar */}
-      <main className="relative z-10 flex-1 flex flex-col justify-between">
-        <HeroTypography />
+      <main className="relative z-10 flex-1">
+        {/* ======================================================== */}
+        {/* SECTION 1: Fullscreen Hero (Center Staggered Typography) */}
+        {/* ======================================================== */}
+        <HeroTypography onScrollToWorks={handleScrollToWorks} />
 
-        {/* 4. Preview Awal Hero Stacked Cards (Diperkenalkan di Milestone 2, disempurnakan di Milestone 3) */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 w-full">
-          <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-8 pt-4">
+        {/* ======================================================== */}
+        {/* SECTION 2: Purrweb Scroll Transition (Bio & 3-Card Stack) */}
+        {/* ======================================================== */}
+        <section 
+          id="section-works"
+          className="relative min-h-screen flex items-center justify-center px-6 md:px-16 py-28 md:py-36 bg-transparent"
+        >
+          <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             
-            {/* Quick Prompt / Context Pill */}
-            <div className="space-y-2">
-              <span className="text-[11px] font-mono tracking-widest text-[#56565c] uppercase">
-                // EXPLORE BY DISCIPLINE
-              </span>
-              <p className="text-xs text-[#8e8e93] font-mono">
-                Click any category below to initiate direct WhatsApp inquiry or explore deliverables.
+            {/* Sisi Kiri (lg:col-span-7): Bio Text Ref Purrweb */}
+            <div className="lg:col-span-7 space-y-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-[11px] font-mono text-[#8e8e93] tracking-widest uppercase">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span>ABOUT & CREATIVE PHILOSOPHY</span>
+              </div>
+
+              {/* Teks Perkenalan Purrweb Signature */}
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-sans font-medium text-white tracking-tight leading-[1.25]">
+                I am <span className="text-white font-bold">Indra Wijaya</span>, I create <span className="font-[family-name:var(--font-serif)] italic text-amber-400">unconventional</span> yet functional & visually pleasing motion and visual experiences.
+              </h2>
+
+              <p className="max-w-2xl text-base sm:text-lg text-[#8e8e93] font-light leading-relaxed">
+                Specialized in high-voltage commercial motion graphics, brand identity systems, and generative AI creative pipelines. Delivering kinetic stories crafted in 60fps precision for visionary brands and bold creators worldwide.
               </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-4 pt-2">
+                <MagneticButton strength={0.25}>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenPlaybook('all')}
+                    className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-white text-black font-mono text-xs uppercase tracking-wider font-bold hover:bg-amber-400 transition-colors cursor-pointer group"
+                  >
+                    <span>OPEN PLAYBOOK</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </MagneticButton>
+
+                <MagneticButton strength={0.25}>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenContact('motion-graphic')}
+                    className="flex items-center gap-2 px-6 py-3.5 rounded-full border border-[#26262b] bg-[#0f0f12] text-white hover:border-amber-400/50 hover:text-amber-400 font-mono text-xs uppercase tracking-wider transition-all cursor-pointer"
+                  >
+                    <span>DISCUSS COLLABORATION</span>
+                  </button>
+                </MagneticButton>
+              </div>
             </div>
 
-            {/* 3-Cards Horizontal Grid Preview (Milestone 2 baseline for Milestone 3 3D Stack) */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full lg:w-auto">
-              {heroStackedCategories.map((card, idx) => (
-                <div
-                  key={card.category}
-                  className="group relative p-5 rounded-2xl border border-[#202024] bg-[#0f0f11]/80 hover:bg-[#161619] hover:border-amber-500/40 transition-all duration-300 backdrop-blur-xl space-y-3 min-w-[240px]"
-                >
-                  <div className="flex items-center justify-between text-[10px] font-mono tracking-widest">
-                    <span className="text-amber-400 font-semibold uppercase">
-                      0{idx + 1}. {card.accentBadge}
-                    </span>
-                    <a
-                      href={getWhatsAppUrl(card.category)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#8e8e93] group-hover:text-emerald-400 transition-colors flex items-center gap-0.5"
-                      title="Direct WhatsApp Inquiry"
-                    >
-                      <span>INQUIRE</span>
-                      <ArrowUpRight className="w-3 h-3" />
-                    </a>
-                  </div>
-
-                  <h3 className="font-display font-bold text-base text-white group-hover:text-amber-300 transition-colors">
-                    {card.title}
-                  </h3>
-
-                  <p className="text-xs text-[#8e8e93] leading-relaxed line-clamp-2">
-                    {card.tagline}
-                  </p>
-
-                  <div className="pt-2 flex items-center justify-between text-[11px] font-mono text-[#56565c] group-hover:text-[#8e8e93] transition-colors border-t border-[#202024]/60">
-                    <span className="flex items-center gap-1.5">
-                      {card.category === 'motion-graphic' ? (
-                        <>
-                          <Play className="w-3 h-3 text-amber-400 fill-amber-400" />
-                          <span>Muted Video Loop</span>
-                        </>
-                      ) : (
-                        <>
-                          <Eye className="w-3 h-3 text-blue-400" />
-                          <span>High-Res Stills</span>
-                        </>
-                      )}
-                    </span>
-                    <span className="group-hover:translate-x-1 transition-transform">→</span>
-                  </div>
-                </div>
-              ))}
+            {/* Sisi Kanan (lg:col-span-5): 3-Card Category Stack */}
+            <div className="lg:col-span-5 flex justify-center lg:justify-end">
+              <CategoryCardStack
+                onSelectCategory={(category) => handleOpenPlaybook(category)}
+              />
             </div>
 
           </div>
-        </div>
+        </section>
       </main>
+
+      {/* 5. Playbook Drawer / Modal Archive */}
+      <PlaybookModal
+        isOpen={isPlaybookOpen}
+        onClose={() => setIsPlaybookOpen(false)}
+        initialFilter={playbookFilter}
+        onSelectProjectForInquiry={(project: ProjectItem) => {
+          handleOpenContact(project.category, project.title);
+        }}
+      />
+
+      {/* 6. Quick Connect Direct WhatsApp & Instagram Modal */}
+      <QuickContactModal
+        isOpen={isContactOpen}
+        onClose={() => setIsContactOpen(false)}
+        initialCategory={contactCategory}
+        projectTitle={contactProjectTitle}
+      />
     </div>
   );
 }

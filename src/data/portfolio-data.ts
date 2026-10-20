@@ -22,9 +22,12 @@ export const siteIdentityData: SiteIdentity = {
     location: 'INDONESIA (WORLDWIDE REMOTE)',
   },
   heroShowreel: {
-    ambientBlurVideoUrl: '/videos/hero/hero-ambient-blur.mp4',
-    sharpRevealVideoUrl: '/videos/hero/hero-sharp-reveal.mp4',
-    fallbackPosterUrl: '/posters/hero-poster.webp',
+    ambientBlurVideoUrl:
+      'https://cdn.dribbble.com/userupload/3989861/file/original-1f1610f0a43c0aed537ab125d7ef8e45.mp4',
+    sharpRevealVideoUrl:
+      'https://cdn.dribbble.com/userupload/3989861/file/original-1f1610f0a43c0aed537ab125d7ef8e45.mp4',
+    fallbackPosterUrl:
+      'https://cdn.dribbble.com/userupload/3989861/file/still-a6e8bb4abb91f9ed2e4ccad1d3bd24bd.png',
     durationSeconds: 12,
   },
   navigationAndContact: {
@@ -47,8 +50,9 @@ export const siteIdentityData: SiteIdentity = {
       },
     },
     instagram: {
-      username: 'indrawijaya.motion',
-      profileUrl: 'https://instagram.com/indrawijaya.motion',
+      username: 'draawijayaa._8'
+      ,
+      profileUrl: 'https://www.instagram.com/draawijayaa._8?xtok=dXV3OXlzMWdvN3o3',
       displayHandle: '@indrawijaya.motion',
     },
     socials: [
@@ -110,9 +114,12 @@ export const heroStackedCategories: StackedCardCategory[] = [
     category: 'motion-graphic',
     title: 'MOTION GRAPHIC',
     tagline: 'High-Voltage Commercials & Kinetic Rhythms',
-    previewVideoUrl: '/videos/projects/hyperdrive-preview.mp4',
-    previewImageUrl: '/posters/hyperdrive-poster.webp',
-    posterUrl: '/posters/hyperdrive-poster.webp',
+    previewVideoUrl:
+      'https://cdn.dribbble.com/userupload/3989861/file/original-1f1610f0a43c0aed537ab125d7ef8e45.mp4',
+    previewImageUrl:
+      'https://cdn.dribbble.com/userupload/3989861/file/still-a6e8bb4abb91f9ed2e4ccad1d3bd24bd.png',
+    posterUrl:
+      'https://cdn.dribbble.com/userupload/3989861/file/still-a6e8bb4abb91f9ed2e4ccad1d3bd24bd.png',
     accentBadge: 'REEL FOCUS',
   },
   {
@@ -152,9 +159,12 @@ export const projectsDataset: ProjectItem[] = [
     },
     media: {
       type: 'VIDEO_LOOP',
-      previewUrl: '/videos/projects/hyperdrive-preview.mp4',
-      fallbackPosterUrl: '/posters/hyperdrive-poster.webp',
-      fullMediaUrl: 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1',
+      previewUrl:
+        'https://cdn.dribbble.com/userupload/3989861/file/original-1f1610f0a43c0aed537ab125d7ef8e45.mp4',
+      fallbackPosterUrl:
+        'https://cdn.dribbble.com/userupload/3989861/file/still-a6e8bb4abb91f9ed2e4ccad1d3bd24bd.png',
+      fullMediaUrl:
+        'https://cdn.dribbble.com/userupload/3989861/file/original-1f1610f0a43c0aed537ab125d7ef8e45.mp4',
       aspectRatio: '16:9',
       durationSeconds: 32,
     },

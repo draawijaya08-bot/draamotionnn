@@ -22,10 +22,10 @@ graph LR
 | Milestone | Ruang Lingkup Utama | File & Komponen Kunci | Status |
 | :---: | :--- | :--- | :---: |
 | **M1** | Data Layer, Types & Configuration Lock | `src/types/portfolio.ts`, `src/data/portfolio-data.ts`, `src/utils/contact-links.ts` | ✅ Selesai (Verified) |
-| **M2** | Core Layout, Mesh & Hero Typography | `TopNavbar.tsx`, `AmbientBackground.tsx`, `HeroTypography.tsx` | ⏳ Antrean |
-| **M3** | Interactive Cursor Lens & 3-Card Stack | `CursorLens.tsx`, `CategoryCardStack.tsx` (DOF blur & scale) | ⏳ Antrean |
-| **M4** | Playbook Drawer, Adaptive Media & WA/IG | `PlaybookModal.tsx`, `AdaptiveProjectMedia.tsx`, `QuickContactModal.tsx` | ⏳ Antrean |
-| **M5** | Polish, Accessibility & 60fps Audit | Lenis smooth scroll, magnetic effects, touch swipe, Lighthouse audit | ⏳ Antrean |
+| **M2** | Core Layout, Mesh & Hero Typography | `TopNavbar.tsx`, `AmbientBackground.tsx`, `HeroTypography.tsx` | ✅ Selesai (Verified) |
+| **M3** | Interactive Cursor Lens & 3-Card Stack | `CursorLens.tsx`, `CategoryCardStack.tsx` (DOF blur & scale) | ✅ Selesai (Verified) |
+| **M4** | Playbook Drawer, Adaptive Media & WA/IG | `PlaybookModal.tsx`, `AdaptiveProjectMedia.tsx`, `QuickContactModal.tsx` | ✅ Selesai (Verified) |
+| **M5** | Polish, Accessibility & 60fps Audit | Lenis smooth scroll, magnetic effects, touch swipe, Lighthouse audit | ✅ Selesai (Verified) |
 
 ---
 
@@ -70,18 +70,18 @@ graph LR
 ### MILESTONE 2: Core Layout, Dark Mesh Gradient & Hero Typography
 > **Tujuan:** Membangun kerangka tata letak presisi khas Purrweb: Top Navbar 4 kolom, latar belakang ambient dark mesh bertekstur noise halus, dan tipografi kinetik Hero dengan aksen serif italic serta metadata bar pojok kiri bawah.
 
-- [ ] **Task 2.1: Top Navigation Bar (`src/components/layout/TopNavbar.tsx`)**
+- [x] **Task 2.1: Top Navigation Bar (`src/components/layout/TopNavbar.tsx`)**
   - Bangun header navigasi 4 kolom presisi:
     - Kolom 1 (Kiri): Monogram/Wordmark `INDRA WIJAYA` (font tebal monokrom).
     - Kolom 2: `PLAYBOOK` (membuka drawer/katalog karya).
     - Kolom 3: `SOCIALS` (popover/tautan langsung Behance, Vimeo, LinkedIn, YouTube).
     - Kolom 4 (Kanan): `CONTACTS` (trigger quick contact WA/IG) + `LiveAvailabilityPill` (titik hijau berdenyut halus).
 
-- [ ] **Task 2.2: Ambient Dark Mesh Background (`src/components/hero/AmbientBackground.tsx`)**
+- [x] **Task 2.2: Ambient Dark Mesh Background (`src/components/hero/AmbientBackground.tsx`)**
   - Buat latar belakang kanvas gelap bernuansa biru-hitam (`#080808` hingga `#0c0e14`) dengan tekstur *subtle noise/grain* CSS SVG filter.
   - Sediakan layer ganda untuk efek *sharp/glowing reveal* yang akan dihubungkan dengan kursor lensa.
 
-- [ ] **Task 2.3: Hero Kinetic Typography & Metadata Bar (`src/components/hero/HeroTypography.tsx`)**
+- [x] **Task 2.3: Hero Kinetic Typography & Metadata Bar (`src/components/hero/HeroTypography.tsx`)**
   - Implementasikan kalimat utama berukuran besar: `"Creative "` + `[dynamic_word]` + `" designer"`.
   - Kata dinamis (`"motion"`, `"visual"`, `"AI-driven"`) menggunakan font *serif italic* bernuansa hangat (oranye/emas elegan) yang bertransisi halus setiap 2.5 detik menggunakan GSAP/CSS animation.
   - Bangun 2 kolom metadata di pojok kiri bawah:
@@ -96,12 +96,12 @@ graph LR
 ### MILESTONE 3: Interactive Cursor Lens & 3-Card Category Stack
 > **Tujuan:** Menghadirkan dua interaksi visual utama: lingkaran lensa kursor pembuka layer video/mesh tajam di desktop (dengan fallback auto-pan di mobile) dan tumpukan 3 kartu interaktif dengan efek Depth of Field di kanan bawah.
 
-- [ ] **Task 3.1: Custom Magnifying Lens Cursor (`src/components/interactive/CursorLens.tsx`)**
+- [x] **Task 3.1: Custom Magnifying Lens Cursor (`src/components/interactive/CursorLens.tsx`)**
   - Implementasikan lingkaran kursor lensa (*glass border + SVG ticks optik + radial clip-path mask*) yang mengikuti koordinat X/Y pointer dengan *smooth LERP inertia* ($\lambda = 0.14$) di desktop.
   - Menyingkap video sharp / glowing layer di bawah ambient background secara presisi 60 FPS.
   - Sediakan deteksi layar sentuh (*touchscreen fallback*): beralih otomatis ke mode *ambient auto-panning* (kurva Lissajous) atau *gyroscope tilt reveal* saat dibuka di ponsel/tablet.
 
-- [ ] **Task 3.2: 3-Card Category Stack (`src/components/hero/CategoryCardStack.tsx`)**
+- [x] **Task 3.2: 3-Card Category Stack (`src/components/hero/CategoryCardStack.tsx`)**
   - Bangun tumpukan 3 kartu interaktif di area kanan bawah dengan efek *Depth of Field* bertingkat:
     1. **`MOTION GRAPHIC`** (Posisi terdepan: `scale(1.00)`, fokus tajam `blur(0px)`, `z-index: 3`, memutar *muted video loop* teroptimasi).
     2. **`GRAPHIC DESIGN`** (Posisi tengah: `scale(0.92)`, `translateY(-14px)`, `blur(6px)`, `opacity: 0.85`, `z-index: 2`).
@@ -117,16 +117,16 @@ graph LR
 ### MILESTONE 4: Playbook Drawer, Adaptive Media & Direct Contact (WA/IG)
 > **Tujuan:** Membangun katalog karya lengkap dengan filtrasi 3 kategori, pemutaran media adaptif hemat memori, dan popover konversi cepat WhatsApp/Instagram.
 
-- [ ] **Task 4.1: Playbook Project Drawer/Modal (`src/components/playbook/PlaybookModal.tsx`)**
+- [x] **Task 4.1: Playbook Project Drawer/Modal (`src/components/playbook/PlaybookModal.tsx`)**
   - Buat antarmuka katalog karya (*The Playbook*) yang dapat dibuka via nav `PLAYBOOK` atau klik kartu kategori:
     - Tab filtrasi instan: `MOTION GRAPHIC` (default), `GRAPHIC DESIGN`, `AI DEVELOPMENT`, dan `ALL`.
     - Kartu karya menampilkan judul, tahun, klien/konteks, ringkasan deskripsi, dan *tool badges* (`After Effects`, `Premiere Pro`, `Photoshop`, `Illustrator`, `Midjourney`, `ComfyUI`).
 
-- [ ] **Task 4.2: Adaptive Media Player (`src/components/media/AdaptiveProjectMedia.tsx`)**
+- [x] **Task 4.2: Adaptive Media Player (`src/components/media/AdaptiveProjectMedia.tsx`)**
   - Enforce aturan performa: Video preview pada kategori `Motion Graphic` hanya berputar saat berada di kartu terdepan atau viewport aktif, dan seketika `pause()` saat berada di belakang tumpukan atau modal ditutup.
   - Format `Graphic Design` dan `AI Development` menggunakan *crisp still image viewer* (WebP) dengan opsi tampilan perbandingan prompt/RAW sebelum dan sesudah.
 
-- [ ] **Task 4.3: Quick Connect WA & IG Popover (`src/components/contact/QuickContactModal.tsx`)**
+- [x] **Task 4.3: Quick Connect WA & IG Popover (`src/components/contact/QuickContactModal.tsx`)**
   - Hubungkan tombol `CONTACTS`, `SOCIALS`, dan tombol inquiry di setiap kartu proyek langsung ke WhatsApp dan Instagram:
     - WhatsApp: Membuka chat dengan *pre-filled text* dinamis sesuai kategori karya yang sedang dibuka.
     - Instagram: Membuka profil `@indrawijaya.motion` di tab baru.
@@ -138,13 +138,13 @@ graph LR
 ### MILESTONE 5: Polish, Accessibility & 60fps Performance Audit
 > **Tujuan:** Menyelaraskan inersia smooth scrolling Lenis, menambahkan efek magnetik mikro, memastikan fallback aksesibilitas OS, dan memverifikasi performa 60–120 FPS tanpa kebocoran memori.
 
-- [ ] **Task 5.1: Smooth Scroll (Lenis) & Magnetic Micro-interactions**
+- [x] **Task 5.1: Smooth Scroll (Lenis) & Magnetic Micro-interactions**
   - Inisialisasi Lenis smooth scroll yang tersinkronisasi ke RAF ticker GSAP.
   - Terapkan efek magnetik (*damped spring physics*) pada tombol navigasi, CTA WhatsApp/IG, dan tombol panah kartu.
-- [ ] **Task 5.2: Mobile Touch Swipe & `prefers-reduced-motion` Fallback**
+- [x] **Task 5.2: Mobile Touch Swipe & `prefers-reduced-motion` Fallback**
   - Tambahkan gesture swipe pada *CategoryCardStack* untuk navigasi kartu yang natural di ponsel.
   - Hormati preferensi `prefers-reduced-motion` sistem operasi (nonaktifkan rotasi blur ekstrem bila diminta).
-- [ ] **Task 5.3: Final Build Verification & Zero TypeScript/ESLint Error Check**
+- [x] **Task 5.3: Final Build Verification & Zero TypeScript/ESLint Error Check**
   - Eksekusi `npm run build`: pastikan zero type error dan zero lint warning.
   - Uji stabilitas frame rate 60–120 FPS di Chrome DevTools Performance Monitor.
   - Verifikasi audit Lighthouse: Performance $\ge 90$, Accessibility $\ge 95$, SEO $\ge 95$.

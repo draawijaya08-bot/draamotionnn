@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #080808;
+  --background: #050608;
   --surface: #0f0f11;
   --surface-hover: #161619;
   --surface-elevated: #1a1a20;
@@ -13,7 +13,7 @@
   --foreground-subtle: #56565c;
   --accent: #ffffff;
   --accent-glow: rgba(255, 255, 255, 0.14);
-  --lens-radius: 160px;
+  --lens-radius: 240px;
 }
 
 @theme inline {
@@ -30,6 +30,7 @@
   --color-accent: var(--accent);
   --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-display: var(--font-syne), sans-serif;
+  --font-serif: var(--font-serif), "Playfair Display", Georgia, serif;
 }
 
 /* Custom Base Resets for High-Voltage Dark Luxury */
@@ -73,3 +74,64 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #38383e;
 }
+
+/* Lenis Smooth Scroll Recommended Classes */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Accessibility: prefers-reduced-motion global overrides */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Hardware-Accelerated Cinematic Ambient Mesh Animations */
+@keyframes ambientSlow {
+  0% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(-40px, 60px) scale(1.1); }
+  100% { transform: translate(30px, -20px) scale(0.95); }
+}
+
+@keyframes ambientMedium {
+  0% { transform: translate(0px, 0px) scale(0.9); }
+  50% { transform: translate(50px, -30px) scale(1.15); }
+  100% { transform: translate(-20px, 40px) scale(1); }
+}
+
+@keyframes ambientFast {
+  0% { transform: translate(0px, 0px); }
+  50% { transform: translate(-30px, -40px) scale(1.05); }
+  100% { transform: translate(20px, 20px) scale(0.9); }
+}
+
+.animate-ambient-slow {
+  animation: ambientSlow 25s infinite alternate ease-in-out;
+}
+
+.animate-ambient-medium {
+  animation: ambientMedium 20s infinite alternate ease-in-out;
+}
+
+.animate-ambient-fast {
+  animation: ambientFast 15s infinite alternate ease-in-out;
+}
+
+
+
