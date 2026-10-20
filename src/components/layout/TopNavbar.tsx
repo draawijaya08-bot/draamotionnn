@@ -1,25 +1,35 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { siteIdentityData } from '@/data/portfolio-data';
 import { MagneticButton } from '@/components/interactive/MagneticButton';
-import { ArrowUpRight } from 'lucide-react';
+import { useLanguageStore, translations } from '@/stores/languageStore';
+import { ArrowUpRight, Globe } from 'lucide-react';
 
 interface TopNavbarProps {
   onOpenPlaybook?: () => void;
   onOpenContacts?: () => void;
+  isSubPage?: boolean;
+  activeNav?: 'hero' | 'playbook' | 'socials' | 'contacts';
 }
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
   onOpenPlaybook,
   onOpenContacts,
+  isSubPage = false,
+  activeNav = 'hero',
 }) => {
   const { brandName, navigationAndContact } = siteIdentityData;
   const [socialsOpen, setSocialsOpen] = useState(false);
+  const { locale, toggleLocale } = useLanguageStore();
+  const t = translations[locale];
+
+  const isPlaybookActive = activeNav === 'playbook';
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 pointer-events-auto">
-      {/* 4-Column CSS Grid Aligned Horizontally Across Top (padding: 2rem 4rem) */}
+      {/* 4-Column CSS Grid Aligned Horizontally Across Top */}
       <nav 
         className="w-full grid grid-cols-4 items-center px-6 py-6 md:px-16 md:py-8 font-sans select-none"
         style={{
@@ -32,9 +42,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         {/* Kolom 1 (Kiri): INDRA WIJAYA */}
         <div className="flex items-center">
           <MagneticButton strength={0.2}>
-            <a
-              href="#"
-              className="text-[#FFFFFF] hover:text-amber-400 transition-colors uppercase font-bold"
+            <Link
+              href="/"
+              className="text-[#FFFFFF] hover:text-amber-400 transition-colors uppercase font-bold tracking-wider"
               style={{
                 fontWeight: 700,
                 fontSize: '0.85rem',
@@ -42,24 +52,45 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               }}
             >
               {brandName}
-            </a>
+            </Link>
           </MagneticButton>
         </div>
 
-        {/* Kolom 2 (Tengah-Kiri): PLAYBOOK */}
+        {/* Kolom 2 (Tengah-Kiri): PLAYBOOK (With active underline matching reference frame t7.0s) */}
         <div className="flex items-center justify-start md:justify-center">
           <MagneticButton strength={0.25}>
-            <button
-              type="button"
-              onClick={onOpenPlaybook}
-              className="text-white/80 hover:text-white uppercase transition-colors cursor-pointer text-left font-medium"
-              style={{
-                fontSize: '0.7rem',
-                letterSpacing: '0.08em',
-              }}
-            >
-              PLAYBOOK
-            </button>
+            {isSubPage ? (
+              <Link
+                href="/#section-playbook"
+                className={`uppercase transition-colors cursor-pointer text-left font-medium ${
+                  isPlaybookActive
+                    ? 'text-white border-b border-white pb-0.5'
+                    : 'text-white/80 hover:text-white'
+                }`}
+                style={{
+                  fontSize: '0.7rem',
+                  letterSpacing: '0.08em',
+                }}
+              >
+                {t.nav.playbook}
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={onOpenPlaybook}
+                className={`uppercase transition-colors cursor-pointer text-left font-medium ${
+                  isPlaybookActive
+                    ? 'text-white border-b border-white pb-0.5'
+                    : 'text-white/80 hover:text-white'
+                }`}
+                style={{
+                  fontSize: '0.7rem',
+                  letterSpacing: '0.08em',
+                }}
+              >
+                {t.nav.playbook}
+              </button>
+            )}
           </MagneticButton>
         </div>
 
@@ -77,7 +108,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               }}
               aria-expanded={socialsOpen}
             >
-              <span>SOCIALS</span>
+              <span>{t.nav.socials}</span>
             </button>
           </MagneticButton>
 
@@ -103,8 +134,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           )}
         </div>
 
-        {/* Kolom 4 (Kanan, Rata Kanan): CONTACTS */}
-        <div className="flex items-center justify-end">
+        {/* Kolom 4 (Kanan, Rata Kanan): CONTACTS + BILINGUAL SWITCHER */}
+        <div className="flex items-center justify-end gap-3 sm:gap-5">
           <MagneticButton strength={0.25}>
             <button
               type="button"
@@ -115,9 +146,23 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 letterSpacing: '0.08em',
               }}
             >
-              CONTACTS
+              {t.nav.contacts}
             </button>
           </MagneticButton>
+
+          {/* Language Switcher [ ID | EN ] */}
+          <button
+            type="button"
+            onClick={toggleLocale}
+            className="flex items-center gap-1 px-2 py-0.5 rounded-full border border-white/15 bg-white/5 hover:border-amber-400/50 hover:bg-white/10 text-[10px] font-mono tracking-wider transition-colors cursor-pointer text-white/90"
+            title="Switch Language / Ganti Bahasa"
+            aria-label="Switch Language"
+          >
+            <Globe className="w-3 h-3 text-amber-400" />
+            <span className={locale === 'en' ? 'text-amber-400 font-bold' : 'text-white/60'}>EN</span>
+            <span className="text-white/30">/</span>
+            <span className={locale === 'id' ? 'text-amber-400 font-bold' : 'text-white/60'}>ID</span>
+          </button>
         </div>
       </nav>
     </header>

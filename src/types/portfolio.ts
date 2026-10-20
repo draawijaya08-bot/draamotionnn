@@ -1,12 +1,17 @@
 /**
  * PORTFOLIO DATA CONTRACTS & TYPE SCHEMAS
- * References: /specs/01-data-architecture.md & /specs/02-interaction-behavior.md
- * Target Profile: INDRA WIJAYA — Motion Designer
+ * References: /docs/reference-analysis.md & /docs/asset-inventory.md
+ * Target Profile: INDRA WIJAYA — Creative Developer & Motion Designer
  */
 
 export type ProjectCategory = 
-  | 'motion-graphic' 
-  | 'graphic-design' 
+  | 'motion-graphics' 
+  | 'video-editing' 
+  | 'visual-design' 
+  | 'web'
+  // Legacy aliases for backward compatibility:
+  | 'motion-graphic'
+  | 'graphic-design'
   | 'ai-development';
 
 export interface CategoryFilterItem {
@@ -20,7 +25,14 @@ export type CoreCreativeTool =
   | 'Adobe After Effects'
   | 'Adobe Premiere Pro'
   | 'Adobe Photoshop'
-  | 'Adobe Illustrator';
+  | 'Adobe Illustrator'
+  | 'DaVinci Resolve'
+  | 'Next.js'
+  | 'React'
+  | 'TypeScript'
+  | 'Tailwind CSS'
+  | 'GSAP'
+  | 'Three.js / WebGL';
 
 export type AiAndTechTool = 
   | 'Midjourney'
@@ -34,7 +46,7 @@ export type AiAndTechTool =
 
 export interface ToolBadge {
   name: CoreCreativeTool | AiAndTechTool;
-  category: 'CORE_CREATIVE' | 'AI_TECH' | 'FINISHING';
+  category: 'CORE_CREATIVE' | 'AI_TECH' | 'DEVELOPMENT' | 'FINISHING';
   isPrimary?: boolean;
 }
 
@@ -49,17 +61,25 @@ export interface AdaptiveMedia {
   fullMediaUrl: string;        // Full video showcase atau high-res image
   aspectRatio: AspectRatioType;
   durationSeconds?: number;    // Khusus video loop
-  comparisonSourceBeforeUrl?: string; // Khusus AI dev (Original RAW vs Synthesized)
+  comparisonSourceBeforeUrl?: string;
 }
 
 export interface ProjectItem {
   id: string;
   slug: string;
   title: string;
+  titleId?: string;
   category: ProjectCategory;
   year: number;
   clientOrContext: string;
+  role?: string;
+  projectUrl?: string;
   description: {
+    shortSnippet: string;
+    detailedChallenge?: string;
+    solutionApplied?: string;
+  };
+  descriptionId?: {
     shortSnippet: string;
     detailedChallenge?: string;
     solutionApplied?: string;
@@ -73,7 +93,7 @@ export interface ProjectItem {
 export interface WhatsAppConfig {
   phoneNumber: string;         // e.g. "6281234567890" (tanpa '+' atau spasi)
   defaultMessage: string;
-  categoryContextMessages: Record<ProjectCategory, string>;
+  categoryContextMessages: Record<string, string>;
 }
 
 export interface InstagramConfig {
@@ -83,7 +103,7 @@ export interface InstagramConfig {
 }
 
 export interface SocialLink {
-  platform: 'BEHANCE' | 'VIMEO' | 'LINKEDIN' | 'YOUTUBE' | 'INSTAGRAM' | 'WHATSAPP';
+  platform: 'BEHANCE' | 'VIMEO' | 'LINKEDIN' | 'YOUTUBE' | 'INSTAGRAM' | 'WHATSAPP' | 'GITHUB';
   label: string;
   url: string;
   isPrimary?: boolean;
@@ -102,20 +122,20 @@ export interface NavigationAndContactSchema {
 
 export interface SiteIdentity {
   brandName: string;           // "INDRA WIJAYA"
-  primaryRole: string;         // "Motion Designer"
+  primaryRole: string;         // "Creative Developer & Motion Designer"
   
   heroKinetic: {
     prefix: string;            // "Creative "
-    dynamicWords: string[];    // ["motion", "visual", "AI-driven"]
+    dynamicWords: string[];    // ["developer", "motion", "visual", "creative"]
     suffix: string;            // " designer"
     subHeadline: string;
     accentColor: string;       // e.g. "#f59e0b" (warm gold/amber)
   };
 
   metadataBar: {
-    specializations: string;   // "MOTION GRAPHIC / GRAPHIC DESIGN / AI DEVELOPMENT"
+    specializations: string;   // "MOTION GRAPHICS / VIDEO EDITING / VISUAL DESIGN / WEB"
     availabilityStatus: string;// "CURRENTLY AVAILABLE FOR FREELANCE & COLLABORATION"
-    location: string;          // "INDONESIA (WORLDWIDE REMOTE)"
+    location: string;          // "BASED IN INDONESIA (REMOTE WORLDWIDE)"
   };
 
   heroShowreel: {
@@ -152,4 +172,5 @@ export interface StackedCardCategory {
   previewImageUrl: string;
   posterUrl: string;
   accentBadge: string;
+  routeUrl: string;
 }

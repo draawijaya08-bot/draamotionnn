@@ -16,19 +16,19 @@ const config: Config = {
       },
       keyframes: {
         ambientSlow: {
-          '0%': { transform: 'translate(0px, 0px) scale(1)' },
-          '50%': { transform: 'translate(-40px, 60px) scale(1.1)' },
-          '100%': { transform: 'translate(30px, -20px) scale(0.95)' },
+          '0%': { transform: 'translate3d(0px, 0px, 0) scale(1)' },
+          '50%': { transform: 'translate3d(-40px, 60px, 0) scale(1.08)' },
+          '100%': { transform: 'translate3d(30px, -20px, 0) scale(0.96)' },
         },
         ambientMedium: {
-          '0%': { transform: 'translate(0px, 0px) scale(0.9)' },
-          '50%': { transform: 'translate(50px, -30px) scale(1.15)' },
-          '100%': { transform: 'translate(-20px, 40px) scale(1)' },
+          '0%': { transform: 'translate3d(0px, 0px, 0) scale(0.95)' },
+          '50%': { transform: 'translate3d(50px, -30px, 0) scale(1.1)' },
+          '100%': { transform: 'translate3d(-20px, 40px, 0) scale(1)' },
         },
         ambientFast: {
-          '0%': { transform: 'translate(0px, 0px)' },
-          '50%': { transform: 'translate(-30px, -40px) scale(1.05)' },
-          '100%': { transform: 'translate(20px, 20px) scale(0.9)' },
+          '0%': { transform: 'translate3d(0px, 0px, 0)' },
+          '50%': { transform: 'translate3d(-30px, -40px, 0) scale(1.04)' },
+          '100%': { transform: 'translate3d(20px, 20px, 0) scale(0.94)' },
         },
       },
     },

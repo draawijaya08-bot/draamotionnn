@@ -1,277 +1,191 @@
 'use client';
 
-import React, { useState, useRef, useSyncExternalStore } from 'react';
-import { heroStackedCategories } from '@/data/portfolio-data';
-import { StackedCardCategory, ProjectCategory } from '@/types/portfolio';
-import { useCursorStore } from '@/stores/cursorStore';
-import { getWhatsAppUrl } from '@/utils/contact-links';
-import { MagneticButton } from '@/components/interactive/MagneticButton';
-import { ArrowRight, Play, Eye, Sparkles, MessageCircle } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { ProjectCategory } from '@/types/portfolio';
+import { ArrowRight } from 'lucide-react';
+import { CategoryVectorShowcase } from './CategoryVectorShowcase';
 
 interface CategoryCardStackProps {
   onSelectCategory?: (category: ProjectCategory) => void;
+  initialIndex?: number;
 }
 
-const subscribeReducedMotion = (callback: () => void) => {
-  if (typeof window === 'undefined') return () => {};
-  const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-  media.addEventListener('change', callback);
-  return () => media.removeEventListener('change', callback);
-};
+interface ShowcaseCard {
+  id: ProjectCategory;
+  title: string;
+  nextPeek: string;
+  route: string;
+  type: 'video' | 'mockup' | 'image';
+  videoUrl?: string;
+  posterUrl?: string;
+  imageUrl?: string;
+}
 
-const getReducedMotionSnapshot = () => {
-  if (typeof window === 'undefined') return false;
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-};
+const showcaseCards: ShowcaseCard[] = [
+  {
+    id: 'motion-graphics',
+    title: 'MOTION GRAPHICS',
+    nextPeek: 'VIDEO EDITING',
+    route: '/work/motion-graphics',
+    type: 'video',
+    videoUrl: 'https://cdn.dribbble.com/userupload/3989861/file/original-1f1610f0a43c0aed537ab125d7ef8e45.mp4',
+    posterUrl: 'https://cdn.dribbble.com/userupload/3989861/file/still-a6e8bb4abb91f9ed2e4ccad1d3bd24bd.png',
+  },
+  {
+    id: 'video-editing',
+    title: 'VIDEO EDITING',
+    nextPeek: 'VISUAL DESIGN',
+    route: '/work/video-editing',
+    type: 'video',
+    videoUrl: 'https://cdn.dribbble.com/userupload/3989861/file/original-1f1610f0a43c0aed537ab125d7ef8e45.mp4',
+    posterUrl: 'https://cdn.dribbble.com/userupload/3989861/file/still-a6e8bb4abb91f9ed2e4ccad1d3bd24bd.png',
+  },
+  {
+    id: 'visual-design',
+    title: 'VISUAL DESIGN',
+    nextPeek: 'WEB DEVELOPMENT',
+    route: '/work/visual-design',
+    type: 'mockup',
+    imageUrl: 'https://cdn.dribbble.com/userupload/3989861/file/still-a6e8bb4abb91f9ed2e4ccad1d3bd24bd.png',
+  },
+  {
+    id: 'web',
+    title: 'WEB DEVELOPMENT',
+    nextPeek: 'MOTION GRAPHICS',
+    route: '/work/web',
+    type: 'mockup',
+    imageUrl: 'https://cdn.dribbble.com/userupload/3989861/file/still-a6e8bb4abb91f9ed2e4ccad1d3bd24bd.png',
+  },
+];
 
-const getReducedMotionServerSnapshot = () => false;
-
-export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
+export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({ 
   onSelectCategory,
+  initialIndex = 0,
 }) => {
-  // State urutan kartu dalam tumpukan: [depan, tengah, belakang]
-  const [deck, setDeck] = useState<number[]>([0, 1, 2]);
-  const [hoveredPos, setHoveredPos] = useState<number | null>(null);
-  const reducedMotion = useSyncExternalStore(
-    subscribeReducedMotion,
-    getReducedMotionSnapshot,
-    getReducedMotionServerSnapshot
-  );
+  const [activeIndex, setActiveIndex] = useState(initialIndex);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(false);
 
-  const { setCursorState } = useCursorStore();
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
 
-  // Touch swipe gesture refs
-  const touchStartPos = useRef<{ x: number; y: number } | null>(null);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.15 }
+    );
 
-  // Fungsi memajukan kartu yang diklik ke posisi terdepan (Deck Shuffle)
-  const bringToFront = (indexInDeck: number) => {
-    if (indexInDeck === 0) return; // Sudah di depan
-    setDeck((prevDeck) => {
-      const selected = prevDeck[indexInDeck];
-      const remaining = prevDeck.filter((_, i) => i !== indexInDeck);
-      return [selected, ...remaining];
-    });
-  };
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
-  // Navigasi via pagination dots
-  const selectByOriginalIndex = (origIdx: number) => {
-    const pos = deck.indexOf(origIdx);
-    if (pos > 0) bringToFront(pos);
-  };
-
-  // Touch Swipe Handlers untuk Mobile
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const touch = e.touches[0];
-    touchStartPos.current = { x: touch.clientX, y: touch.clientY };
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!touchStartPos.current) return;
-    const touch = e.changedTouches[0];
-    const dx = touch.clientX - touchStartPos.current.x;
-    const dy = touch.clientY - touchStartPos.current.y;
-    touchStartPos.current = null;
-
-    // Minimum swipe threshold (40px)
-    if (Math.abs(dx) > 40 || Math.abs(dy) > 40) {
-      if (Math.abs(dx) > Math.abs(dy)) {
-        // Horizontal swipe: left to advance, right to cycle backward
-        if (dx < 0) {
-          bringToFront(1);
-        } else {
-          bringToFront(2);
-        }
-      } else {
-        // Vertical swipe: up to advance, down to cycle backward
-        if (dy < 0) {
-          bringToFront(1);
-        } else {
-          bringToFront(2);
-        }
-      }
+  const handleCardClick = (index: number) => {
+    if (index !== activeIndex) {
+      setActiveIndex(index);
     }
   };
 
   return (
-    <div className="relative flex flex-col items-end select-none">
-      {/* 1. Header Telemetri Kanan Bawah */}
-      <div className="flex items-center justify-between w-full max-w-[340px] sm:max-w-[380px] mb-3 text-[11px] font-mono tracking-widest text-[#8e8e93]">
-        <div className="flex items-center gap-2">
-          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-          <span className="text-white font-medium">DISCIPLINES STACK</span>
-        </div>
-        <span className="text-[#56565c] text-[10px] hidden sm:inline">SWIPE / CLICK TO SHUFFLE</span>
-      </div>
-
-      {/* 2. Kontainer Tumpukan Kartu Bertingkat (Depth of Field) */}
-      <div
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        className="relative w-full max-w-[340px] sm:max-w-[380px] h-[260px] sm:h-[280px] touch-pan-y"
-      >
-        {deck.map((catIdx, pos) => {
-          const card: StackedCardCategory = heroStackedCategories[catIdx];
+    <div ref={containerRef} className="relative w-full max-w-[620px] flex flex-col items-end select-none">
+      {/* ======================================================== */}
+      {/* 1. STACKED CARDS CONTAINER (1:1 Frame t9.0s & t11.0s)    */}
+      {/* ======================================================== */}
+      <div className="relative w-full h-[400px] sm:h-[450px] lg:h-[480px]">
+        {showcaseCards.map((card, idx) => {
+          // Calculate relative position to active card
+          const count = showcaseCards.length;
+          const pos = (idx - activeIndex + count) % count;
           const isFront = pos === 0;
-          const isMiddle = pos === 1;
 
-          // Pengaturan Depth of Field (Scale, TranslateY, Blur, Opacity, Z-Index)
-          let transformStyle = '';
-          let filterStyle = '';
-          let opacityStyle = 1;
-          let zIndexStyle = 30;
-
-          if (isFront) {
-            transformStyle = 'translate3d(0, 0, 0) scale(1.0)';
-            filterStyle = reducedMotion ? 'none' : 'blur(0px) brightness(1.0)';
-            opacityStyle = 1;
-            zIndexStyle = 30;
-          } else if (isMiddle) {
-            const hoverLift = hoveredPos === 1 && !reducedMotion ? -6 : 0;
-            transformStyle = `translate3d(0, ${-18 + hoverLift}px, 0) scale(0.92)`;
-            filterStyle = reducedMotion ? 'none' : 'blur(6px) brightness(0.7)';
-            opacityStyle = 0.85;
-            zIndexStyle = 20;
-          } else {
-            const hoverLift = hoveredPos === 2 && !reducedMotion ? -6 : 0;
-            transformStyle = `translate3d(0, ${-36 + hoverLift}px, 0) scale(0.85)`;
-            filterStyle = reducedMotion ? 'none' : 'blur(12px) brightness(0.45)';
-            opacityStyle = 0.65;
-            zIndexStyle = 10;
-          }
+          // Transforms matching Purrweb perspective:
+          // Front card: scale(1), translateY(0), sharp
+          // Back cards: elevated translateY(-28px, -54px, -78px), scale(0.95, 0.90, 0.85), blur(4px, 8px, 12px)
+          const translateY = isFront ? 0 : pos === 1 ? -28 : pos === 2 ? -54 : -78;
+          const scale = isFront ? 1 : pos === 1 ? 0.95 : pos === 2 ? 0.90 : 0.85;
+          const blurAmount = isFront ? 0 : pos === 1 ? 4 : pos === 2 ? 8 : 12;
+          const opacity = isFront ? 1 : pos === 1 ? 0.8 : pos === 2 ? 0.5 : 0.25;
+          const zIndex = isFront ? 40 : pos === 1 ? 30 : pos === 2 ? 20 : 10;
 
           return (
             <div
-              key={card.category}
-              onClick={() => {
-                if (!isFront) {
-                  bringToFront(pos);
-                } else if (onSelectCategory) {
-                  onSelectCategory(card.category);
-                }
-              }}
-              onMouseEnter={() => {
-                setHoveredPos(pos);
-                setCursorState('PROJECT_HOVER', isFront ? 'VIEW' : 'SHUFFLE');
-                if (!isFront) {
-                  bringToFront(pos);
-                }
-              }}
-              onMouseLeave={() => {
-                setHoveredPos(null);
-                setCursorState('DEFAULT');
-              }}
-              className="absolute inset-0 rounded-2xl border border-[#26262b] bg-[#0f0f12]/95 backdrop-blur-2xl p-5 shadow-2xl flex flex-col justify-between cursor-pointer transition-all duration-450 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden"
+              key={card.id}
+              onClick={() => handleCardClick(idx)}
+              className="absolute inset-0 rounded-2xl sm:rounded-3xl border border-white/10 bg-[#08080a] p-6 sm:p-8 flex flex-col justify-between shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden cursor-pointer"
               style={{
-                transform: transformStyle,
-                filter: filterStyle,
-                opacity: opacityStyle,
-                zIndex: zIndexStyle,
+                transform: `translate3d(0, ${translateY}px, 0) scale(${scale})`,
+                filter: `blur(${blurAmount}px)`,
+                opacity: opacity,
+                zIndex: zIndex,
                 transformOrigin: 'bottom center',
                 willChange: 'transform, filter, opacity',
-                transitionDuration: reducedMotion ? '0.05s' : '0.45s',
               }}
             >
-              {/* Muted Video Loop Background Preview for Motion Graphic Front Card */}
-              {card.category === 'motion-graphic' && isFront && (
-                <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none z-0 opacity-25">
-                  <video
-                    src={card.previewVideoUrl || '/videos/projects/hyperdrive-preview.mp4'}
-                    poster={card.posterUrl}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f12] via-[#0f0f12]/60 to-transparent" />
-                </div>
-              )}
-
-              {/* Header Kartu */}
-              <div className="relative z-10 flex items-center justify-between">
-                <span className="px-2 py-0.5 rounded-full border border-amber-400/30 bg-amber-400/10 text-amber-400 text-[10px] font-mono tracking-widest font-semibold uppercase">
-                  {card.accentBadge}
+              {/* --- CARD HEADER (1:1 with reference) --- */}
+              {/* Category Name ────── Horizontal Line ────── Next Peek Name */}
+              <div className="relative z-20 flex items-center justify-between gap-4 font-sans">
+                <span className="font-extrabold text-white text-lg sm:text-2xl tracking-tight">
+                  {card.title}
                 </span>
 
-                <div className="flex items-center gap-2">
-                  {card.category === 'motion-graphic' ? (
-                    <span className="flex items-center gap-1 text-[10px] font-mono text-emerald-400">
-                      <Play className="w-3 h-3 fill-emerald-400" />
-                      <span>60FPS REEL</span>
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-1 text-[10px] font-mono text-blue-400">
-                      <Eye className="w-3 h-3" />
-                      <span>HIGH-RES</span>
-                    </span>
-                  )}
-                </div>
+                <div className="flex-1 h-[1px] bg-white/20 mx-2 hidden sm:block" />
+
+                <span className="text-white/40 text-xs sm:text-sm font-medium tracking-wider hidden sm:block">
+                  {card.nextPeek}
+                </span>
               </div>
 
-              {/* Badan Kartu */}
-              <div className="relative z-10 space-y-1.5 my-auto">
-                <h3 className="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
-                  {card.title}
-                </h3>
-                <p className="text-xs text-[#8e8e93] leading-relaxed line-clamp-2">
-                  {card.tagline}
-                </p>
-              </div>
-
-              {/* Footer Kartu & Tombol Aksi Melingkar (→) */}
-              <div className="relative z-10 pt-3 border-t border-[#202024]/80 flex items-center justify-between">
-                <a
-                  href={getWhatsAppUrl(card.category)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="flex items-center gap-1.5 text-[11px] font-mono text-[#8e8e93] hover:text-emerald-400 transition-colors"
+              {/* --- CIRCULAR ARROW ACTION BUTTON (1:1 with reference) --- */}
+              <div className="relative z-20 mt-4">
+                <Link
+                  href={card.route}
+                  onClick={(e) => {
+                    if (!isFront) {
+                      e.preventDefault();
+                      handleCardClick(idx);
+                    } else if (onSelectCategory) {
+                      onSelectCategory(card.id);
+                    }
+                  }}
+                  className="w-11 h-11 sm:w-13 sm:h-13 rounded-full border border-white/40 hover:border-white hover:bg-white hover:text-black text-white flex items-center justify-center transition-all duration-200 group/btn"
+                  title={`Open ${card.title}`}
+                  aria-label={`Open ${card.title}`}
                 >
-                  <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>DIRECT WA</span>
-                </a>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:translate-x-0.5 transition-transform" />
+                </Link>
+              </div>
 
-                {/* Circular Action Button with Magnetic Hover on Desktop */}
-                <MagneticButton strength={0.35}>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (onSelectCategory) {
-                        onSelectCategory(card.category);
-                      } else {
-                        const el = document.getElementById('playbook');
-                        el?.scrollIntoView({ behavior: 'smooth' });
-                      }
-                    }}
-                    className="w-8 h-8 rounded-full border border-white/20 bg-white/5 hover:bg-amber-400 hover:text-black hover:border-amber-400 transition-all flex items-center justify-center text-white cursor-pointer group"
-                    title="Explore Deliverables"
-                    aria-label={`Explore ${card.title}`}
-                  >
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                  </button>
-                </MagneticButton>
+              {/* --- CARD MEDIA SHOWCASE BODY (1:1 with reference) --- */}
+              <div className="relative w-full flex-1 min-h-[190px] sm:min-h-[230px] mt-4 rounded-xl sm:rounded-2xl overflow-hidden bg-black/60 border border-white/5 flex items-center justify-center">
+                <CategoryVectorShowcase category={card.id} isFront={isFront} />
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* 3. Tiga Titik Indikator Tumpukan (Pagination Dots) */}
-      <div className="flex items-center gap-2 mt-4 pr-1">
-        {heroStackedCategories.map((item, idx) => {
-          const isActive = deck[0] === idx;
+      {/* ======================================================== */}
+      {/* 2. THREE PAGINATION DOTS (1:1 Frame t9.0s & t11.0s)      */}
+      {/* Active dot: cyan pill [#00e5c0], Inactive: circles       */}
+      {/* ======================================================== */}
+      <div className="flex items-center gap-2.5 mt-8 mr-2 z-30">
+        {showcaseCards.map((_, dotIdx) => {
+          const isActive = activeIndex === dotIdx;
           return (
             <button
-              key={item.category}
-              onClick={() => selectByOriginalIndex(idx)}
-              className={`transition-all duration-300 rounded-full cursor-pointer ${
+              key={dotIdx}
+              type="button"
+              onClick={() => setActiveIndex(dotIdx)}
+              className={`transition-all duration-300 cursor-pointer ${
                 isActive
-                  ? 'w-7 h-2 bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.6)]'
-                  : 'w-2 h-2 bg-[#2a2a30] hover:bg-[#383842]'
+                  ? 'w-7 h-2 rounded-full bg-[#00e5c0] shadow-[0_0_12px_rgba(0,229,192,0.6)]'
+                  : 'w-2 h-2 rounded-full border border-white/40 hover:border-white/80'
               }`}
-              title={`Switch to ${item.title}`}
-              aria-label={`Switch to ${item.title}`}
+              title={`View slide ${dotIdx + 1}`}
+              aria-label={`View slide ${dotIdx + 1}`}
             />
           );
         })}
@@ -279,3 +193,5 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
     </div>
   );
 };
+
+export default CategoryCardStack;

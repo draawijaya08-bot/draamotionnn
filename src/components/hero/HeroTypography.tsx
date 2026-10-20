@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { siteIdentityData } from '@/data/portfolio-data';
+import { useLanguageStore, translations } from '@/stores/languageStore';
+import { useSmoothScroll } from '@/components/layout/SmoothScrollProvider';
 import { ArrowDown } from 'lucide-react';
 
 interface HeroTypographyProps {
@@ -11,18 +13,44 @@ interface HeroTypographyProps {
 export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks }) => {
   const { heroKinetic } = siteIdentityData;
   const { dynamicWords } = heroKinetic;
+  const { locale } = useLanguageStore();
+  const t = translations[locale];
+  const { getLenis } = useSmoothScroll();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  const heroSectionRef = useRef<HTMLElement>(null);
   const heroContainerRef = useRef<HTMLDivElement>(null);
   const outerMaskRef = useRef<HTMLDivElement>(null);
   const innerScaledRef = useRef<HTMLDivElement>(null);
   const glassRingRef = useRef<HTMLDivElement>(null);
+  const isHeroInView = useRef(true);
 
-  // Rotasi kata dinamis setiap 2.5 detik
+  // 1. Intersection Observer: Hentikan tracking & interval saat Hero di-scroll keluar layar
+  useEffect(() => {
+    const el = heroSectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isHeroInView.current = entry.isIntersecting;
+        if (!entry.isIntersecting) {
+          if (outerMaskRef.current) outerMaskRef.current.style.opacity = '0';
+          if (glassRingRef.current) glassRingRef.current.style.opacity = '0';
+        }
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // 2. Rotasi kata dinamis setiap 2.5 detik (hanya saat hero in view)
   useEffect(() => {
     const interval = setInterval(() => {
+      if (!isHeroInView.current) return;
       setIsTransitioning(true);
       setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % dynamicWords.length);
@@ -33,7 +61,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
     return () => clearInterval(interval);
   }, [dynamicWords.length]);
 
-  // Sinkronisasi 1:1 Koordinat Lensa Kaca & Magnifikasi Teks
+  // 3. Sinkronisasi 1:1 Koordinat Lensa Kaca & Magnifikasi Teks (RAF Throttled)
   useEffect(() => {
     const container = heroContainerRef.current;
     if (!container) return;
@@ -57,18 +85,24 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
       glassRingRef.current.style.opacity = '1';
     }
 
-    const handlePointerMove = (e: MouseEvent | PointerEvent) => {
-      if (!heroContainerRef.current) return;
-      const rect = heroContainerRef.current.getBoundingClientRect();
-      const relX = e.clientX - rect.left;
-      const relY = e.clientY - rect.top;
+    let rafId: number | null = null;
+    let latestE: MouseEvent | PointerEvent | null = null;
 
-      // Cek apakah kursor berada di dalam / dekat area Hero
+    const updateLens = () => {
+      if (!latestE || !heroContainerRef.current || !isHeroInView.current) {
+        rafId = null;
+        return;
+      }
+
+      const rect = heroContainerRef.current.getBoundingClientRect();
+      const relX = latestE.clientX - rect.left;
+      const relY = latestE.clientY - rect.top;
+
       const isNearby = 
-        e.clientX >= rect.left - 120 &&
-        e.clientX <= rect.right + 120 &&
-        e.clientY >= rect.top - 120 &&
-        e.clientY <= rect.bottom + 120;
+        latestE.clientX >= rect.left - 120 &&
+        latestE.clientX <= rect.right + 120 &&
+        latestE.clientY >= rect.top - 120 &&
+        latestE.clientY <= rect.bottom + 120;
 
       if (outerMaskRef.current) {
         outerMaskRef.current.style.clipPath = `circle(120px at ${relX}px ${relY}px)`;
@@ -78,12 +112,21 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
 
       if (innerScaledRef.current) {
         innerScaledRef.current.style.transformOrigin = `${relX}px ${relY}px`;
-        innerScaledRef.current.style.transform = 'scale(1.22)';
       }
 
       if (glassRingRef.current) {
         glassRingRef.current.style.transform = `translate3d(${relX - 120}px, ${relY - 120}px, 0)`;
         glassRingRef.current.style.opacity = isNearby ? '1' : '0';
+      }
+
+      rafId = null;
+    };
+
+    const handlePointerMove = (e: MouseEvent | PointerEvent) => {
+      if (!isHeroInView.current) return;
+      latestE = e;
+      if (rafId === null) {
+        rafId = requestAnimationFrame(updateLens);
       }
     };
 
@@ -91,6 +134,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
     window.addEventListener('mousemove', handlePointerMove, { passive: true });
 
     return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('mousemove', handlePointerMove);
     };
@@ -102,13 +146,21 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
     if (onScrollToWorks) {
       onScrollToWorks();
     } else {
-      const el = document.getElementById('section-works');
-      el?.scrollIntoView({ behavior: 'smooth' });
+      const lenis = getLenis();
+      if (lenis) {
+        lenis.scrollTo('#section-works', { duration: 1.1 });
+      } else {
+        const el = document.getElementById('section-works');
+        el?.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col justify-between px-6 py-6 md:px-16 md:py-8 pt-28 md:pt-36 select-none overflow-hidden bg-transparent">
+    <section 
+      ref={heroSectionRef}
+      className="relative w-full min-h-screen flex flex-col justify-between px-6 py-6 md:px-16 md:py-8 pt-28 md:pt-36 select-none overflow-hidden bg-transparent"
+    >
       
       {/* ======================================================== */}
       {/* 1. CENTER STAGGERED TYPOGRAPHY (1:1 PURRWEB DRIBBBLE)     */}
@@ -138,10 +190,10 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
             </span>
           </div>
 
-          {/* Baris 2: designer (Menjorok ke kanan 18vw tepat di bawah Creative) */}
+          {/* Baris 2: designer (Menjorok tepat di bawah huruf 't' dari Creative, 1:1 Dribbble reference) */}
           <div 
             className="w-full flex items-baseline leading-[0.95]"
-            style={{ paddingLeft: 'clamp(2.5rem, 18vw, 24rem)' }}
+            style={{ paddingLeft: 'clamp(2.5rem, 11vw, 13rem)' }}
           >
             <span 
               className="font-sans font-medium text-[#F3F4F6] tracking-[-0.03em]"
@@ -170,7 +222,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
               transform: 'scale(1.22)',
               transformOrigin: '50% 50%',
               textShadow:
-                '-7px -3px 12px rgba(255, 95, 20, 0.9), 7px 3px 12px rgba(30, 165, 255, 0.9), -3px 2px 6px rgba(255, 140, 50, 0.65), 3px -2px 6px rgba(60, 200, 255, 0.65), 0px 0px 20px rgba(255, 255, 255, 0.35)',
+                '-7px -2px 14px rgba(40, 190, 255, 0.95), 7px 2px 14px rgba(255, 120, 30, 0.95), -3px -1px 8px rgba(70, 220, 255, 0.7), 3px 1px 8px rgba(255, 140, 40, 0.7), 0px 0px 18px rgba(255, 255, 255, 0.4)',
               filter: 'blur(2.8px) contrast(1.08)',
               willChange: 'transform',
             }}
@@ -194,7 +246,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
             {/* Baris 2 Magnified */}
             <div 
               className="w-full flex items-baseline leading-[0.95]"
-              style={{ paddingLeft: 'clamp(2.5rem, 18vw, 24rem)' }}
+              style={{ paddingLeft: 'clamp(2.5rem, 11vw, 13rem)' }}
             >
               <span 
                 className="font-sans font-medium text-white tracking-[-0.03em]"
@@ -233,20 +285,20 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
           {/* Kolom 1 */}
           <div className="flex flex-col">
             <span className="font-bold text-white leading-relaxed">
-              MOTION GRAPHIC / GRAPHIC DESIGN / AI DEVELOPMENT
+              {t.hero.specializations}
             </span>
             <span className="text-white/50 mt-3 font-normal">
-              CURRENTLY AVAILABLE FOR FREELANCE WORLDWIDE
+              {t.hero.availability}
             </span>
           </div>
 
           {/* Kolom 2 */}
           <div className="flex flex-col">
             <span className="font-bold text-white leading-relaxed">
-              BASED IN INDONESIA
+              {t.hero.location}
             </span>
             <span className="text-white/50 mt-3 font-normal">
-              AE / PR / PS / AI WORKFLOW
+              AE / PR / PS / AI / TS / REACT / GSAP
             </span>
           </div>
         </div>

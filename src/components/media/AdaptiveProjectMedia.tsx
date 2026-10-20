@@ -10,6 +10,7 @@ interface AdaptiveProjectMediaProps {
   title: string;
   isActive?: boolean;
   className?: string;
+  isFeatured?: boolean;
 }
 
 export const AdaptiveProjectMedia: React.FC<AdaptiveProjectMediaProps> = ({
@@ -17,17 +18,42 @@ export const AdaptiveProjectMedia: React.FC<AdaptiveProjectMediaProps> = ({
   title,
   isActive = true,
   className = '',
+  isFeatured = false,
 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [showComparison, setShowComparison] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [isInView, setIsInView] = useState(false);
 
-  // Kontrol pemutaran video hening: hanya play saat isActive = true untuk hemat GPU
+  // 1. Viewport Intersection Observer: Hanya play video saat terlihat di layar
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || media.type !== 'VIDEO_LOOP') return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      {
+        rootMargin: '120px 0px 120px 0px', // Buffer 120px untuk transisi mulus
+        threshold: 0.1,
+      }
+    );
+
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [media.type]);
+
+  // 2. Kontrol pemutaran video hening: HANYA play saat isActive DAN isInView
   useEffect(() => {
     const video = videoRef.current;
     if (!video || media.type !== 'VIDEO_LOOP') return;
 
-    if (isActive) {
+    if (isActive && isInView) {
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
@@ -37,7 +63,7 @@ export const AdaptiveProjectMedia: React.FC<AdaptiveProjectMediaProps> = ({
     } else {
       video.pause();
     }
-  }, [isActive, media.type]);
+  }, [isActive, isInView, media.type]);
 
   // Rasio aspek mapping
   const aspectClass =
@@ -49,7 +75,15 @@ export const AdaptiveProjectMedia: React.FC<AdaptiveProjectMediaProps> = ({
 
   return (
     <div
-      className={`relative w-full ${aspectClass} overflow-hidden rounded-xl bg-[#0a0a0d] border border-[#202024] group ${className}`}
+      ref={containerRef}
+      className={`relative w-full ${aspectClass} overflow-hidden rounded-xl bg-[#0a0a0d] border ${
+        isFeatured ? 'border-amber-400/40 shadow-[0_0_25px_rgba(245,158,11,0.12)]' : 'border-[#202024]'
+      } group ${className}`}
+      style={{
+        contain: 'paint layout',
+        transform: 'translate3d(0, 0, 0)',
+        backfaceVisibility: 'hidden',
+      }}
     >
       {/* 1. Format Video Loop (Khusus Motion Graphic & AI Video Preview) */}
       {media.type === 'VIDEO_LOOP' && (
@@ -61,7 +95,7 @@ export const AdaptiveProjectMedia: React.FC<AdaptiveProjectMediaProps> = ({
             loop
             muted
             playsInline
-            preload="metadata"
+            preload={isInView ? 'metadata' : 'none'}
             onLoadedData={() => setIsVideoLoaded(true)}
             className={`w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 ${
               isVideoLoaded ? 'opacity-100' : 'opacity-90'
@@ -69,7 +103,7 @@ export const AdaptiveProjectMedia: React.FC<AdaptiveProjectMediaProps> = ({
           />
 
           {/* Badge Muted Video Indicator */}
-          <div className="absolute top-3 left-3 px-2 py-1 rounded-md bg-black/70 backdrop-blur-md border border-white/10 flex items-center gap-1.5 text-[9px] font-mono text-[#8e8e93]">
+          <div className="absolute top-3 left-3 px-2 py-1 rounded-md bg-black/70 backdrop-blur-md border border-white/10 flex items-center gap-1.5 text-[9px] font-mono text-[#8e8e93] pointer-events-none">
             <VolumeX className="w-3 h-3 text-amber-400" />
             <span className="uppercase tracking-wider">SILENT LOOP</span>
           </div>
@@ -87,7 +121,7 @@ export const AdaptiveProjectMedia: React.FC<AdaptiveProjectMediaProps> = ({
             unoptimized
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
-          <div className="absolute top-3 left-3 px-2 py-1 rounded-md bg-black/70 backdrop-blur-md border border-white/10 flex items-center gap-1.5 text-[9px] font-mono text-[#8e8e93]">
+          <div className="absolute top-3 left-3 px-2 py-1 rounded-md bg-black/70 backdrop-blur-md border border-white/10 flex items-center gap-1.5 text-[9px] font-mono text-[#8e8e93] pointer-events-none">
             <Eye className="w-3 h-3 text-blue-400" />
             <span className="uppercase tracking-wider">HIGH-RES STILL</span>
           </div>
