@@ -1,243 +1,398 @@
-# SPEC-01: DATA ARCHITECTURE & CONTENT SCHEMA
+# SPEC-01: DATA MODEL & CONTENT ARCHITECTURE
+**Project**: Portfolio Website Indra Wijaya — Creative Motion Designer & AI Development  
+**Concept**: Interactive Dark Minimalist with Cursor Lens / Refraction & Dynamic Showreel (Inspired by Purrweb Designer Portfolio)  
 **Phase**: 01 — Data Model & Information Architecture  
 **Status**: DRAFT (Review Pending)  
-**Scope**: Definisi skema konten & relasi data untuk Portofolio Motion Designer / Creative Studio (Dark Minimalist & Interactive Showreel).  
-**Constraint**: Tidak ada kode aplikasi/implementasi framework. Format TypeScript Interface & JSON Schema digunakan murni sebagai kontrak data struktural.
+**Constraint**: Murni spesifikasi skema data & arsitektur konten. DILARANG menulis kode aplikasi atau framework di luar direktori `/specs/`.
 
 ---
 
-## 1. Arsitektur Informasi & Navigation Sitemap
+## 1. Arsitektur Informasi & Pemetaan Bagian Halaman
 
-Website dirancang dengan struktur *high-impact single-page showcase* dengan kapabilitas *deep-linking* atau modal detail proyek tanpa merusak alur scroll.
+Website dirancang sebagai *high-impact single-page portfolio* dengan sistem filtrasi karya yang instan, interaksi kursor lensa pada Hero Showreel, dan konversi cepat tanpa friksi formulir email yang rumit.
 
 ```mermaid
 graph TD
-    A[Header / Global Nav] --> B[Hero Section: Kinetic Showreel & Cursor Lens]
-    B --> C[Selected Works / Playbook: Interactive Video Grid]
-    C --> D[Services & Collaboration Packages]
-    D --> E[Studio/Creative Profile & Tool Arsenal]
-    E --> F[Conversion CTA & Inquiry Modal / Section]
-    F --> G[Footer: Live Timezone & Socials]
+    A[Top Navigation Bar] --> B[Hero Section: Kinetic Typography & Dual-Layer Video Lens]
+    B --> C[Metadata Bar Kiri Bawah: Specialization, Availability & Location]
+    C --> D[Playbook / Works Showcase: 3 Filter Kategori]
+    D --> D1[1. MOTION GRAPHIC: Muted Video Loops]
+    D --> D2[2. GRAPHIC DESIGN: High-Res Visuals & Layouts]
+    D --> D3[3. AI DEVELOPMENT: AI Video/Image & Workflow Integrations]
+    D --> E[Direct Conversion Footer & Floating Actions: WhatsApp & Instagram]
 ```
 
-### Rincian Bagian (Sitemap Component Tree)
-1. **Header (Global Sticky/Floating Bar)**:
-   - Wordmark / Studio Monogram
-   - Real-time Availability Pill (`● Available for Projects` / `○ Fully Booked`)
-   - Anchor Nav (`Selected Works`, `Services`, `Profile`, `Contact`)
-   - Quick Action: `Start a Project`
-2. **Hero (Showreel & Dynamic Canvas)**:
-   - Kinetic Typography Loop (headline yang bertransformasi)
-   - Dual-layer Video Engine: Ambient Background Blur Loop + Sharp Refraction Reveal (untuk interaksi kursor)
-   - Audio Toggle (Mute/Unmute untuk immersive preview)
-3. **Selected Works (The Playbook)**:
-   - Filter Kategori: `All`, `Motion Graphics`, `Commercial / Ads`, `3D & Visuals`, `Brand Identity`
-   - Feed Proyek dengan rasio dinamis (16:9 cinematic, 9:16 vertical reels)
-   - Hover-to-preview video stream ringan
-4. **Services & Capabilities (Creative Packs)**:
-   - Daftar paket layanan kreatif (Motion Design for Product, Campaign Commercials, Kinetic Typography & Branding)
-   - Rincian deliverable & alur kerja (*Brief → Styleframe → Animatic → Render*)
-5. **Creative Profile & Hardware/Software Arsenal**:
-   - Filosofi desain & bio ringkas
-   - Daftar software / workflow tools (Premiere Pro, DaVinci Resolve, After Effects, Cinema 4D/Blender, Plugins)
-6. **Contact & Project Inquiry**:
-   - Direct Contact (Email, WhatsApp, Discord/Telegram)
-   - Filter perkiraan budget & timeline
-7. **Footer**:
-   - Dynamic Local Time (WIB / GMT+7)
-   - Copyright & Social Networks (Behance, Vimeo, YouTube, Instagram, LinkedIn)
+### Pemetaan Relasi Data ke Setiap Bagian Halaman
+
+1. **Header (Top Navigation Bar)**:
+   - Wordmark Kiri Atas: `INDRA WIJAYA`
+   - Menu Navigasi: `PLAYBOOK (WORKS)` | `SOCIALS` | `CONTACTS`
+   - Live Availability Pill (Ketersediaan proyek)
+2. **Hero Section (Interactive Dual-Layer Showreel)**:
+   - Kinetic Headline: `"Creative "` + `[dynamic_word]` (font serif/italic dinamis: *"motion"*, *"visual"*, *"AI-driven"*) + `" designer"`
+   - Dual-Layer Video Canvas: Ambient Blur Background + Sharp Reveal Lens (mengikuti kursor mouse)
+   - Quick CTA: Scroll to Works / Direct WhatsApp
+   - **Kiri Bawah (Metadata Bar)**:
+     - Spesialisasi: `MOTION GRAPHIC / GRAPHIC DESIGN / AI DEVELOPMENT`
+     - Status: `CURRENTLY AVAILABLE FOR FREELANCE & COLLABORATION`
+     - Lokasi: `INDONESIA (WORLDWIDE REMOTE)`
+   - **Kanan Bawah (Interactive 3 Stacked Cards Deck)**:
+     - Kartu 1 (Depan / Fokus): `MOTION GRAPHIC` (Video loop hening, z-index 3)
+     - Kartu 2 (Tengah): `GRAPHIC DESIGN` (Offset scale 0.94, blur sedang, z-index 2)
+     - Kartu 3 (Belakang): `AI DEVELOPMENT` (Offset scale 0.88, blur kuat, z-index 1)
+     - Interaksi: Hover/Click melakukan *deck shuffle* & scroll/filter langsung ke kategori karya terkait.
+3. **Katalog Karya (The Playbook / Works)**:
+   - Filtrasi tab interaktif: `ALL` (Semua), `MOTION GRAPHIC`, `GRAPHIC DESIGN`, `AI DEVELOPMENT`
+   - Grid adaptif multi-rasio (`16:9`, `9:16`, `1:1`)
+   - Adaptive Media Preview:
+     - Video loop silent teroptimasi untuk kategori *Motion Graphic*.
+     - High-res crisp visual / comparison frame untuk *Graphic Design* dan *AI Development*.
+5. **Direct Conversion & Floating Contact (Tanpa Form Email Rumit)**:
+   - **WhatsApp Direct**: Tombol aksi dengan tautan dinamis yang menyertakan *pre-filled text* kontekstual berdasarkan kategori karya yang sedang dieksplorasi.
+   - **Instagram Direct**: Akses cepat ke profil `@indrawijaya` (atau moniker pilihan) untuk direct messaging (DM).
 
 ---
 
-## 2. Definisi Skema Data (TypeScript Type Contracts)
-
-### A. Site Identity Schema (`SiteIdentitySchema`)
-Mendefinisikan identitas pemilik portofolio, mode operasional (apakah personal moniker atau creative studio), status ketersediaan, serta spesialisasi software/tools.
+## 2. Definisi TypeScript Interfaces (Data Contracts)
 
 ```typescript
-export type OperationalMode = 'STUDIO_CREATIVE' | 'PERSONAL_FREELANCER';
+/**
+ * 1. Kategori Karya & Filter
+ */
+export type ProjectCategory = 
+  | 'motion-graphic' 
+  | 'graphic-design' 
+  | 'ai-development';
 
-export type AvailabilityStatus = 
-  | 'AVAILABLE_IMMEDIATE'   // Siap terima proyek baru
-  | 'SELECTIVE_PROJECTS'    // Hanya menerima proyek skala tertentu
-  | 'BOOKED_OUT';           // Sedang penuh hingga periode tertentu
+export interface CategoryFilterItem {
+  id: ProjectCategory | 'all';
+  label: string;          // e.g. "ALL", "MOTION GRAPHIC", "GRAPHIC DESIGN", "AI DEVELOPMENT"
+  countBadge?: number;
+  description: string;
+}
 
-export interface ToolItem {
+/**
+ * 2. Atribut Tools & Creative Pipeline
+ */
+export type CoreCreativeTool = 
+  | 'Adobe After Effects'
+  | 'Adobe Premiere Pro'
+  | 'Adobe Photoshop'
+  | 'Adobe Illustrator';
+
+export type AiAndTechTool = 
+  | 'Midjourney'
+  | 'Runway Gen-3'
+  | 'ComfyUI'
+  | 'Stable Diffusion'
+  | 'ElevenLabs'
+  | 'Claude / GPT-4'
+  | 'Cinema 4D / Blender'
+  | string; // Slot terbuka untuk custom AI workflow
+
+export interface ToolBadge {
+  name: CoreCreativeTool | AiAndTechTool;
+  category: 'CORE_CREATIVE' | 'AI_TECH' | 'FINISHING';
+  isPrimary?: boolean;
+}
+
+/**
+ * 3. Media Adaptif Proyek
+ */
+export type AspectRatioType = '16:9' | '9:16' | '1:1';
+
+export type MediaType = 'VIDEO_LOOP' | 'IMAGE_STILL' | 'INTERACTIVE_COMPARISON';
+
+export interface AdaptiveMedia {
+  type: MediaType;
+  previewUrl: string;          // Video loop WebM/MP4 (tanpa audio) atau WebP visual
+  fallbackPosterUrl: string;   // Lightweight poster WebP
+  fullMediaUrl: string;        // Full video showcase (YouTube/Vimeo/CDN) atau High-res image
+  aspectRatio: AspectRatioType;
+  durationSeconds?: number;    // Khusus untuk video
+  comparisonSourceBeforeUrl?: string; // Khusus AI dev (Original prompt/RAW vs Final)
+}
+
+/**
+ * 4. Skema Item Proyek (ProjectItemSchema)
+ */
+export interface ProjectItemSchema {
   id: string;
-  name: string;             // Contoh: "DaVinci Resolve Studio", "Adobe After Effects"
-  category: 'COMPOSITING_MOTION' | 'COLOR_EDITING' | '3D_CGI' | 'AUDIO_DESIGN' | 'PLUGINS_SCRIPTS';
-  iconIdentifier: string;   // Identifier ikon SVG
-  proficiencyLevel?: 'MASTER' | 'ADVANCED' | 'CORE_STACK';
+  slug: string;
+  title: string;
+  category: ProjectCategory;
+  year: number;
+  clientOrContext: string;     // e.g. "Hyperdrive Labs", "Editorial Runway", "Internal R&D"
+  description: {
+    shortSnippet: string;      // 1 kalimat pengait cepat
+    detailedChallenge?: string;
+    solutionApplied?: string;
+  };
+  media: AdaptiveMedia;
+  tools: ToolBadge[];
+  featuredInHero?: boolean;
+  sortOrder: number;
 }
 
-export interface SocialLink {
-  platform: 'BEHANCE' | 'VIMEO' | 'INSTAGRAM' | 'YOUTUBE' | 'LINKEDIN' | 'WHATSAPP' | 'EMAIL';
-  label: string;
-  url: string;
-  isPrimaryContact: boolean;
+/**
+ * 5. Konfigurasi Kontak & Konversi Langsung (Tanpa Form Email)
+ */
+export interface WhatsAppConfig {
+  phoneNumber: string;         // e.g. "6281234567890" (format internasional tanpa '+')
+  defaultMessage: string;      // Default pre-filled text
+  categoryContextMessages: Record<ProjectCategory, string>; // Pesan dinamis per kategori
 }
 
+export interface InstagramConfig {
+  username: string;            // e.g. "indrawijaya.motion"
+  profileUrl: string;
+  displayHandle: string;       // e.g. "@indrawijaya.motion"
+}
+
+export interface NavigationAndContactSchema {
+  navLinks: Array<{
+    id: string;
+    label: string;
+    targetAnchor: string;      // e.g. "#playbook", "#socials", "#contact"
+  }>;
+  whatsapp: WhatsAppConfig;
+  instagram: InstagramConfig;
+  socials: Array<{
+    platform: 'BEHANCE' | 'VIMEO' | 'LINKEDIN' | 'YOUTUBE';
+    label: string;
+    url: string;
+  }>;
+}
+
+/**
+ * 6. Skema Identitas Utama (SiteIdentitySchema)
+ */
 export interface SiteIdentitySchema {
-  mode: OperationalMode;
-  brandName: string;          // Contoh: "Indra Studio" atau "Indra Wijaya"
-  legalName?: string;
-  tagline: string;            // Contoh: "Sculpting Rhythm & Kinetic Motion for Bold Brands"
-  shortBio: string;           // 1-2 kalimat positioning statement
-  location: {
-    city: string;
-    country: string;
-    timezone: string;         // Contoh: "Asia/Jakarta" (GMT+7)
-  };
-  availability: {
-    status: AvailabilityStatus;
-    badgeText: string;        // Contoh: "Available for Q4/2026 Projects"
-    bookingSlotsOpenFrom?: string; // ISO date / bulan jika booked out
-  };
-  specializations: string[];  // Contoh: ["Kinetic Typography", "Commercial Editing", "CGI Motion", "Color Grading"]
-  toolsArsenal: ToolItem[];
-  socialLinks: SocialLink[];
-}
-```
-
----
-
-### B. Showreel Hero Schema (`ShowreelHeroSchema`)
-Mendefinisikan data untuk area paling atas layar, termasuk teks kinetik yang berganti dinamis dan sumber media ganda untuk efek lensa kursor.
-
-```typescript
-export interface KineticKeyword {
-  id: string;
-  text: string;               // Contoh: "KINETIC RHYTHM", "BOLD COMMERCIALS", "3D DYNAMICS"
-  accentColor?: string;       // Hex / HSL aksen opsional saat kata kunci ini aktif
-}
-
-export interface ShowreelHeroSchema {
-  headlinePrefix: string;     // Contoh: "Crafting High-Voltage"
-  kineticKeywords: KineticKeyword[];
-  headlineSuffix: string;     // Contoh: "for Next-Gen Brands & Creators."
-  subText: string;            // Keterangan pendukung di bawah headline
+  brandName: string;           // "INDRA WIJAYA"
+  primaryRole: string;         // "Motion Designer"
   
-  // Dual-Layer Video Assets untuk Refraction / Cursor Lens
-  mediaSources: {
-    // Layer 1: Ambient background (terdistorsi, redup, atau diburamkan secara artistik)
-    ambientBlurVideoUrl: string;       // Optimized low-bitrate MP4/WebM (Muted, Loop)
-    // Layer 2: Video tajam resolusi tinggi yang terkuak tepat di dalam radius kursor lensa
-    sharpRevealVideoUrl: string;       // Ultra-sharp MP4/WebM sync loop
-    // Fallback bila browser pengguna low-power mode atau menonaktifkan video
+  heroKinetic: {
+    prefix: string;            // "Creative "
+    dynamicWords: string[];    // ["motion", "visual", "AI-driven"]
+    suffix: string;            // " designer"
+    subHeadline: string;       // Penjelasan pelengkap di bawah headline
+  };
+
+  metadataBar: {
+    specializations: string;   // "MOTION GRAPHIC / GRAPHIC DESIGN / AI DEVELOPMENT"
+    availabilityStatus: string;// "CURRENTLY AVAILABLE FOR FREELANCE & COLLABORATION"
+    location: string;          // "INDONESIA (WORLDWIDE REMOTE)"
+  };
+
+  heroShowreel: {
+    ambientBlurVideoUrl: string;  // Layer 0: Ambient loop blur
+    sharpRevealVideoUrl: string;  // Layer 1: Sharp sync loop untuk cursor lens
     fallbackPosterUrl: string;
     durationSeconds: number;
   };
 
-  callToActions: {
-    primary: {
-      label: string;          // Contoh: "Watch Full Reel"
-      actionType: 'OPEN_SHOWREEL_MODAL' | 'SCROLL_TO_PROJECTS';
-      targetVideoUrl?: string;// URL video resolusi tinggi (YouTube/Vimeo embed atau direct CDN)
-    };
-    secondary: {
-      label: string;          // Contoh: "Book a Project"
-      targetSectionId: string;// e.g., "#contact"
-    };
-  };
+  navigationAndContact: NavigationAndContactSchema;
 }
 ```
 
 ---
 
-### C. Project Item Schema (`ProjectItemSchema`)
-Mendefinisikan spesifikasi setiap karya di galeri portofolio, mendukung video loop instan, berbagai rasio aspek (cinematic vs social vertical), breakdown peran teknis, serta tautan video penuh.
+## 3. Mock Data JSON Realistis
 
-```typescript
-export type ProjectCategory = 
-  | 'MOTION_GRAPHICS'
-  | 'COMMERCIAL_ADS'
-  | '3D_VISUALS'
-  | 'BRANDING_KINETIC'
-  | 'EXPLAINER_PRODUCT';
+Struktur data mock operasional yang mengimplementasikan seluruh kontrak di atas:
 
-export type AspectRatioType = 
-  | '16:9'    // Landscape Cinematic / YouTube
-  | '9:16'    // Vertical Social / Reels / TikTok Ads
-  | '4:5'     // Portrait Feed
-  | '1:1'     // Square Showcase
-  | '21:9';   // Ultra-widescreen banner
+```json
+{
+  "siteIdentity": {
+    "brandName": "INDRA WIJAYA",
+    "primaryRole": "Motion Designer",
+    "heroKinetic": {
+      "prefix": "Creative ",
+      "dynamicWords": ["motion", "visual", "AI-driven"],
+      "suffix": " designer",
+      "subHeadline": "Merging precision kinetic typography, commercial motion graphics, and generative AI pipelines to craft high-voltage visual experiences."
+    },
+    "metadataBar": {
+      "specializations": "MOTION GRAPHIC / GRAPHIC DESIGN / AI DEVELOPMENT",
+      "availabilityStatus": "CURRENTLY AVAILABLE FOR FREELANCE & COLLABORATION",
+      "location": "INDONESIA (WORLDWIDE REMOTE)"
+    },
+    "heroShowreel": {
+      "ambientBlurVideoUrl": "/videos/hero/hero-ambient-blur.mp4",
+      "sharpRevealVideoUrl": "/videos/hero/hero-sharp-reveal.mp4",
+      "fallbackPosterUrl": "/posters/hero-poster.webp",
+      "durationSeconds": 12
+    },
+    "navigationAndContact": {
+      "navLinks": [
+        { "id": "works", "label": "PLAYBOOK (WORKS)", "targetAnchor": "#playbook" },
+        { "id": "socials", "label": "SOCIALS", "targetAnchor": "#socials" },
+        { "id": "contact", "label": "CONTACTS", "targetAnchor": "#contacts" }
+      ],
+      "whatsapp": {
+        "phoneNumber": "6281234567890",
+        "defaultMessage": "Halo Indra, saya melihat portofolio Anda dan tertarik untuk berdiskusi mengenai proyek kolaborasi.",
+        "categoryContextMessages": {
+          "motion-graphic": "Halo Indra, saya tertarik berdiskusi mengenai proyek Motion Graphic / Commercial Animation untuk brand saya.",
+          "graphic-design": "Halo Indra, saya tertarik berdiskusi mengenai kebutuhan Visual Identity / Graphic Design proyek kami.",
+          "ai-development": "Halo Indra, saya tertarik berdiskusi mengenai eksplorasi AI Creative Pipeline & Visual Generation untuk campaign kami."
+        }
+      },
+      "instagram": {
+        "username": "indrawijaya.motion",
+        "profileUrl": "https://instagram.com/indrawijaya.motion",
+        "displayHandle": "@indrawijaya.motion"
+      },
+      "socials": [
+        { "platform": "BEHANCE", "label": "Behance", "url": "https://behance.net/indrawijaya" },
+        { "platform": "VIMEO", "label": "Vimeo", "url": "https://vimeo.com/indrawijaya" },
+        { "platform": "LINKEDIN", "label": "LinkedIn", "url": "https://linkedin.com/in/indrawijaya" },
+        { "platform": "YOUTUBE", "label": "YouTube", "url": "https://youtube.com/@indrawijaya" }
+      ]
+    }
+  },
 
-export interface RoleContribution {
-  roleName: string;          // Contoh: "Motion Director", "Color Grading", "Sound FX Sync"
-  percentageOrScope?: string;// Contoh: "Lead 100%" atau "Compositing & Animation"
-}
+  "categoryFilters": [
+    { "id": "motion-graphic", "label": "MOTION GRAPHIC", "description": "Animasi dinamis, showreel, bumper komersial & kinetic reels (Kategori Utama)" },
+    { "id": "graphic-design", "label": "GRAPHIC DESIGN", "description": "Visual branding, poster editorial, layout & key visual" },
+    { "id": "ai-development", "label": "AI DEVELOPMENT", "description": "Eksplorasi generative video, visual synthesis & custom workflow" },
+    { "id": "all", "label": "ALL", "description": "Seluruh koleksi karya terpilih" }
+  ],
 
-export interface ProjectItemSchema {
-  id: string;
-  slug: string;              // URL-friendly identifier unik (e.g. "tokopedia-hyperdrive-campaign")
-  title: string;             // Judul Proyek
-  client: {
-    name: string;            // Nama Klien / Brand / Kreator
-    industry?: string;       // Contoh: "Fintech", "Apparel", "SaaS", "Entertainment"
-    logoUrl?: string;
-  };
-  category: ProjectCategory;
-  year: number;              // Tahun produksi (misal: 2026)
-  aspectRatio: AspectRatioType;
-  
-  // Media Assets
-  media: {
-    previewLoopUrl: string;  // Short silent video loop (3-7 detik, WebM/MP4, kompresi tinggi untuk fast load)
-    posterThumbnailUrl: string; // Static fallback image / WebP
-    fullVideoUrl: string;    // Full showcase video (YouTube, Vimeo unlisted, or Cloudflare Stream)
-    videoDurationSeconds: number;
-    hasAudio: boolean;       // Menandai apakah proyek memiliki audio asli saat dibuka
-  };
-  
-  // Breakdown & Keterangan Proyek
-  description: {
-    challengeSnippet: string;// 1-2 kalimat ringkasan tantangan kreatif
-    solutionSnippet: string; // 1-2 kalimat solusi motion & visual yang diterapkan
-  };
-  roles: RoleContribution[];
-  toolsUsed: string[];       // Daftar tools yang dipakai di proyek ini: ["After Effects", "DaVinci Resolve"]
-  
-  // Highlight / Performance Metrics (Opsional)
-  metrics?: {
-    viewsOrReach?: string;   // Contoh: "1.4M+ Impressions"
-    keyResult?: string;      // Contoh: "Winner - Best Visual 2025"
-  };
-
-  // Status Tampilan
-  featured: boolean;         // Tampil di Hero / Top Spotlight
-  sortOrder: number;         // Prioritas urutan tampil
+  "projects": [
+    {
+      "id": "proj-01-hyperdrive",
+      "slug": "hyperdrive-fintech-rebrand",
+      "title": "Hyperdrive Fintech — Kinetic Rebrand Reel",
+      "category": "motion-graphic",
+      "year": 2026,
+      "clientOrContext": "Hyperdrive Labs",
+      "description": {
+        "shortSnippet": "High-voltage kinetic animation dan sound FX sync untuk kampanye digital aplikasi pembayaran instan.",
+        "detailedChallenge": "Membangun video promosi 30 detik yang menyajikan transaksi instan tanpa alur yang membosankan.",
+        "solutionApplied": "Menerapkan kinetic typography berlapis, motion blur terkontrol, dan transisi match-cut dinamis di After Effects."
+      },
+      "media": {
+        "type": "VIDEO_LOOP",
+        "previewUrl": "/videos/projects/hyperdrive-preview.mp4",
+        "fallbackPosterUrl": "/posters/hyperdrive-poster.webp",
+        "fullMediaUrl": "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1",
+        "aspectRatio": "16:9",
+        "durationSeconds": 30
+      },
+      "tools": [
+        { "name": "Adobe After Effects", "category": "CORE_CREATIVE", "isPrimary": true },
+        { "name": "Adobe Premiere Pro", "category": "CORE_CREATIVE" },
+        { "name": "Adobe Photoshop", "category": "CORE_CREATIVE" }
+      ],
+      "featuredInHero": true,
+      "sortOrder": 1
+    },
+    {
+      "id": "proj-02-chronos",
+      "slug": "chronos-brutalist-identity",
+      "title": "Chronos Runway — Brutalist Key Visual & Poster Series",
+      "category": "graphic-design",
+      "year": 2025,
+      "clientOrContext": "Chronos Studio Paris",
+      "description": {
+        "shortSnippet": "Seri poster editorial dan visual identity bertema avant-garde dengan eksplorasi tipografi modular monokrom.",
+        "detailedChallenge": "Menciptakan komposisi visual yang mempertahankan keterbacaan tinggi di tengah eksperimen distorsi grafis.",
+        "solutionApplied": "Merancang grid modular di Illustrator dan grading tekstur film halftones di Photoshop."
+      },
+      "media": {
+        "type": "IMAGE_STILL",
+        "previewUrl": "/posters/chronos-poster.webp",
+        "fallbackPosterUrl": "/posters/chronos-poster.webp",
+        "fullMediaUrl": "/images/projects/chronos-full.webp",
+        "aspectRatio": "1:1"
+      },
+      "tools": [
+        { "name": "Adobe Illustrator", "category": "CORE_CREATIVE", "isPrimary": true },
+        { "name": "Adobe Photoshop", "category": "CORE_CREATIVE", "isPrimary": true }
+      ],
+      "featuredInHero": false,
+      "sortOrder": 2
+    },
+    {
+      "id": "proj-03-neural-genesis",
+      "slug": "neural-genesis-ai-campaign",
+      "title": "Neural Genesis — AI Generative Video Pipeline",
+      "category": "ai-development",
+      "year": 2026,
+      "clientOrContext": "Generative Art Collective (Internal R&D)",
+      "description": {
+        "shortSnippet": "Eksplorasi sintesis video berbasis AI yang menggabungkan Midjourney, Runway Gen-3, dan fine-tuning compositing di After Effects.",
+        "detailedChallenge": "Mengatasi inkonsistensi frame-by-frame (flicker) yang umum terjadi pada AI video generators.",
+        "solutionApplied": "Membangun multi-pass workflow dengan optical flow interpolation dan color stabilization di Premiere Pro & After Effects."
+      },
+      "media": {
+        "type": "VIDEO_LOOP",
+        "previewUrl": "/videos/projects/neural-genesis-preview.mp4",
+        "fallbackPosterUrl": "/posters/neural-genesis-poster.webp",
+        "fullMediaUrl": "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1",
+        "aspectRatio": "9:16",
+        "durationSeconds": 24,
+        "comparisonSourceBeforeUrl": "/images/projects/neural-raw-generation.webp"
+      },
+      "tools": [
+        { "name": "Midjourney", "category": "AI_TECH", "isPrimary": true },
+        { "name": "Runway Gen-3", "category": "AI_TECH", "isPrimary": true },
+        { "name": "Adobe After Effects", "category": "CORE_CREATIVE" },
+        { "name": "ComfyUI", "category": "AI_TECH" }
+      ],
+      "featuredInHero": true,
+      "sortOrder": 3
+    }
+  ]
 }
 ```
 
 ---
 
-### D. Service & Capability Schema (`ServicePackageSchema`)
-Mendefinisikan penawaran paket pengerjaan untuk calon klien/brand/UMKM agar alur konversi jelas.
+## 4. Alur Interaksi Konversi Langsung (WhatsApp & Instagram Direct)
 
-```typescript
-export interface DeliverableItem {
-  name: string;              // Contoh: "Storyboarding & Styleframes", "Render 4K 60FPS"
-  description?: string;
-}
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Pengunjung as Pengunjung Website
+    participant UI as Playbook UI / Project Card
+    participant CTA as Dynamic WhatsApp Button
+    participant WA as WhatsApp Application / Web
 
-export interface ServicePackageSchema {
-  id: string;
-  title: string;             // Contoh: "Commercial Motion & Ads"
-  shortDescription: string;  // Penjelasan tujuan layanan
-  deliverables: DeliverableItem[];
-  turnaroundTime: string;    // Contoh: "5-10 Hari Kerja"
-  idealFor: string;          // Contoh: "Brand & Agensi yang butuh video promosi campaign berdampak tinggi"
-  startingFromPrice?: string;// Opsional (e.g. "Custom Quote" atau nominal)
-}
+    Pengunjung->>UI: Membuka Proyek Kategori "MOTION GRAPHIC"
+    UI->>CTA: Update Context: category = 'motion-graphic'
+    CTA->>CTA: Format Link: https://wa.me/{phone}?text={encode(categoryContextMessage)}
+    Pengunjung->>CTA: Klik Tombol "Direct WhatsApp"
+    CTA->>WA: Buka Chat dengan Pesan Otomatis:
+    Note over WA: "Halo Indra, saya tertarik berdiskusi mengenai proyek Motion Graphic / Commercial Animation untuk brand saya."
 ```
 
 ---
 
-## 3. Pertanyaan Klarifikasi untuk Mengunci Fase 1
+## 5. Ringkasan Kepatuhan Spesifikasi (Compliance Matrix)
 
-Sebelum skema data ini dikunci dan kita beralih ke **Fase 2 (UI/UX Architecture & Interaction Specs)**, mohon konfirmasi untuk 4 hal berikut:
+| Poin Kunci Kebutuhan | Status di Dokumen Ini | Lokasi Definisi |
+| :--- | :---: | :--- |
+| **Identitas & Role** | `INDRA WIJAYA` — `Motion Designer` | `SiteIdentitySchema.brandName` & `primaryRole` |
+| **Hero Kinetic Typography** | `"Creative "` + `[motion / visual / AI-driven]` + `" designer"` | `SiteIdentitySchema.heroKinetic` |
+| **Metadata Kiri Bawah** | 3 Baris: Specialization, Availability Status, Location | `SiteIdentitySchema.metadataBar` |
+| **3 Kategori Utama** | `MOTION GRAPHIC`, `GRAPHIC DESIGN`, `AI DEVELOPMENT` | `ProjectCategory` & `categoryFilters` |
+| **Media Adaptif Multi-Rasio** | `16:9`, `9:16`, `1:1` (Video loop silent & high-res still) | `AdaptiveMedia` & `ProjectItemSchema.media` |
+| **Core & AI Tools Stack** | After Effects, Premiere, Photoshop, Illustrator + AI Slot | `ToolBadge`, `CoreCreativeTool`, `AiAndTechTool` |
+| **Navigasi & Direct Contact** | WhatsApp dinamis per kategori & Instagram Direct | `NavigationAndContactSchema.whatsapp` & `instagram` |
+| **Contoh Mock JSON 3 Kategori** | 1 Motion Graphic, 1 Graphic Design, 1 AI Development | Section 3 (JSON Mock Structure) |
 
-1. **Mode Identitas Portofolio**: Apakah nama brand yang akan ditampilkan adalah **Personal Brand** (misal: *Indra Wijaya — Motion Designer*) atau **Creative Studio / Collective Entity** (misal: *Indra Studio / Motion Lab*)?
-2. **Koleksi Format Video Utama**: Apakah karya-karya yang akan dipamerkan mayoritas berformat **Landscape Cinematic (16:9)**, **Vertical Mobile / Reels (9:16)**, atau **Kombinasi Keduanya (Mixed Grid)**?
-3. **Penyimpanan Video Preview**: Untuk video pendek *preview loop* (3-5 detik) dan *showreel hero*, apakah nantinya akan di-host secara **lokal/self-hosted (folder publik/assets MP4/WebM)**, atau diarahkan ke **layanan pihak ketiga (Vimeo / Cloudflare Stream / YouTube)**?
-4. **Struktur Paket Layanan (Services)**: Apakah Anda ingin mencantumkan **kisaran harga estimasi (starting price)** secara terbuka, atau murni menggunakan model **Custom Quote / Inquiry Form**?
+---
+
+## 6. Keputusan Konfirmasi Pengguna (User-Locked Decisions)
+
+Berikut parameter yang telah dikonfirmasi dan dikunci oleh pengguna:
+1. **Kontak Langsung (WhatsApp & Instagram)**: 
+   - Menggunakan nilai *placeholder* terlebih dahulu selama fase perancangan dan *development* (`6281234567890` & `@indrawijaya.motion`).
+   - Nomor WhatsApp resmi dan username Instagram asli akan ditanyakan kembali secara eksplisit kepada pengguna saat website sudah selesai dibangun / siap dideploy.
+2. **Prioritas Kategori Karya (Playbook)**: 
+   - Kategori **`MOTION GRAPHIC`** diposisikan sebagai prioritas utama dan tampil pertama di navigasi tab, diikuti oleh `GRAPHIC DESIGN`, `AI DEVELOPMENT`, dan `ALL`.
+3. **Format Video Showreel Hero**: 
+   - Ditetapkan menggunakan standar industri sinematik **Landscape 16:9** (`1920x1080` / `1280x720`) dengan fallback poster WebP/SVG teroptimasi otomatis untuk menjamin kompatibilitas visual di semua resolusi layar.
+

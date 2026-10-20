@@ -1,199 +1,159 @@
 # IMPLEMENTATION ROADMAP (TASKS.md)
-**Project**: Portfolio Website Indra Wijaya — Motion Designer & Creative Studio  
-**Status**: APPROVED & READY FOR EXECUTION  
+**Project**: Portfolio Website Indra Wijaya — Creative Motion Designer & AI Development  
+**Concept**: Interactive Dark Minimalist with Cursor Lens / Refraction & Dynamic Showreel (Inspired by Purrweb Designer Portfolio)  
+**Status**: APPROVED & FINALIZED FOR EXECUTION  
 **References**:
-- [01-data-architecture.md](file:///d:/WEBSITE%20PORTOFOLIO%20INDRA/specs/01-data-architecture.md) (Data Models & Schemas)
-- [02-interaction-behavior.md](file:///d:/WEBSITE%20PORTOFOLIO%20INDRA/specs/02-interaction-behavior.md) (State Machines & Physics)
-- [03-technical-architecture.md](file:///d:/WEBSITE%20PORTOFOLIO%20INDRA/specs/03-technical-architecture.md) (Tech Stack, Tree & Pipeline)
+- [01-data-architecture.md](file:///d:/WEBSITE%20PORTOFOLIO%20INDRA/specs/01-data-architecture.md) (Data Models, 3 Categories & Direct Contacts)
+- [02-interaction-behavior.md](file:///d:/WEBSITE%20PORTOFOLIO%20INDRA/specs/02-interaction-behavior.md) (State Machines, Lens Optics & Stacked Cards)
+- [03-technical-architecture.md](file:///d:/WEBSITE%20PORTOFOLIO%20INDRA/specs/03-technical-architecture.md) (Tech Stack, Component Tree & Pipeline)
 
 ---
 
-## Ringkasan Milestone & Estimasi Alur Pengerjaan
+## Ringkasan Milestone & Eksekusi Bertahap
 
 ```mermaid
 graph LR
-    M1[M1: Scaffolding & Mock Data] --> M2[M2: Core Layout & Semantics]
-    M2 --> M3[M3: Cursor Lens & Hero Showreel]
-    M3 --> M4[M4: Project Grid, Video Memory & Mobile]
-    M4 --> M5[M5: Smooth Scroll, Polish & Audit]
+    M1[M1: Data Layer, Types & Config] --> M2[M2: Core Layout, Mesh & Typography]
+    M2 --> M3[M3: Cursor Lens & 3-Card Stack]
+    M3 --> M4[M4: Playbook Drawer, Media & WA/IG]
+    M4 --> M5[M5: Polish, Accessibility & 60fps Audit]
 ```
 
-| Milestone | Fokus Utama | Luaran Kritis (*Key Deliverables*) | Status |
+| Milestone | Ruang Lingkup Utama | File & Komponen Kunci | Status |
 | :---: | :--- | :--- | :---: |
-| **M1** | Scaffolding & Static Mock Data | Next.js 15, Tailwind, Zustand, GSAP, TS types & static dataset | ✅ Selesai (Verified) |
-| **M2** | Core Layout & Typography | Semantic HTML, Header, Hero, Grid, Services, Bio, Footer | ⏳ Antrean |
-| **M3** | Interactive Cursor Lens & Optics | Dual-Layer Video Reveal, State Machine Kursor, Magnetic Button | ⏳ Antrean |
-| **M4** | Project Grid & Media Concurrency | Hover-to-Play, Concurrency Budget (Max 2), FLIP Modal, Mobile Gyro | ⏳ Antrean |
-| **M5** | Polish, Smooth Scroll & Audit | Lenis RAF Sync, Audio Toggle, 60 FPS Memory GC, Performance Audit | ⏳ Antrean |
+| **M1** | Data Layer, Types & Configuration Lock | `src/types/portfolio.ts`, `src/data/portfolio-data.ts`, `src/utils/contact-links.ts` | ✅ Selesai (Verified) |
+| **M2** | Core Layout, Mesh & Hero Typography | `TopNavbar.tsx`, `AmbientBackground.tsx`, `HeroTypography.tsx` | ⏳ Antrean |
+| **M3** | Interactive Cursor Lens & 3-Card Stack | `CursorLens.tsx`, `CategoryCardStack.tsx` (DOF blur & scale) | ⏳ Antrean |
+| **M4** | Playbook Drawer, Adaptive Media & WA/IG | `PlaybookModal.tsx`, `AdaptiveProjectMedia.tsx`, `QuickContactModal.tsx` | ⏳ Antrean |
+| **M5** | Polish, Accessibility & 60fps Audit | Lenis smooth scroll, magnetic effects, touch swipe, Lighthouse audit | ⏳ Antrean |
 
 ---
 
-## Detail Breakdown Tugas (*Checklist*)
+## Detail Checklist Tugas Per Milestone
 
-### MILESTONE 1: Project Scaffolding & Static Mock Data Implementation
-> **Tujuan:** Membangun fondasi proyek Next.js 15 App Router yang bersih, mengonfigurasi Tailwind CSS dengan token dark minimalist, serta mengimplementasikan skema data statis dari `SPEC-01` secara type-safe.
+### MILESTONE 1: Data Layer, Types & Configuration Lock
+> **Tujuan:** Mengunci seluruh kontrak data TypeScript, dataset statis profil Indra Wijaya (3 kategori karya), serta generator tautan konversi langsung WhatsApp/Instagram tanpa form rumit.
 
-- [x] **Task 1.1: Next.js Project Initialization**
-  - Inisialisasi Next.js 15 App Router dengan TypeScript (`strict: true`), ESLint, dan Tailwind CSS.
-  - Bersihkan boilerplate default Next.js (`globals.css`, `page.tsx`).
-- [x] **Task 1.2: Dependencies Installation**
-  - Pasang pustaka inti: `zustand` (state telemetry), `gsap` (animasi timeline), `@studio-freight/lenis` / `lenis` (smooth scroll), `lucide-react` (vektor ikon), `clsx`, dan `tailwind-merge`.
-- [x] **Task 1.3: Design Tokens & CSS Custom Properties**
-  - Konfigurasi `src/app/globals.css` dengan palet warna dark luxury:
-    - Pure black `#080808`, card surface `#0f0f11`, elevated border `#202024`, aksen putih monokrom `#f5f5f7`.
-    - Atur konfigurasi font sans (*Inter*) dan display font (*Syne*) via `next/font/google`.
-- [x] **Task 1.4: TypeScript Type Contracts Implementation**
-  - Buat file `src/types/content.types.ts` mengadopsi kontrak data dari `SPEC-01`:
-    - `SiteIdentitySchema`, `ToolItem`, `SocialLink`, `AvailabilityStatus`.
-    - `ShowreelHeroSchema`, `KineticKeyword`.
-    - `ProjectItemSchema`, `ProjectCategory`, `AspectRatioType`, `RoleContribution`.
-    - `ServicePackageSchema`, `DeliverableItem`.
-  - Buat file `src/types/interaction.types.ts` mengadopsi kontrak state dari `SPEC-02` (`CursorState`, `MediaPlaybackState`).
-- [x] **Task 1.5: Static Data Models Implementation**
-  - Buat `src/data/site-identity.data.ts` (Identitas studio/personal Indra Wijaya, bio, availability badge, 12+ software tools terklasifikasi, media sosial).
-  - Buat `src/data/hero.data.ts` (Headline teks, 4 kinetic keywords, URL video dual-layer).
-  - Buat `src/data/projects.data.ts` (6 karya komersial, motion ads, kinetic branding, dan visual 3D lengkap dengan rasio 16:9, 9:16, 4:5, deskripsi challenge/solution, peran teknis, dan durasi).
-  - Buat `src/data/services.data.ts` (3 paket layanan terstruktur: Commercial Motion, 3D Product, Kinetic Identity).
-- [x] **Task 1.6: Static Asset Directory & Placeholder Stubs**
-  - Siapkan folder `public/videos/hero/`, `public/videos/projects/`, `public/posters/`, dan `public/icons/`.
-  - Pasang aset awal/stubs placeholder untuk memastikan build lokal tidak mengalami broken links.
+- [x] **Task 1.1: TypeScript Interfaces & Schema (`src/types/portfolio.ts`)**
+  - Implementasikan seluruh kontrak tipe data mengacu pada `SPEC-01`:
+    - `SiteIdentity`: wordmark `INDRA WIJAYA`, role `Motion Designer`, kinetic headline config, metadata bar, hero showreel sources.
+    - `ProjectCategory`: `'motion-graphic' | 'graphic-design' | 'ai-development'`.
+    - `ProjectItem`: `id`, `slug`, `title`, `category`, `year`, `clientOrContext`, `description`, `media` (adaptive), `tools`, `featured`.
+    - `ToolStack`: Core creative tools (`Adobe After Effects`, `Adobe Premiere Pro`, `Adobe Photoshop`, `Adobe Illustrator`) dan AI tools slot (`Midjourney`, `Runway Gen-3`, `ComfyUI`, dll.).
+    - `ContactCTA`: `WhatsAppConfig` (phone number, default text, pre-filled category text) dan `InstagramConfig` (handle `@indrawijaya.motion`, profile URL).
+    - `CursorState` & `MediaPlaybackState` kontrak tipe interaksi mengacu pada `SPEC-02`.
 
-*Kriteria Keberhasilan M1:* `npm run build` sukses 100% tanpa error TypeScript dan seluruh data statis terverifikasi valid sesuai kontrak skema.
+- [x] **Task 1.2: Static Content & Mock Data (`src/data/portfolio-data.ts`)**
+  - Buat dataset statis terpusat untuk profil **INDRA WIJAYA**:
+    - Array rotasi kata kinetik: `["motion", "visual", "AI-driven"]`.
+    - Metadata Bar:
+      - Spesialisasi: `MOTION GRAPHIC / GRAPHIC DESIGN / AI DEVELOPMENT`
+      - Status: `CURRENTLY AVAILABLE FOR FREELANCE & COLLABORATION`
+      - Lokasi: `INDONESIA (WORLDWIDE REMOTE)`
+    - Koleksi proyek terkurasi untuk 3 kategori:
+      1. *Motion Graphic* (Preview loop hening, 16:9 cinematic commercial & reels).
+      2. *Graphic Design* (High-res key visual, editorial poster, 1:1 square layout).
+      3. *AI Development* (Generative AI video pipeline, before/after RAW comparison).
 
----
+- [x] **Task 1.3: Direct Conversion Helper (`src/utils/contact-links.ts`)**
+  - Buat fungsi utilitas generator tautan WhatsApp:
+    - Fungsi `getWhatsAppUrl(category?: ProjectCategory, projectTitle?: string): string` yang meng-encode nomor WhatsApp dan template pesan dinamis:
+      - Motion Graphic: *"Halo Indra, saya tertarik berdiskusi mengenai proyek Motion Graphic / Commercial Animation untuk brand saya."*
+      - Graphic Design: *"Halo Indra, saya tertarik berdiskusi mengenai kebutuhan Visual Identity / Graphic Design proyek kami."*
+      - AI Development: *"Halo Indra, saya tertarik berdiskusi mengenai eksplorasi AI Creative Pipeline & Visual Generation untuk campaign kami."*
+  - Ekspor konstanta link Instagram langsung (`https://instagram.com/indrawijaya.motion`).
 
-### MILESTONE 2: Core Layout, Typography & Semantic HTML Structure
-> **Tujuan:** Merangkai kerangka antarmuka lengkap tanpa animasi berat terlebih dahulu, memastikan struktur dokumen memiliki aksesibilitas tinggi (*SEO & Semantic HTML*), heading hierarchy yang benar, dan responsivitas penuh di desktop maupun mobile.
-
-- [ ] **Task 2.1: Root Layout & Metadata Configuration**
-  - Modifikasi `src/app/layout.tsx` dengan metadata lengkap (Title, Description, OpenGraph, Viewport, Theme color dark `#080808`).
-  - Terapkan font display dan sans via `next/font`.
-- [ ] **Task 2.2: Global Navigation Header**
-  - Buat `src/components/layout/GlobalHeader.tsx`:
-    - Monogram studio / wordmark.
-    - `AvailabilityBadge.tsx` (Status ketersediaan proyek dengan indikator titik hijau berdenyut halus).
-    - Anchor links nav (`Works`, `Services`, `Profile`, `Contact`).
-    - Quick CTA `"Start a Project"`.
-- [ ] **Task 2.3: Hero Section Semantic Layout**
-  - Buat `src/components/modules/hero/HeroSection.tsx`:
-    - Heading `<h1>` tunggal dengan headline statis dan slot kinetic keyword.
-    - Subtext filosofi studio.
-    - Kontainer dual video canvas (placeholder frame 16:9).
-    - Tombol aksi primer `"Watch Showreel"` dan sekunder `"Book a Project"`.
-- [ ] **Task 2.4: Selected Works Gallery Grid**
-  - Buat `src/components/modules/works/SelectedWorksSection.tsx`:
-    - Header seksi dan subjudul.
-    - `CategoryFilterBar.tsx` (Filter kategori: All, Motion Graphics, Commercial, 3D, Branding).
-    - Layout grid responsif (mendukung variasi rasio 16:9, 9:16, 4:5).
-    - `ProjectCard.tsx` statis (tampilan poster WebP, judul, nama klien, tahun, dan chip peran teknis).
-- [ ] **Task 2.5: Services & Capabilities Showcase**
-  - Buat `src/components/modules/services/ServicesSection.tsx` & `ServicePackageCard.tsx`:
-    - Kartu paket layanan dengan daftar deliverable checklist dan estimasi turnaround.
-- [ ] **Task 2.6: Studio Profile & Software Arsenal**
-  - Buat `src/components/modules/profile/StudioProfileSection.tsx` & `ToolsArsenalGrid.tsx`:
-    - Pernyataan bio & filosofi kreatif.
-    - Grid software tools yang dikelompokkan berdasarkan kategori (Compositing, 3D, Color, Plugins).
-- [ ] **Task 2.7: Contact & Brief Inquiry Section**
-  - Buat `src/components/modules/contact/ContactSection.tsx` & `InquiryBriefForm.tsx`:
-    - Form seleksi cepat tipe proyek, timeline, dan tombol kontak langsung (Email, WhatsApp, Discord).
-- [ ] **Task 2.8: Global Footer**
-  - Buat `src/components/layout/GlobalFooter.tsx`:
-    - Jam real-time live WIB (GMT+7 Asia/Jakarta) dengan indikator detik.
-    - Social links dan hak cipta.
-
-*Kriteria Keberhasilan M2:* Halaman dapat di-render secara statis di browser dengan struktur semantik sempurna, ramah pembaca layar (*screen reader*), dan responsif di resolusi 375px hingga 1920px+.
+*Kriteria Keberhasilan M1:* Kompilasi TypeScript lulus 100%, seluruh data statis dan helper URL WhatsApp/IG teruji valid secara unit.
 
 ---
 
-### MILESTONE 3: Interactive Cursor Lens & Showreel Dual-Layer Reveal
-> **Tujuan:** Mengimplementasikan fitur tanda tangan visual portofolio: state machine kursor interaktif, tombol magnetik dengan rumus pegas teredam, dan kanvas video ganda dengan masking lingkaran aperture berkecepatan 60 FPS.
+### MILESTONE 2: Core Layout, Dark Mesh Gradient & Hero Typography
+> **Tujuan:** Membangun kerangka tata letak presisi khas Purrweb: Top Navbar 4 kolom, latar belakang ambient dark mesh bertekstur noise halus, dan tipografi kinetik Hero dengan aksen serif italic serta metadata bar pojok kiri bawah.
 
-- [ ] **Task 3.1: Zustand Cursor State Store**
-  - Buat `src/stores/cursorStore.ts` untuk mengelola state (`DEFAULT`, `LENS_REVEAL`, `PROJECT_HOVER`, `MAGNETIC_BUTTON`, `HIDDEN`) dan posisi koordinat kursor `(x, y)` tanpa memicu siklus re-render React.
-- [ ] **Task 3.2: Custom Cursor Follower Portal**
-  - Buat `src/components/cursor/CustomCursor.tsx`:
-    - Inner dot (8px) dan outer follower ring (36px).
-    - Rumus interpolasi LERP ($\lambda = 0.14$) untuk pergerakan trailing sinematik.
-    - Event listener `pointermove`, `mouseleave`, dan `mouseenter`.
-- [ ] **Task 3.3: Lens Optics Markings & Telemetry**
-  - Buat `src/components/cursor/LensCoordinates.tsx` dan `LensApertureRings.tsx`:
-    - Tampilan badge koordinat live `[X: ..., Y: ...]` saat state `LENS_REVEAL`.
-    - Ticks konsentris optik SVG (atas, kanan, bawah, kiri) dan aperture ring 1px.
-- [ ] **Task 3.4: Magnetic Button Spring Physics**
-  - Buat hook `src/hooks/useMagneticEffect.ts` dengan rumus pegas teredam ($k = 0.35, d = 0.65$).
-  - Buat komponen atomik `src/components/atomic/MagneticButton.tsx` yang menarik kursor follower dan menggeser elemen tombol secara halus.
-- [ ] **Task 3.5: Dual-Layer Video Reveal Canvas**
-  - Buat `src/components/modules/hero/HeroDualVideoCanvas.tsx`:
-    - Layer 0: `<video>` Ambient Blur (`filter: blur(28px)`).
-    - Layer 1: `<video>` Sharp Reveal dengan CSS `clip-path: circle(R at X Y)`.
-    - Transformasi koordinat lokal mouse terhadap bounding rectangle hero section.
-    - Dynamic velocity expansion: Radius kursor mengembang saat digerakkan cepat ($R = 160\text{px} \rightarrow 240\text{px}$).
-- [ ] **Task 3.6: Dual-Video Time Synchronizer**
-  - Implementasikan logika sinkronisasi master-slave di hero canvas untuk mengoreksi *drift* waktu bila $\Delta t > 0.065\text{s}$.
-- [ ] **Task 3.7: Kinetic Typography Loop**
-  - Buat `src/components/modules/hero/KineticHeadlineLoop.tsx` dengan GSAP timeline untuk memutar kata kunci kinetik secara dinamis dengan efek split-text / fade slide.
+- [ ] **Task 2.1: Top Navigation Bar (`src/components/layout/TopNavbar.tsx`)**
+  - Bangun header navigasi 4 kolom presisi:
+    - Kolom 1 (Kiri): Monogram/Wordmark `INDRA WIJAYA` (font tebal monokrom).
+    - Kolom 2: `PLAYBOOK` (membuka drawer/katalog karya).
+    - Kolom 3: `SOCIALS` (popover/tautan langsung Behance, Vimeo, LinkedIn, YouTube).
+    - Kolom 4 (Kanan): `CONTACTS` (trigger quick contact WA/IG) + `LiveAvailabilityPill` (titik hijau berdenyut halus).
 
-*Kriteria Keberhasilan M3:* Saat mouse digerakkan di atas Hero Showreel, lingkaran lensa menembus lapisan blur dan menyingkap video tajam di bawahnya secara presisi pada 60 FPS; tombol magnetik bereaksi saat didekati; kursor bertransisi mulus antar state.
+- [ ] **Task 2.2: Ambient Dark Mesh Background (`src/components/hero/AmbientBackground.tsx`)**
+  - Buat latar belakang kanvas gelap bernuansa biru-hitam (`#080808` hingga `#0c0e14`) dengan tekstur *subtle noise/grain* CSS SVG filter.
+  - Sediakan layer ganda untuk efek *sharp/glowing reveal* yang akan dihubungkan dengan kursor lensa.
+
+- [ ] **Task 2.3: Hero Kinetic Typography & Metadata Bar (`src/components/hero/HeroTypography.tsx`)**
+  - Implementasikan kalimat utama berukuran besar: `"Creative "` + `[dynamic_word]` + `" designer"`.
+  - Kata dinamis (`"motion"`, `"visual"`, `"AI-driven"`) menggunakan font *serif italic* bernuansa hangat (oranye/emas elegan) yang bertransisi halus setiap 2.5 detik menggunakan GSAP/CSS animation.
+  - Bangun 2 kolom metadata di pojok kiri bawah:
+    - Baris 1: `MOTION GRAPHIC / GRAPHIC DESIGN / AI DEVELOPMENT`
+    - Baris 2: `CURRENTLY AVAILABLE FOR FREELANCE & COLLABORATION`
+    - Baris 3: `INDONESIA (WORLDWIDE REMOTE)`
+
+*Kriteria Keberhasilan M2:* Antarmuka Hero tampil presisi dengan hierarki tipografi mewah, rotasi kata kinetik berjalan mulus tanpa layout shift, dan metadata bar kiri bawah terkunci rapi.
 
 ---
 
-### MILESTONE 4: Project Grid, Hover-to-Play Video Optimization & Mobile Fallback
-> **Tujuan:** Menghidupkan galeri Selected Works dengan pemutaran video hover yang hemat daya, menegakkan batas konkurensi memori GPU, membangun modal detail transisi FLIP, dan menyediakan fallback gyroscope untuk perangkat mobile.
+### MILESTONE 3: Interactive Cursor Lens & 3-Card Category Stack
+> **Tujuan:** Menghadirkan dua interaksi visual utama: lingkaran lensa kursor pembuka layer video/mesh tajam di desktop (dengan fallback auto-pan di mobile) dan tumpukan 3 kartu interaktif dengan efek Depth of Field di kanan bawah.
 
-- [ ] **Task 4.1: Media Playback Zustand Store**
-  - Buat `src/stores/mediaPlaybackStore.ts` untuk memantau antrean video dan menegakkan **Concurrency Budget** (Maksimal 2 video aktif bersamaan di Desktop, 1 di Mobile).
-- [ ] **Task 4.2: Intersection Observer Multi-Zone Hook**
-  - Buat `src/hooks/useIntersectionVideo.ts` yang mengelola 3 zona memori:
-    - *Zona A (>600px)*: `IDLE` (unloaded).
-    - *Zona B (300px)*: `PRELOADING` (`preload="metadata"`).
-    - *Zona C (Viewport $\ge 0.5$)*: Urutkan kandidat berdasarkan *Center-Proximity Distance* dan jalankan `.play()` hanya untuk kuota teratas.
-- [ ] **Task 4.3: VideoPreviewPlayer Component**
-  - Buat `src/components/media/VideoPreviewPlayer.tsx`:
-    - Memuat WebM primer dan MP4 fallback tanpa audio track.
-    - Transisi fade-in poster WebP ke video loop saat video siap diputar.
-    - Sinkronisasi state kursor ke `PROJECT_HOVER` (kursor membesar dengan badge `"VIEW"`).
-- [ ] **Task 4.4: Project Detail Modal (FLIP Showcase)**
-  - Buat `src/components/modules/works/ProjectDetailModal.tsx`:
-    - Ketika kartu diklik: Seketika hentikan seluruh video latar belakang (`FULL_MODAL_PLAYING`).
-    - Animasi ekspansi geometri kartu ke layar penuh (*FLIP transition*).
-    - Player video resolusi tinggi penuh dengan audio fade-in eksponensial (300ms).
-    - Tombol tutup / ESC handler dengan pembersihan memori total (`video.src = ""`).
-- [ ] **Task 4.5: Mobile & Tablet Fallback Engine**
-  - Buat `src/hooks/useDeviceOrientation.ts`: Membaca event `deviceorientation` (`gamma` dan `beta`) untuk menggerakkan fokus lensa aperture di Hero saat perangkat dimiringkan.
-  - Buat `src/components/modules/hero/GyroscopeController.ts`:
-    - Mode 1: Tilt Gyroscope.
-    - Mode 2: Auto-panning Lissajous curve loop jika sensor tidak tersedia.
-    - Mode 3: Touch spotlight pulse saat layar disentuh.
+- [ ] **Task 3.1: Custom Magnifying Lens Cursor (`src/components/interactive/CursorLens.tsx`)**
+  - Implementasikan lingkaran kursor lensa (*glass border + SVG ticks optik + radial clip-path mask*) yang mengikuti koordinat X/Y pointer dengan *smooth LERP inertia* ($\lambda = 0.14$) di desktop.
+  - Menyingkap video sharp / glowing layer di bawah ambient background secara presisi 60 FPS.
+  - Sediakan deteksi layar sentuh (*touchscreen fallback*): beralih otomatis ke mode *ambient auto-panning* (kurva Lissajous) atau *gyroscope tilt reveal* saat dibuka di ponsel/tablet.
 
-*Kriteria Keberhasilan M4:* Di galeri karya hanya maksimal 2 video yang berputar bersamaan di layar desktop; membuka proyek mematikan video lain dan memutar video penuh; membuka situs di smartphone memberikan pengalaman reveal showreel melalui kemiringan ponsel (*gyroscope*) atau orbit otonom.
+- [ ] **Task 3.2: 3-Card Category Stack (`src/components/hero/CategoryCardStack.tsx`)**
+  - Bangun tumpukan 3 kartu interaktif di area kanan bawah dengan efek *Depth of Field* bertingkat:
+    1. **`MOTION GRAPHIC`** (Posisi terdepan: `scale(1.00)`, fokus tajam `blur(0px)`, `z-index: 3`, memutar *muted video loop* teroptimasi).
+    2. **`GRAPHIC DESIGN`** (Posisi tengah: `scale(0.92)`, `translateY(-14px)`, `blur(6px)`, `opacity: 0.85`, `z-index: 2`).
+    3. **`AI DEVELOPMENT`** (Posisi belakang: `scale(0.85)`, `translateY(-28px)`, `blur(12px)`, `opacity: 0.65`, `z-index: 1`).
+  - Sediakan 3 titik indikator (*pagination dots*) yang mencerminkan status kartu yang sedang berada di depan.
+  - Implementasikan rotasi urutan kartu (*deck shuffle*) dengan animasi GSAP spring saat kartu belakang di-klik/di-hover/di-swipe.
+  - Sertakan tombol aksi melingkar (`→`) pada kartu terdepan untuk langsung membuka katalog karya sesuai kategori tersebut.
+
+*Kriteria Keberhasilan M3:* Kursor lensa menembus lapisan blur pada 60 FPS; tumpukan kartu kanan bawah dapat di-shuffle dengan transisi blur-to-sharp yang mulus; interaksi terasa responsif dan berkelas.
 
 ---
 
-### MILESTONE 5: Polish, Smooth Scroll (Lenis), & Performance Audit
-> **Tujuan:** Mengintegrasikan inertia smooth scrolling, menyelaraskan master audio ambience, memastikan standar aksesibilitas OS (*Reduced Motion*), dan mengeksekusi audit performa akhir untuk menjamin 60–120 FPS tanpa kebocoran memori.
+### MILESTONE 4: Playbook Drawer, Adaptive Media & Direct Contact (WA/IG)
+> **Tujuan:** Membangun katalog karya lengkap dengan filtrasi 3 kategori, pemutaran media adaptif hemat memori, dan popover konversi cepat WhatsApp/Instagram.
 
-- [ ] **Task 5.1: Lenis Smooth Scroll & GSAP RAF Sync**
-  - Buat `src/components/layout/SmoothScrollProvider.tsx`:
-    - Inisialisasi Lenis dengan durasi 1.2s dan kurva redaman halus.
-    - Tautkan perputaran loop Lenis ke dalam `gsap.ticker.add()` untuk eliminasi stuttering antar scroll dan animasi.
-- [ ] **Task 5.2: Master Audio Ambience & Sound Toggle**
-  - Buat `src/components/media/AudioGlobalToggle.tsx` pada header:
-    - Kontrol mute/unmute audio studio ambience dengan visualizer gelombang audio mini bergerak.
-- [ ] **Task 5.3: Reduced Motion & Accessibility Hardening**
-  - Buat `src/hooks/useReducedMotion.ts`:
-    - Menghormati pengaturan `prefers-reduced-motion` sistem operasi (menonaktifkan dynamic lens stretch dan scroll smoothing ekstrem bila diminta pengguna).
-- [ ] **Task 5.4: Asset Pipeline Audit & Optimization**
-  - Verifikasi seluruh video pratinjau di `public/videos/`: pastikan track audio ter-strip murni pada level kontainer, file WebM/MP4 $\le 1.2\text{MB}$, dan poster WebP $\le 85\text{KB}$.
-- [ ] **Task 5.5: Comprehensive Performance & Lighthouse Audit**
-  - Jalankan pengujian memori di Chrome DevTools: pastikan tidak ada kebocoran DOM ref atau listener saat navigasi.
-  - Verifikasi skor Lighthouse: Performance $\ge 90$, Accessibility $\ge 95$, Best Practices $\ge 95$, SEO $\ge 95$.
-  - Uji kestabilan frame rate pada resolusi layar monitor tinggi (1440p / 4K).
+- [ ] **Task 4.1: Playbook Project Drawer/Modal (`src/components/playbook/PlaybookModal.tsx`)**
+  - Buat antarmuka katalog karya (*The Playbook*) yang dapat dibuka via nav `PLAYBOOK` atau klik kartu kategori:
+    - Tab filtrasi instan: `MOTION GRAPHIC` (default), `GRAPHIC DESIGN`, `AI DEVELOPMENT`, dan `ALL`.
+    - Kartu karya menampilkan judul, tahun, klien/konteks, ringkasan deskripsi, dan *tool badges* (`After Effects`, `Premiere Pro`, `Photoshop`, `Illustrator`, `Midjourney`, `ComfyUI`).
 
-*Kriteria Keberhasilan M5:* Website beroperasi pada 60–120 FPS stabil, interaksi kursor terasa mewah dan responsif, scroll terasa organik, video terkelola tanpa memory leak, dan seluruh metrik audit terpenuhi.
+- [ ] **Task 4.2: Adaptive Media Player (`src/components/media/AdaptiveProjectMedia.tsx`)**
+  - Enforce aturan performa: Video preview pada kategori `Motion Graphic` hanya berputar saat berada di kartu terdepan atau viewport aktif, dan seketika `pause()` saat berada di belakang tumpukan atau modal ditutup.
+  - Format `Graphic Design` dan `AI Development` menggunakan *crisp still image viewer* (WebP) dengan opsi tampilan perbandingan prompt/RAW sebelum dan sesudah.
+
+- [ ] **Task 4.3: Quick Connect WA & IG Popover (`src/components/contact/QuickContactModal.tsx`)**
+  - Hubungkan tombol `CONTACTS`, `SOCIALS`, dan tombol inquiry di setiap kartu proyek langsung ke WhatsApp dan Instagram:
+    - WhatsApp: Membuka chat dengan *pre-filled text* dinamis sesuai kategori karya yang sedang dibuka.
+    - Instagram: Membuka profil `@indrawijaya.motion` di tab baru.
+
+*Kriteria Keberhasilan M4:* Playbook dapat difilter secara instan; kuota video aktif terkendali tanpa drop frame; alur konversi WhatsApp dan Instagram berfungsi tanpa kendala.
+
+---
+
+### MILESTONE 5: Polish, Accessibility & 60fps Performance Audit
+> **Tujuan:** Menyelaraskan inersia smooth scrolling Lenis, menambahkan efek magnetik mikro, memastikan fallback aksesibilitas OS, dan memverifikasi performa 60–120 FPS tanpa kebocoran memori.
+
+- [ ] **Task 5.1: Smooth Scroll (Lenis) & Magnetic Micro-interactions**
+  - Inisialisasi Lenis smooth scroll yang tersinkronisasi ke RAF ticker GSAP.
+  - Terapkan efek magnetik (*damped spring physics*) pada tombol navigasi, CTA WhatsApp/IG, dan tombol panah kartu.
+- [ ] **Task 5.2: Mobile Touch Swipe & `prefers-reduced-motion` Fallback**
+  - Tambahkan gesture swipe pada *CategoryCardStack* untuk navigasi kartu yang natural di ponsel.
+  - Hormati preferensi `prefers-reduced-motion` sistem operasi (nonaktifkan rotasi blur ekstrem bila diminta).
+- [ ] **Task 5.3: Final Build Verification & Zero TypeScript/ESLint Error Check**
+  - Eksekusi `npm run build`: pastikan zero type error dan zero lint warning.
+  - Uji stabilitas frame rate 60–120 FPS di Chrome DevTools Performance Monitor.
+  - Verifikasi audit Lighthouse: Performance $\ge 90$, Accessibility $\ge 95$, SEO $\ge 95$.
+
+*Kriteria Keberhasilan M5:* Website beroperasi pada 60–120 FPS mentok tanpa stuttering; transisi lensa dan kartu terasa organik; siap untuk tahap uji coba dan deployment.
 
 ---
 
 ## Aturan Eksekusi
-1. Pengerjaan dilakukan secara bertahap dimulai dari **Milestone 1**.
-2. Setiap kali satu milestone selesai, verifikasi teknis dan pengujian fungsional akan dijalankan sebelum melangkah ke milestone berikutnya.
+1. Pengerjaan dilakukan secara teratur per milestone, diawali dari **Milestone 1**.
+2. Setiap milestone yang selesai akan diverifikasi dan diuji fungsionalitasnya sebelum melangkah ke milestone berikutnya.
 3. Proyek siap dimulai begitu perintah `"MULAI MILESTONE 1"` diberikan.
