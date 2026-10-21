@@ -31,7 +31,7 @@ const showcaseCards: ShowcaseCard[] = [
     title: 'MOTION GRAPHIC',
     nextPeek: 'DESIGN GRAPHIC',
     peekCode: 'DES',
-    route: '/work/motion-graphics',
+    route: '/#section-exploration',
     type: 'image',
     imageUrl: '/posters/motion-graphic-banner.png',
     posterUrl: '/posters/motion-graphic-banner.png',
@@ -41,7 +41,7 @@ const showcaseCards: ShowcaseCard[] = [
     title: 'DESIGN GRAPHIC',
     nextPeek: 'AI DEVELOPMENT',
     peekCode: 'AI DEV',
-    route: '/work/visual-design',
+    route: '/#section-exploration',
     type: 'mockup',
   },
   {
@@ -49,7 +49,7 @@ const showcaseCards: ShowcaseCard[] = [
     title: 'AI DEVELOPMENT',
     nextPeek: 'MOTION GRAPHIC',
     peekCode: 'MOT',
-    route: '/work/web',
+    route: '/#section-exploration',
     type: 'mockup',
   },
 ];

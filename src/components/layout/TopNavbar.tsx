@@ -8,13 +8,15 @@ import { useLanguageStore, translations } from '@/stores/languageStore';
 import { ArrowUpRight, Globe } from 'lucide-react';
 
 interface TopNavbarProps {
+  onOpenAbout?: () => void;
   onOpenPlaybook?: () => void;
   onOpenContacts?: () => void;
   isSubPage?: boolean;
-  activeNav?: 'hero' | 'playbook' | 'socials' | 'contacts';
+  activeNav?: 'hero' | 'about' | 'playbook' | 'socials' | 'contacts';
 }
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
+  onOpenAbout,
   onOpenPlaybook,
   onOpenContacts,
   isSubPage = false,
@@ -25,7 +27,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const { locale, toggleLocale } = useLanguageStore();
   const t = translations[locale];
 
-  const isPlaybookActive = activeNav === 'playbook';
+  const isAboutActive = activeNav === 'about' || activeNav === 'playbook';
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 pointer-events-auto">
@@ -56,14 +58,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           </MagneticButton>
         </div>
 
-        {/* Kolom 2 (Tengah-Kiri): PLAYBOOK (With active underline matching reference frame t7.0s) */}
+        {/* Kolom 2 (Tengah-Kiri): ABOUT ME (Navigates to About Me / Bio Section) */}
         <div className="flex items-center justify-start md:justify-center">
           <MagneticButton strength={0.25}>
             {isSubPage ? (
               <Link
-                href="/#section-playbook"
+                href="/#section-works"
                 className={`uppercase transition-colors cursor-pointer text-left font-medium ${
-                  isPlaybookActive
+                  isAboutActive
                     ? 'text-white border-b border-white pb-0.5'
                     : 'text-white/80 hover:text-white'
                 }`}
@@ -72,14 +74,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                   letterSpacing: '0.08em',
                 }}
               >
-                {t.nav.playbook}
+                {t.nav.about || 'ABOUT ME'}
               </Link>
             ) : (
               <button
                 type="button"
-                onClick={onOpenPlaybook}
+                onClick={onOpenAbout || onOpenPlaybook}
                 className={`uppercase transition-colors cursor-pointer text-left font-medium ${
-                  isPlaybookActive
+                  isAboutActive
                     ? 'text-white border-b border-white pb-0.5'
                     : 'text-white/80 hover:text-white'
                 }`}
@@ -88,7 +90,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                   letterSpacing: '0.08em',
                 }}
               >
-                {t.nav.playbook}
+                {t.nav.about || 'ABOUT ME'}
               </button>
             )}
           </MagneticButton>

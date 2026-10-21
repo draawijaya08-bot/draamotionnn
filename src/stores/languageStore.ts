@@ -33,7 +33,8 @@ export const useLanguageStore = create<LanguageStore>((set) => ({
 export const translations = {
   en: {
     nav: {
-      playbook: 'PLAYBOOK',
+      about: 'ABOUT ME',
+      playbook: 'ABOUT ME',
       socials: 'SOCIALS',
       contacts: 'CONTACTS',
       backToHome: 'BACK TO PORTFOLIO',
@@ -103,7 +104,8 @@ export const translations = {
   },
   id: {
     nav: {
-      playbook: 'PLAYBOOK',
+      about: 'ABOUT ME',
+      playbook: 'ABOUT ME',
       socials: 'SOSIAL',
       contacts: 'KONTAK',
       backToHome: 'KEMBALI KE BERANDA',

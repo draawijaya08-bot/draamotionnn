@@ -66,12 +66,14 @@ export const PlaybookModal: React.FC<PlaybookModalProps> = ({
 
         {/* Category Filter Tabs Bar */}
         <div className="flex flex-wrap items-center gap-2 border-b border-[#202024]/60 pb-4">
-          {categoryFilterList.map((cat) => {
-            const isActive = activeTab === cat.id;
-            const count =
-              cat.id === 'all'
-                ? projectsDataset.length
-                : projectsDataset.filter((p) => p.category === cat.id).length;
+          {categoryFilterList
+            .filter((cat) => cat.id === 'all' || projectsDataset.some((p) => p.category === cat.id))
+            .map((cat) => {
+              const isActive = activeTab === cat.id;
+              const count =
+                cat.id === 'all'
+                  ? projectsDataset.length
+                  : projectsDataset.filter((p) => p.category === cat.id).length;
 
             return (
               <button
@@ -118,16 +120,6 @@ export const PlaybookModal: React.FC<PlaybookModalProps> = ({
                     title={displayTitle}
                     isActive={isOpen}
                   />
-                  <Link
-                    href={`/work/${project.category}/${project.slug}`}
-                    onClick={onClose}
-                    className="absolute inset-0 z-10 opacity-0 group-hover:opacity-100 bg-black/40 backdrop-blur-xs flex items-center justify-center transition-opacity duration-300"
-                  >
-                    <span className="px-4 py-2 rounded-full border border-white/20 bg-black/70 text-white font-mono text-xs flex items-center gap-2">
-                      <span>{locale === 'id' ? 'LIHAT DETAIL' : 'VIEW DETAILS'}</span>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-amber-400" />
-                    </span>
-                  </Link>
                 </div>
 
                 {/* Konten Metadata */}
@@ -139,13 +131,9 @@ export const PlaybookModal: React.FC<PlaybookModalProps> = ({
                     <span>{project.year} • {project.clientOrContext}</span>
                   </div>
 
-                  <Link
-                    href={`/work/${project.category}/${project.slug}`}
-                    onClick={onClose}
-                    className="block font-display font-bold text-lg text-white group-hover:text-amber-300 transition-colors"
-                  >
+                  <h3 className="block font-display font-bold text-lg text-white">
                     {displayTitle}
-                  </Link>
+                  </h3>
 
                   <p className="text-xs text-[#8e8e93] leading-relaxed line-clamp-2">
                     {displayDesc}
@@ -170,17 +158,8 @@ export const PlaybookModal: React.FC<PlaybookModalProps> = ({
                     ))}
                   </div>
 
-                  {/* Dual Action: View Detail Page & Direct WhatsApp Inquiry */}
-                  <div className="grid grid-cols-2 gap-2 pt-1">
-                    <Link
-                      href={`/work/${project.category}/${project.slug}`}
-                      onClick={onClose}
-                      className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-lg border border-white/10 bg-[#161619] hover:bg-[#202026] text-white font-mono text-[11px] transition-all"
-                    >
-                      <span>{locale === 'id' ? 'DETAIL' : 'DETAILS'}</span>
-                      <ExternalLink className="w-3 h-3 text-[#8e8e93]" />
-                    </Link>
-
+                  {/* Direct WhatsApp Inquiry */}
+                  <div className="pt-1">
                     <a
                       href={getWhatsAppUrl(project.category, project.title)}
                       target="_blank"
@@ -188,10 +167,10 @@ export const PlaybookModal: React.FC<PlaybookModalProps> = ({
                       onClick={() => {
                         onSelectProjectForInquiry?.(project);
                       }}
-                      className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-mono text-[11px] transition-all"
+                      className="w-full flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-mono text-xs font-semibold transition-all"
                     >
-                      <MessageCircle className="w-3 h-3" />
-                      <span>{locale === 'id' ? 'KONSULTASI' : 'INQUIRE'}</span>
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      <span>{locale === 'id' ? 'KONSULTASI VIA WHATSAPP' : 'INQUIRE VIA WHATSAPP'}</span>
                     </a>
                   </div>
                 </div>

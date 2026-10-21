@@ -23,14 +23,14 @@ export default function Home() {
   const [contactCategory, setContactCategory] = useState<ProjectCategory>('motion-graphics');
   const [contactProjectTitle, setContactProjectTitle] = useState<string | undefined>(undefined);
 
-  const [activeSection, setActiveSection] = useState<'hero' | 'playbook' | 'contacts'>('hero');
+  const [activeSection, setActiveSection] = useState<'hero' | 'about' | 'playbook' | 'contacts'>('hero');
   const [activeCard, setActiveCard] = useState(0);
 
   const { locale } = useLanguageStore();
   const t = translations[locale];
   const { getLenis } = useSmoothScroll();
 
-  // Scroll position observer to update activeNav for PLAYBOOK or CONTACTS underline
+  // Scroll position observer to update activeNav for ABOUT ME or CONTACTS underline
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -41,7 +41,7 @@ export default function Home() {
       if (scrollY >= contactsThreshold) {
         setActiveSection('contacts');
       } else if (scrollY > heroThreshold) {
-        setActiveSection('playbook');
+        setActiveSection('about');
       } else {
         setActiveSection('hero');
       }
@@ -54,7 +54,7 @@ export default function Home() {
       const el = document.getElementById('section-works');
       if (el) {
         el.scrollIntoView({ behavior: 'instant' });
-        setActiveSection('playbook');
+        setActiveSection('about');
       }
     }
 
@@ -112,7 +112,8 @@ export default function Home() {
       {/* 2. Global Purrweb 4-Column Top Navigation with Active Underline */}
       <TopNavbar
         activeNav={activeSection}
-        onOpenPlaybook={() => handleOpenPlaybook('motion-graphics')}
+        onOpenAbout={handleScrollToWorks}
+        onOpenPlaybook={handleScrollToWorks}
         onOpenContacts={handleScrollToContacts}
       />
 

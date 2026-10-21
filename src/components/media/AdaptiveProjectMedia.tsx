@@ -3,7 +3,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { AdaptiveMedia } from '@/types/portfolio';
-import { Eye, Sparkles, VolumeX } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 interface AdaptiveProjectMediaProps {
   media: AdaptiveMedia;
@@ -71,6 +71,8 @@ export const AdaptiveProjectMedia: React.FC<AdaptiveProjectMediaProps> = ({
       ? 'aspect-video'
       : media.aspectRatio === '9:16'
       ? 'aspect-[9/16]'
+      : media.aspectRatio === '4:5'
+      ? 'aspect-[4/5]'
       : 'aspect-square';
 
   return (
@@ -101,12 +103,6 @@ export const AdaptiveProjectMedia: React.FC<AdaptiveProjectMediaProps> = ({
               isVideoLoaded ? 'opacity-100' : 'opacity-90'
             }`}
           />
-
-          {/* Badge Muted Video Indicator */}
-          <div className="absolute top-3 left-3 px-2 py-1 rounded-md bg-black/70 backdrop-blur-md border border-white/10 flex items-center gap-1.5 text-[9px] font-mono text-[#8e8e93] pointer-events-none">
-            <VolumeX className="w-3 h-3 text-amber-400" />
-            <span className="uppercase tracking-wider">SILENT LOOP</span>
-          </div>
         </>
       )}
 
@@ -121,10 +117,6 @@ export const AdaptiveProjectMedia: React.FC<AdaptiveProjectMediaProps> = ({
             unoptimized
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
-          <div className="absolute top-3 left-3 px-2 py-1 rounded-md bg-black/70 backdrop-blur-md border border-white/10 flex items-center gap-1.5 text-[9px] font-mono text-[#8e8e93] pointer-events-none">
-            <Eye className="w-3 h-3 text-blue-400" />
-            <span className="uppercase tracking-wider">HIGH-RES STILL</span>
-          </div>
         </>
       )}
 

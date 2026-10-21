@@ -22,6 +22,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
 
   const heroSectionRef = useRef<HTMLElement>(null);
   const heroContainerRef = useRef<HTMLDivElement>(null);
+  const baseTextRef = useRef<HTMLDivElement>(null);
   const outerMaskRef = useRef<HTMLDivElement>(null);
   const innerScaledRef = useRef<HTMLDivElement>(null);
   const glassRingRef = useRef<HTMLDivElement>(null);
@@ -125,18 +126,20 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
       p.skewX += (targetSkewX - p.skewX) * 0.22;
       p.skewY += (targetSkewY - p.skewY) * 0.22;
 
-      // Dynamic convex liquid expansion
-      const dynamicScale = 1.12 + Math.min(speed * 0.0035, 0.10);
+      // Dynamic convex liquid expansion (1.0 at rest for 100% seamless continuity, stretches on drag)
+      const dynamicScale = 1.0 + Math.min(speed * 0.002, 0.05);
 
       // SVG liquify displacement turbulence scale
-      const targetDisp = Math.min(speed * 0.45, 14);
+      const targetDisp = Math.min(speed * 0.45, 12);
       p.dispScale += (targetDisp - p.dispScale) * 0.25;
 
-      // 1. Mask Layer: clipped to circle, with dark optical backing so background text never bleeds through
+      // 1. Mask Layer: clipped to circle, completely transparent so ambient background shows through
       if (outerMaskRef.current) {
         outerMaskRef.current.style.clipPath = `circle(${radius}px at ${relX}px ${relY}px)`;
         outerMaskRef.current.style.setProperty('-webkit-clip-path', `circle(${radius}px at ${relX}px ${relY}px)`);
-        outerMaskRef.current.style.background = `radial-gradient(circle ${radius}px at ${relX}px ${relY}px, rgba(14, 14, 18, 0.96) 0%, rgba(6, 6, 8, 0.98) 75%, rgba(2, 2, 4, 1) 100%)`;
+        outerMaskRef.current.style.maskImage = 'none';
+        outerMaskRef.current.style.setProperty('-webkit-mask-image', 'none');
+        outerMaskRef.current.style.background = 'transparent';
         outerMaskRef.current.style.opacity = p.isNearby ? '1' : '0';
       }
 
@@ -270,7 +273,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
           className="relative w-full flex flex-col justify-center"
         >
           {/* --- LAYER A: Base Headline (Normal Scale & Crisp White) --- */}
-          <div className="relative z-10 w-full">
+          <div ref={baseTextRef} className="relative z-10 w-full">
             {/* Baris 1: Creative + dynamic_word */}
             <div className="flex flex-wrap items-baseline gap-x-4 sm:gap-x-7">
               <span 
@@ -366,10 +369,10 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
               width: '250px',
               height: '250px',
               borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(255, 255, 255, 0.01) 0%, rgba(56, 189, 248, 0.04) 70%, rgba(255, 255, 255, 0.08) 100%)',
-              border: '1.5px solid rgba(255, 255, 255, 0.42)',
-              boxShadow: 'inset 0 0 25px rgba(255, 255, 255, 0.22), inset 0 0 50px rgba(56, 189, 248, 0.15), 0 0 35px rgba(0, 0, 0, 0.75)',
-              backdropFilter: 'blur(1.5px)',
+              background: 'radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, rgba(56, 189, 248, 0.05) 70%, rgba(255, 255, 255, 0.08) 100%)',
+              border: '1.5px solid rgba(255, 255, 255, 0.38)',
+              boxShadow: 'inset 0 0 25px rgba(255, 255, 255, 0.22), inset 0 0 45px rgba(56, 189, 248, 0.12)',
+              backdropFilter: 'blur(1px)',
               willChange: 'transform',
             }}
           />

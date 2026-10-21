@@ -147,24 +147,11 @@ export const CursorLens: React.FC = () => {
 
   return (
     <>
-      {/* 1. Inner Precision Pointer Dot */}
+      {/* Precision Pointer Dot */}
       <div
         ref={dotRef}
         className="fixed top-0 left-0 w-1.5 h-1.5 rounded-full bg-white pointer-events-none z-[9999] opacity-0 transition-opacity duration-300 mix-blend-difference"
       />
-
-      {/* 2. Interactive Project Hover Badge (Hanya saat hover project card) */}
-      {cursorState === 'PROJECT_HOVER' && (
-        <div
-          ref={lensRingRef}
-          className="fixed top-0 left-0 rounded-full pointer-events-none z-[9998] transition-all duration-200 flex items-center justify-center px-4 py-2 border border-white/40 bg-white/10 backdrop-blur-md shadow-[0_0_24px_rgba(255,255,255,0.12)]"
-          style={{ willChange: 'transform' }}
-        >
-          <span className="font-mono text-[10px] font-bold tracking-widest text-white uppercase drop-shadow">
-            {cursorLabel || 'VIEW'}
-          </span>
-        </div>
-      )}
     </>
   );
 };

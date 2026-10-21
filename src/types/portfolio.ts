@@ -50,7 +50,7 @@ export interface ToolBadge {
   isPrimary?: boolean;
 }
 
-export type AspectRatioType = '16:9' | '9:16' | '1:1';
+export type AspectRatioType = '16:9' | '9:16' | '1:1' | '4:5';
 
 export type MediaType = 'VIDEO_LOOP' | 'IMAGE_STILL' | 'INTERACTIVE_COMPARISON';
 
