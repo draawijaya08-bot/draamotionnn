@@ -70,22 +70,12 @@ export const siteIdentityData: SiteIdentity = {
       {
         platform: 'BEHANCE',
         label: 'Behance',
-        url: 'https://behance.net/indrawijaya',
+        url: 'https://www.behance.net/indrawijaya46',
       },
       {
-        platform: 'VIMEO',
-        label: 'Vimeo',
-        url: 'https://vimeo.com/indrawijaya',
-      },
-      {
-        platform: 'LINKEDIN',
-        label: 'LinkedIn',
-        url: 'https://linkedin.com/in/indrawijaya',
-      },
-      {
-        platform: 'GITHUB',
-        label: 'GitHub',
-        url: 'https://github.com/indrawijaya',
+        platform: 'WHATSAPP',
+        label: 'WhatsApp',
+        url: 'https://wa.me/6281234567890',
       },
     ],
   },

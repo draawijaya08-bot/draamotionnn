@@ -140,7 +140,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             <button
               type="button"
               onClick={onOpenContacts}
-              className="text-white/80 hover:text-white uppercase transition-colors cursor-pointer text-right font-medium"
+              className={`uppercase transition-colors cursor-pointer text-right font-medium ${
+                activeNav === 'contacts'
+                  ? 'text-white border-b border-white pb-0.5'
+                  : 'text-white/80 hover:text-white'
+              }`}
               style={{
                 fontSize: '0.7rem',
                 letterSpacing: '0.08em',

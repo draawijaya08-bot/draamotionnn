@@ -10,6 +10,7 @@ import { ProjectExplorationSection } from '@/components/playbook/ProjectExplorat
 import { CursorLens } from '@/components/interactive/CursorLens';
 import { PlaybookModal } from '@/components/playbook/PlaybookModal';
 import { QuickContactModal } from '@/components/contact/QuickContactModal';
+import { ContactSection } from '@/components/contact/ContactSection';
 import { useLanguageStore, translations } from '@/stores/languageStore';
 import { useSmoothScroll } from '@/components/layout/SmoothScrollProvider';
 import { ArrowDown } from 'lucide-react';
@@ -29,12 +30,17 @@ export default function Home() {
   const t = translations[locale];
   const { getLenis } = useSmoothScroll();
 
-  // Scroll position observer to update activeNav for PLAYBOOK underline (Frame t7.0s)
+  // Scroll position observer to update activeNav for PLAYBOOK or CONTACTS underline
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const heroThreshold = window.innerHeight * 0.45;
-      if (scrollY > heroThreshold) {
+      const contactsEl = document.getElementById('contacts');
+      const contactsThreshold = contactsEl ? contactsEl.offsetTop - window.innerHeight * 0.5 : Infinity;
+
+      if (scrollY >= contactsThreshold) {
+        setActiveSection('contacts');
+      } else if (scrollY > heroThreshold) {
         setActiveSection('playbook');
       } else {
         setActiveSection('hero');
@@ -88,6 +94,16 @@ export default function Home() {
     }
   };
 
+  const handleScrollToContacts = () => {
+    const lenis = getLenis();
+    if (lenis) {
+      lenis.scrollTo('#contacts', { duration: 1.2 });
+    } else {
+      const el = document.getElementById('contacts');
+      el?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="relative min-h-screen bg-transparent text-[#f5f5f7] flex flex-col selection:bg-amber-400 selection:text-black overflow-x-hidden">
       {/* 1. Custom Interactive Magnifying Lens Cursor (True Optical Lens with RGB Aberration) */}
@@ -97,7 +113,7 @@ export default function Home() {
       <TopNavbar
         activeNav={activeSection}
         onOpenPlaybook={() => handleOpenPlaybook('motion-graphics')}
-        onOpenContacts={() => handleOpenContact('motion-graphics')}
+        onOpenContacts={handleScrollToContacts}
       />
 
       {/* 3. Deep Navy Spotlight & Film Grain Ambient Mesh Background */}
@@ -230,6 +246,11 @@ export default function Home() {
         {/* SLIDE 03: Project Exploration (The Playbook Full Grid)   */}
         {/* ======================================================== */}
         <ProjectExplorationSection />
+
+        {/* ======================================================== */}
+        {/* SLIDE 04: Contact Section (1:1 Reference Image 1)        */}
+        {/* ======================================================== */}
+        <ContactSection onOpenQuickContact={() => handleOpenContact('motion-graphics')} />
       </main>
 
       {/* 5. Playbook Drawer / Modal Archive (Fast Exploration) */}
