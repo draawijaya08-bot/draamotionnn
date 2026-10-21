@@ -310,44 +310,79 @@ export const ProjectExplorationSection: React.FC = () => {
     };
   }, [measureCardPositions, scheduleUpdateCurvature, scrollToCard, updateCurvature]);
 
-  // Mouse wheel to horizontal scroll with buttery LERP interpolation
+  // Smooth Horizontal Wheel Navigation with Zero-Trapping (Page scroll never gets stuck)
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     let wheelSnapTimeout: NodeJS.Timeout;
+    let consecutiveDownScrolls = 0;
+    let consecutiveUpScrolls = 0;
+    let lastWheelTime = 0;
 
     const handleWheel = (e: WheelEvent) => {
-      const isVertical = Math.abs(e.deltaY) >= Math.abs(e.deltaX) * 0.7;
-      const delta = isVertical ? e.deltaY : e.deltaX;
+      const now = performance.now();
+      const timeSinceLast = now - lastWheelTime;
+      lastWheelTime = now;
 
-      const maxScroll = container.scrollWidth - container.clientWidth;
-      const current = container.scrollLeft;
+      // Reset consecutive counter after a 450ms pause
+      if (timeSinceLast > 450) {
+        consecutiveDownScrolls = 0;
+        consecutiveUpScrolls = 0;
+      }
 
-      const isAtStart = current <= 4 && delta < 0;
-      const isAtEnd = current >= maxScroll - 4 && delta > 0;
+      // 1. Explicit Horizontal Trackpad Gesture or Shift + Wheel
+      const isHorizontalGesture = Math.abs(e.deltaX) > Math.abs(e.deltaY) || e.shiftKey;
+      if (isHorizontalGesture) {
+        const delta = e.shiftKey ? e.deltaY : e.deltaX;
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        const current = container.scrollLeft;
+        const isAtStart = current <= 4 && delta < 0;
+        const isAtEnd = current >= maxScroll - 4 && delta > 0;
 
-      // Only intercept if we can scroll within the horizontal carousel
-      if (!isAtStart && !isAtEnd) {
-        e.preventDefault();
-
-        if (!isAnimatingLerp.current) {
-          currentScrollX.current = container.scrollLeft;
-          targetScrollX.current = container.scrollLeft;
+        if (!isAtStart && !isAtEnd) {
+          e.preventDefault();
+          if (!isAnimatingLerp.current) {
+            currentScrollX.current = container.scrollLeft;
+            targetScrollX.current = container.scrollLeft;
+          }
+          targetScrollX.current = Math.max(0, Math.min(maxScroll, targetScrollX.current + delta * 0.95));
+          startLerp();
+          clearTimeout(wheelSnapTimeout);
+          wheelSnapTimeout = setTimeout(() => { snapToNearestCard(); }, 260);
         }
+        return;
+      }
 
-        // Smoothly accumulate target scroll
-        targetScrollX.current = Math.max(
-          0,
-          Math.min(maxScroll, targetScrollX.current + delta * 0.95)
-        );
+      // 2. Standard Vertical Mouse Wheel:
+      // Slide horizontal cards smoothly, but NEVER trap the user when scrolling down to Contact!
+      const isScrollingDown = e.deltaY > 0;
+      const isScrollingUp = e.deltaY < 0;
 
-        startLerp();
+      if (isScrollingDown) {
+        consecutiveDownScrolls++;
+        consecutiveUpScrolls = 0;
 
-        clearTimeout(wheelSnapTimeout);
-        wheelSnapTimeout = setTimeout(() => {
-          snapToNearestCard();
-        }, 260);
+        // On first downward scroll, advance 1 card into view
+        // If user continues scrolling down (consecutive >= 2) or already at last card, NEVER intercept -> let page scroll to Contact!
+        if (consecutiveDownScrolls <= 1 && activeIndexRef.current < projectsDataset.length - 1) {
+          e.preventDefault();
+          scrollToCard(activeIndexRef.current + 1);
+        } else {
+          // Allow page vertical scroll to proceed freely and naturally down to Contact!
+        }
+      } else if (isScrollingUp) {
+        consecutiveUpScrolls++;
+        consecutiveDownScrolls = 0;
+
+        // On first upward scroll, retreat 1 card into view
+        // If user continues scrolling up or already at first card, let page scroll up!
+        if (consecutiveUpScrolls <= 1 && activeIndexRef.current > 0) {
+          e.preventDefault();
+          scrollToCard(activeIndexRef.current - 1);
+        } else {
+          // Allow page vertical scroll to proceed freely and naturally up!
+        }
       }
     };
 
@@ -357,7 +392,7 @@ export const ProjectExplorationSection: React.FC = () => {
       container.removeEventListener('wheel', handleWheel);
       clearTimeout(wheelSnapTimeout);
     };
-  }, [snapToNearestCard, startLerp]);
+  }, [scrollToCard, snapToNearestCard, startLerp]);
 
   // Pointer Down (Mouse Drag / Touch)
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -512,13 +547,12 @@ export const ProjectExplorationSection: React.FC = () => {
         {/* ======================================================== */}
         <div
           ref={containerRef}
-          data-lenis-prevent="true"
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
           onPointerLeave={handlePointerUp}
-          className={`relative w-full overflow-x-auto no-scrollbar select-none py-28 -my-28 ${
+          className={`relative w-full overflow-x-auto no-scrollbar select-none py-8 sm:py-10 ${
             isDragging ? 'cursor-grabbing' : 'cursor-grab'
           }`}
           style={{
