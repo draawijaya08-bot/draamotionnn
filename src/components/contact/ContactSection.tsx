@@ -54,36 +54,30 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuickConta
   return (
     <section 
       id="contacts"
-      className="relative w-full py-24 sm:py-32 px-4 sm:px-6 md:px-12 flex items-center justify-center overflow-hidden"
+      className="relative w-full py-28 sm:py-36 px-4 sm:px-6 md:px-12 flex items-center justify-center overflow-hidden bg-transparent"
     >
-      {/* Ethereal Cloudy / Atmospheric Ambient Backdrop */}
+      {/* Subtle Atmospheric Spotlight / Seamless Mesh Glow Merging with Section Above */}
       <div className="absolute inset-0 pointer-events-none select-none">
-        {/* Soft atmospheric white clouds & gradient haze matching Image 1 */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[120%] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.85)_0%,rgba(240,242,245,0.7)_40%,rgba(215,220,228,0.3)_70%,transparent_100%)] opacity-95 blur-2xl" />
-        
-        {/* Organic soft cloud blobs */}
-        <div className="absolute -top-12 left-1/4 w-[480px] h-[320px] bg-white/70 rounded-full blur-3xl" />
-        <div className="absolute -bottom-16 right-1/4 w-[520px] h-[350px] bg-white/80 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 -left-20 w-[420px] h-[300px] bg-white/60 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 -right-20 w-[450px] h-[320px] bg-white/60 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[#00e5c0]/[0.05] rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 left-1/3 w-[500px] h-[300px] bg-amber-400/[0.03] rounded-full blur-[100px]" />
       </div>
 
-      {/* Main Frosted Card matching 1:1 Image 1 */}
-      <div className="relative z-10 w-full max-w-4xl mx-auto rounded-[32px] sm:rounded-[40px] bg-white/80 backdrop-blur-2xl border border-white/90 shadow-[0_30px_90px_rgba(0,0,0,0.12),0_10px_30px_rgba(0,0,0,0.06)] p-8 sm:p-14 md:p-16 flex flex-col items-center text-center space-y-7 sm:space-y-8 select-none">
+      {/* Main Banner Card - Styled like the 3 category cards (Dark, Sleek, border-white/10) */}
+      <div className="relative z-10 w-full max-w-4xl mx-auto rounded-[32px] sm:rounded-[40px] bg-[#0c0d12]/90 backdrop-blur-2xl border border-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.6),0_10px_30px_rgba(0,0,0,0.4)] p-8 sm:p-14 md:p-16 flex flex-col items-center text-center space-y-7 sm:space-y-8 select-none">
         
         {/* Top Status Pill: ● Available for New Project */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-gray-200/90 shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-xs font-semibold text-gray-800 tracking-tight transition-transform hover:scale-105">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.07] border border-white/15 shadow-sm text-xs font-semibold text-white/90 tracking-tight transition-transform hover:scale-105">
           <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
           <span>Available for New Project</span>
         </div>
 
         {/* Large Bold Headline: HAVE A PROJECT IN MIND? */}
-        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-black tracking-[-0.03em] text-[#111317] uppercase font-sans leading-[1.08] max-w-2xl">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-black tracking-[-0.03em] text-white uppercase font-sans leading-[1.08] max-w-2xl">
           HAVE A PROJECT IN MIND?
         </h2>
 
         {/* Descriptive Subtitle */}
-        <p className="max-w-xl text-xs sm:text-sm md:text-[15px] text-gray-600 font-normal leading-relaxed text-center px-2">
+        <p className="max-w-xl text-xs sm:text-sm md:text-[15px] text-[#8e8e93] font-normal leading-relaxed text-center px-2">
           Together, we can create something clear and impactful. Let’s collaborate to bring our ideas to life in a way that resonates with everyone.
         </p>
 
@@ -92,20 +86,20 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuickConta
           <button
             type="button"
             onClick={handleContactClick}
-            className="group px-7 sm:px-8 py-3.5 rounded-full bg-[#18181b] hover:bg-black text-white text-xs sm:text-sm font-semibold tracking-wide flex items-center gap-2.5 shadow-[0_12px_28px_rgba(0,0,0,0.25)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.35)] hover:scale-[1.03] active:scale-[0.98] transition-all duration-200 cursor-pointer"
+            className="group px-7 sm:px-8 py-3.5 rounded-full bg-white hover:bg-neutral-200 text-black text-xs sm:text-sm font-semibold tracking-wide flex items-center gap-2.5 shadow-[0_12px_28px_rgba(255,255,255,0.12)] hover:shadow-[0_16px_36px_rgba(255,255,255,0.2)] hover:scale-[1.03] active:scale-[0.98] transition-all duration-200 cursor-pointer"
             title="Get in touch with Indra Wijaya"
             aria-label="Contact Me"
           >
             <span>Contact Me</span>
-            <ArrowUpRight className="w-4 h-4 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            <ArrowUpRight className="w-4 h-4 text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </button>
         </div>
 
         {/* Bottom Row of Pills (Avatar + Social Platforms) */}
-        <div className="w-full pt-6 sm:pt-10 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 border-t border-gray-100">
+        <div className="w-full pt-6 sm:pt-10 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 border-t border-white/10">
           
           {/* Avatar Name Pill: [Avatar] Indra Wijaya */}
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#18181b] text-white shadow-md text-xs font-semibold select-none">
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-white shadow-md text-xs font-semibold select-none">
             <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 flex items-center justify-center text-[9px] font-black text-black">
               IW
             </div>
@@ -119,11 +113,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuickConta
               href={platform.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white hover:bg-gray-50 border border-gray-200/90 text-gray-800 hover:text-black text-xs font-semibold shadow-[0_2px_6px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+              className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white/80 hover:text-white text-xs font-semibold shadow-sm hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
               title={`Visit ${platform.label}`}
               aria-label={platform.label}
             >
-              <span className="text-gray-700">{platform.icon}</span>
+              <span className="text-white/60">{platform.icon}</span>
               <span>{platform.label}</span>
             </a>
           ))}
