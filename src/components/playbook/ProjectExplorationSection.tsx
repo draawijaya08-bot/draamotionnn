@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { projectsDataset } from '@/data/portfolio-data';
 import { useLanguageStore, translations } from '@/stores/languageStore';
 import { AdaptiveProjectMedia } from '@/components/media/AdaptiveProjectMedia';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const ProjectExplorationSection: React.FC = () => {
   const { locale } = useLanguageStore();
@@ -13,12 +14,17 @@ export const ProjectExplorationSection: React.FC = () => {
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const glowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [isDragging, setIsDragging] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeIndexRef = useRef(0);
 
-  // Drag-to-scroll state
+  // Drag-to-scroll & momentum physics state
   const isPointerDown = useRef(false);
   const startX = useRef(0);
   const startScrollLeft = useRef(0);
   const dragDistance = useRef(0);
+  const lastPointerX = useRef(0);
+  const lastPointerTime = useRef(0);
+  const pointerVelocity = useRef(0);
   const rafId = useRef<number | null>(null);
 
   // Calculate and apply dynamic zoom, curved arc layout, and white back-glow
@@ -34,7 +40,7 @@ export const ProjectExplorationSection: React.FC = () => {
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Responsive parameters
+    // Responsive curvature parameters
     let maxDrop = 34;
     let maxRotateZ = 3.8;
     let maxRotateY = 4.5;
@@ -46,23 +52,31 @@ export const ProjectExplorationSection: React.FC = () => {
       maxRotateY = 0;
       maxZoom = 0;
     } else if (width < 640) {
-      // Mobile: gentle zoom and very subtle curve
       maxDrop = 12;
       maxRotateZ = 1.0;
       maxRotateY = 0;
       maxZoom = 0.08;
     } else if (width < 1024) {
-      // Tablet
       maxDrop = 22;
       maxRotateZ = 2.4;
       maxRotateY = 3.0;
       maxZoom = 0.12;
     }
 
+    let closestIdx = 0;
+    let minDistanceToCenter = Infinity;
+
     cardRefs.current.forEach((card, idx) => {
       if (!card) return;
       const cardRect = card.getBoundingClientRect();
       const cardCenter = cardRect.left + cardRect.width / 2;
+      const distFromCenter = Math.abs(cardCenter - centerX);
+
+      if (distFromCenter < minDistanceToCenter) {
+        minDistanceToCenter = distFromCenter;
+        closestIdx = idx;
+      }
+
       const normalized = (cardCenter - centerX) / halfWidth;
       const clamped = Math.max(-2, Math.min(2, normalized));
 
@@ -85,7 +99,7 @@ export const ProjectExplorationSection: React.FC = () => {
       // 5. Z-Index to ensure focused card is always on top
       const zIndex = Math.round(proximity * 20 + 10);
 
-      // 6. Subtle opacity difference: focused is 100%, unfocused is 75%
+      // 6. Subtle opacity: focused is 100%, unfocused is 72%
       const opacity = isReduced ? 1 : 0.72 + proximity * 0.28;
 
       card.style.transform = `translate3d(0, ${translateY.toFixed(
@@ -103,7 +117,52 @@ export const ProjectExplorationSection: React.FC = () => {
         glow.style.opacity = glowOpacity.toFixed(2);
       }
     });
+
+    if (closestIdx !== activeIndexRef.current) {
+      activeIndexRef.current = closestIdx;
+      setActiveIndex(closestIdx);
+    }
   }, []);
+
+  // Smooth scroll a specific card dead-center into focus
+  const scrollToCard = useCallback((idx: number) => {
+    if (!containerRef.current) return;
+    const card = cardRefs.current[idx];
+    if (!card) return;
+    const container = containerRef.current;
+    const containerWidth = container.clientWidth;
+    const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+    const targetScrollLeft = cardCenter - containerWidth / 2;
+
+    container.scrollTo({
+      left: Math.max(0, targetScrollLeft),
+      behavior: 'smooth',
+    });
+    activeIndexRef.current = idx;
+    setActiveIndex(idx);
+  }, []);
+
+  // Snap to the closest card to center
+  const snapToNearestCard = useCallback(() => {
+    if (!containerRef.current) return;
+    const container = containerRef.current;
+    const currentCenter = container.scrollLeft + container.clientWidth / 2;
+
+    let closestIdx = 0;
+    let minDiff = Infinity;
+
+    cardRefs.current.forEach((card, idx) => {
+      if (!card) return;
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+      const diff = Math.abs(cardCenter - currentCenter);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIdx = idx;
+      }
+    });
+
+    scrollToCard(closestIdx);
+  }, [scrollToCard]);
 
   // Update curvature on scroll, resize, and initial render
   useEffect(() => {
@@ -118,59 +177,58 @@ export const ProjectExplorationSection: React.FC = () => {
     container.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll, { passive: true });
 
-    // Initial update
-    updateCurvature();
+    // Initial update & center first card smoothly
+    const initTimer = setTimeout(() => {
+      scrollToCard(0);
+      updateCurvature();
+    }, 150);
 
     return () => {
       if (rafId.current) cancelAnimationFrame(rafId.current);
       container.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
+      clearTimeout(initTimer);
     };
-  }, [updateCurvature]);
+  }, [scrollToCard, updateCurvature]);
 
-  // Smooth scroll a specific card dead-center into focus
-  const scrollToCard = useCallback((idx: number) => {
-    if (!containerRef.current) return;
-    const card = cardRefs.current[idx];
-    if (!card) return;
+  // Smooth mouse-wheel translation with natural edge handling
+  useEffect(() => {
     const container = containerRef.current;
-    const containerRect = container.getBoundingClientRect();
-    const cardRect = card.getBoundingClientRect();
+    if (!container) return;
 
-    const targetScrollLeft =
-      container.scrollLeft +
-      (cardRect.left - containerRect.left) -
-      (containerRect.width - cardRect.width) / 2;
+    let wheelTimeout: NodeJS.Timeout;
 
-    container.scrollTo({
-      left: targetScrollLeft,
-      behavior: 'smooth',
-    });
-  }, []);
+    const handleWheel = (e: WheelEvent) => {
+      // If user is mostly scrolling vertically on mouse wheel
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX) * 0.8) {
+        const isAtStart = container.scrollLeft <= 5 && e.deltaY < 0;
+        const isAtEnd =
+          container.scrollLeft >= container.scrollWidth - container.clientWidth - 5 &&
+          e.deltaY > 0;
 
-  // Snap to the closest card to center after drag ends
-  const snapToNearestCard = useCallback(() => {
-    if (!containerRef.current) return;
-    const container = containerRef.current;
-    const containerRect = container.getBoundingClientRect();
-    const centerX = containerRect.left + containerRect.width / 2;
+        // If not at extremes, smoothly scroll gallery horizontally
+        if (!isAtStart && !isAtEnd) {
+          e.preventDefault();
+          container.scrollLeft += e.deltaY * 0.85;
 
-    let closestIdx = 0;
-    let minDiff = Infinity;
+          if (rafId.current) cancelAnimationFrame(rafId.current);
+          rafId.current = requestAnimationFrame(updateCurvature);
 
-    cardRefs.current.forEach((card, idx) => {
-      if (!card) return;
-      const cardRect = card.getBoundingClientRect();
-      const cardCenter = cardRect.left + cardRect.width / 2;
-      const diff = Math.abs(cardCenter - centerX);
-      if (diff < minDiff) {
-        minDiff = diff;
-        closestIdx = idx;
+          clearTimeout(wheelTimeout);
+          wheelTimeout = setTimeout(() => {
+            snapToNearestCard();
+          }, 180);
+        }
       }
-    });
+    };
 
-    scrollToCard(closestIdx);
-  }, [scrollToCard]);
+    container.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      container.removeEventListener('wheel', handleWheel);
+      clearTimeout(wheelTimeout);
+    };
+  }, [snapToNearestCard, updateCurvature]);
 
   // Pointer Down (Mouse / Touch)
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -181,9 +239,17 @@ export const ProjectExplorationSection: React.FC = () => {
     dragDistance.current = 0;
     startX.current = e.clientX;
     startScrollLeft.current = containerRef.current.scrollLeft;
+    lastPointerX.current = e.clientX;
+    lastPointerTime.current = performance.now();
+    pointerVelocity.current = 0;
+
+    // Capture pointer to prevent losing drag when moving fast
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
   };
 
-  // Pointer Move (Mouse Drag)
+  // Pointer Move (Mouse Drag) with velocity tracking
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isPointerDown.current || !containerRef.current) return;
 
@@ -194,6 +260,15 @@ export const ProjectExplorationSection: React.FC = () => {
       setIsDragging(true);
     }
 
+    // Velocity calculation for momentum
+    const now = performance.now();
+    const dt = now - lastPointerTime.current;
+    if (dt > 8) {
+      pointerVelocity.current = (e.clientX - lastPointerX.current) / dt;
+      lastPointerX.current = e.clientX;
+      lastPointerTime.current = now;
+    }
+
     // Scroll horizontal following pointer
     containerRef.current.scrollLeft = startScrollLeft.current - deltaX;
 
@@ -202,20 +277,44 @@ export const ProjectExplorationSection: React.FC = () => {
     rafId.current = requestAnimationFrame(updateCurvature);
   };
 
-  // Pointer Up / Cancel / Leave
-  const handlePointerUp = () => {
+  // Pointer Up / Cancel / Leave with momentum glide
+  const handlePointerUp = (e: React.PointerEvent) => {
     if (!isPointerDown.current) return;
     isPointerDown.current = false;
 
-    const didDragSignificantly = dragDistance.current > 15;
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {}
+
+    const didDragSignificantly = dragDistance.current > 12;
+    const velocity = pointerVelocity.current;
 
     setTimeout(() => {
       setIsDragging(false);
       dragDistance.current = 0;
     }, 50);
 
-    // If user dragged, smoothly snap to the nearest centered project
-    if (didDragSignificantly) {
+    // If user threw/flicked with momentum
+    if (didDragSignificantly && Math.abs(velocity) > 0.2 && containerRef.current) {
+      const container = containerRef.current;
+      const momentumDistance = velocity * 280;
+      const projectedCenter =
+        container.scrollLeft - momentumDistance + container.clientWidth / 2;
+
+      let targetIdx = 0;
+      let minDiff = Infinity;
+      cardRefs.current.forEach((card, idx) => {
+        if (!card) return;
+        const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+        const diff = Math.abs(cardCenter - projectedCenter);
+        if (diff < minDiff) {
+          minDiff = diff;
+          targetIdx = idx;
+        }
+      });
+
+      scrollToCard(targetIdx);
+    } else if (didDragSignificantly) {
       snapToNearestCard();
     } else {
       updateCurvature();
@@ -315,6 +414,7 @@ export const ProjectExplorationSection: React.FC = () => {
                       cardRefs.current[idx] = el;
                     }}
                     onClick={() => handleCardClick(idx)}
+                    onDragStart={(e) => e.preventDefault()}
                     className="group relative rounded-3xl p-1 sm:p-1.5 cursor-pointer transition-[box-shadow,opacity] duration-300"
                     style={{
                       willChange: 'transform, opacity',
@@ -358,14 +458,52 @@ export const ProjectExplorationSection: React.FC = () => {
         </div>
 
         {/* ======================================================== */}
-        {/* FLOATING "← DRAG ME →" PILL BADGE                         */}
+        {/* SLEEK NAVIGATION CONTROLS & PAGINATION                    */}
         {/* ======================================================== */}
-        <div className="flex justify-center pt-2 sm:pt-4">
-          <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-mono tracking-widest uppercase px-5 py-2.5 rounded-full pointer-events-none shadow-lg select-none transition-all duration-300 hover:bg-white/15">
-            <span className="text-white/50 text-[10px]">←</span>
-            <span>DRAG OR CLICK TO FOCUS</span>
-            <span className="text-white/50 text-[10px]">→</span>
+        <div className="flex items-center justify-center gap-3 sm:gap-6 pt-2 select-none">
+          {/* Previous Arrow Button */}
+          <button
+            type="button"
+            onClick={() => scrollToCard(Math.max(0, activeIndex - 1))}
+            disabled={activeIndex === 0}
+            className="w-10 h-10 rounded-full border border-white/20 bg-black/50 backdrop-blur-md text-white/80 hover:text-white hover:border-white/50 hover:bg-white/10 flex items-center justify-center transition-all disabled:opacity-30 disabled:pointer-events-none cursor-pointer shadow-lg"
+            aria-label="Previous project"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          {/* Interactive Pagination Dots with Active Count */}
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 bg-black/60 backdrop-blur-md shadow-lg">
+            {projectsDataset.map((_, dotIdx) => {
+              const isActive = activeIndex === dotIdx;
+              return (
+                <button
+                  key={dotIdx}
+                  type="button"
+                  onClick={() => scrollToCard(dotIdx)}
+                  className={`transition-all duration-300 cursor-pointer ${
+                    isActive
+                      ? 'w-6 h-2 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.8)]'
+                      : 'w-2 h-2 rounded-full bg-white/30 hover:bg-white/60'
+                  }`}
+                  aria-label={`Go to project ${dotIdx + 1}`}
+                />
+              );
+            })}
           </div>
+
+          {/* Next Arrow Button */}
+          <button
+            type="button"
+            onClick={() =>
+              scrollToCard(Math.min(projectsDataset.length - 1, activeIndex + 1))
+            }
+            disabled={activeIndex === projectsDataset.length - 1}
+            className="w-10 h-10 rounded-full border border-white/20 bg-black/50 backdrop-blur-md text-white/80 hover:text-white hover:border-white/50 hover:bg-white/10 flex items-center justify-center transition-all disabled:opacity-30 disabled:pointer-events-none cursor-pointer shadow-lg"
+            aria-label="Next project"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
       </div>
     </section>
