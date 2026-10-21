@@ -13,45 +13,36 @@ function PreviewCardsContent() {
   const t = translations[locale];
   const searchParams = useSearchParams();
   const cardParam = Number(searchParams.get('card') || '0');
-  const initialIndex = !isNaN(cardParam) && cardParam >= 0 && cardParam <= 3 ? cardParam : 0;
+  const initialIndex = !isNaN(cardParam) && cardParam >= 0 && cardParam <= 2 ? cardParam : 0;
   const [activeCard, setActiveCard] = React.useState(initialIndex);
 
   const statements = [
     {
       leadEn: 'I turn ideas into ',
       accentEn: 'visual experiences',
-      suffixEn: 'through motion, video,\nand interactive web.',
+      suffixEn: 'through motion graphics,\nkinetic typography & 3D.',
       leadId: 'Saya mengubah ide menjadi ',
       accentId: 'pengalaman visual',
-      suffixId: 'melalui motion, video,\ndan web interaktif.',
-      tags: 'MOTION GRAPHICS / VIDEO EDITING /\nVISUAL DESIGN & WEB',
-    },
-    {
-      leadEn: 'I create ',
-      accentEn: 'unconventional',
-      suffixEn: 'yet functional & visually\npleasing interfaces for the mobile and web.',
-      leadId: 'Saya menciptakan ',
-      accentId: 'antarmuka unik',
-      suffixId: 'namun fungsional &\nmemukau untuk mobile dan web.',
-      tags: 'WEB & MOBILE / UX&UI /\nBRANDING',
+      suffixId: 'melalui motion graphic,\ntipografi kinetik & 3D.',
+      tags: 'MOTION GRAPHICS / 3D CGI /\nAFTER EFFECTS & CINEMA 4D',
     },
     {
       leadEn: 'I shape ',
       accentEn: 'memorable visual identities',
-      suffixEn: '& dynamic systems that stand the test of time.',
+      suffixEn: '& graphic design systems that stand the test of time.',
       leadId: 'Saya membentuk ',
       accentId: 'identitas visual kuat',
-      suffixId: '& sistem visual berkarakter yang abadi.',
-      tags: 'BRANDING / ART DIRECTION /\nIDENTITY SYSTEMS',
+      suffixId: '& sistem desain grafis berkarakter yang abadi.',
+      tags: 'DESIGN GRAPHIC / BRAND IDENTITY /\nEDITORIAL & TYPOGRAPHY',
     },
     {
       leadEn: 'I engineer ',
-      accentEn: 'interactive web',
-      suffixEn: 'with fluid motion, 3D, and high-performance code.',
+      accentEn: 'neural AI systems',
+      suffixEn: 'uniting generative intelligence, creative web & performance.',
       leadId: 'Saya membangun ',
-      accentId: 'web interaktif',
-      suffixId: 'dengan fluid motion, 3D, dan performa tinggi.',
-      tags: 'CREATIVE DEVELOPMENT / NEXT.JS /\nTHREE.JS & WEBGL',
+      accentId: 'sistem AI cerdas',
+      suffixId: 'menyatukan inteligensi generatif, web interaktif & performa tinggi.',
+      tags: 'AI DEVELOPMENT / AGENTIC WORKFLOWS /\nNEXT.JS & INTERACTIVE WEB',
     },
   ];
 

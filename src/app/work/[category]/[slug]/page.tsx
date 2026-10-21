@@ -38,7 +38,13 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   const { category, slug } = await params;
 
   const projectIndex = projectsDataset.findIndex(
-    (p) => p.slug === slug && p.category === category
+    (p) =>
+      p.slug === slug &&
+      (p.category === category ||
+        (category === 'motion-graphic' && p.category === 'motion-graphics') ||
+        (category === 'graphic-design' && p.category === 'visual-design') ||
+        (category === 'ai-development' && (p.category === 'web' || p.category === 'ai-development')) ||
+        (category === 'web' && p.category === 'ai-development'))
   );
 
   if (projectIndex === -1) {

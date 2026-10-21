@@ -290,10 +290,9 @@ export const CategoryVectorShowcase: React.FC<CategoryVectorShowcaseProps> = ({
         )}
 
         {/* ================================================================ */}
-        {/* CARD 3: VISUAL DESIGN / BRANDING (Editorial Poster & Geometry)   */}
-        {/* Hand arranging Swiss typography layout & brand identity vectors  */}
+        {/* CARD 2: DESIGN GRAPHIC / BRANDING (Editorial Poster & Geometry)  */}
         {/* ================================================================ */}
-        {category === 'visual-design' && (
+        {(category === 'visual-design' || category === 'graphic-design') && (
           <g id="branding-card-3" transform="translate(30, 10)">
             {/* 1. Large Editorial Typography Artboard */}
             <rect
@@ -317,7 +316,10 @@ export const CategoryVectorShowcase: React.FC<CategoryVectorShowcaseProps> = ({
               <text x="0" y="140" fill="#ffffff" fontSize="90" fontFamily="serif" fontStyle="italic" fontWeight="bold">
                 Aa
               </text>
-              <text x="150" y="130" fill="#00e5c0" fontSize="48" fontFamily="sans-serif" fontWeight="900" letterSpacing="-0.03em">
+              <text x="150" y="110" fill="#00e5c0" fontSize="40" fontFamily="sans-serif" fontWeight="900" letterSpacing="-0.03em">
+                GRAPHIC
+              </text>
+              <text x="150" y="148" fill="#ffffff" fontSize="32" fontFamily="sans-serif" fontWeight="800" letterSpacing="-0.02em">
                 DESIGN
               </text>
 
@@ -352,11 +354,10 @@ export const CategoryVectorShowcase: React.FC<CategoryVectorShowcaseProps> = ({
         )}
 
         {/* ================================================================ */}
-        {/* CARD 4: WEB DEVELOPMENT (Interactive Multi-Device Wireframe)     */}
-        {/* Desktop Browser + Mobile screen with modern UI components        */}
+        {/* CARD 3: AI DEVELOPMENT (Neural Pipelines & Generative Agents)    */}
         {/* ================================================================ */}
-        {category === 'web' && (
-          <g id="web-card-4" transform="translate(40, 20)">
+        {(category === 'web' || category === 'ai-development') && (
+          <g id="ai-dev-card-4" transform="translate(40, 20)">
             {/* Desktop Browser Window Bezel */}
             <rect
               x="80"
@@ -364,7 +365,7 @@ export const CategoryVectorShowcase: React.FC<CategoryVectorShowcaseProps> = ({
               width="440"
               height="280"
               rx="18"
-              fill="#080a10"
+              fill="#06080e"
               stroke="#ffffff"
               strokeWidth="3.5"
             />
@@ -374,20 +375,45 @@ export const CategoryVectorShowcase: React.FC<CategoryVectorShowcaseProps> = ({
             <circle cx="106" cy="37" r="5" fill="#ff5f56" />
             <circle cx="122" cy="37" r="5" fill="#ffbd2e" />
             <circle cx="138" cy="37" r="5" fill="#27c93f" />
-            <rect x="170" y="29" width="180" height="16" rx="6" fill="rgba(255,255,255,0.1)" />
+            
+            <text x="165" y="41" fill="rgba(255,255,255,0.7)" fontSize="10" fontFamily="monospace">
+              INDRA WIJAYA / AI DEVELOPMENT LAB
+            </text>
 
-            {/* Wireframe Hero UI Section inside window */}
-            <g transform="translate(110, 80)">
-              <rect x="0" y="0" width="160" height="20" rx="4" fill="rgba(0,229,192,0.6)" />
-              <rect x="0" y="30" width="220" height="10" rx="3" fill="rgba(255,255,255,0.3)" />
-              <rect x="0" y="48" width="180" height="10" rx="3" fill="rgba(255,255,255,0.18)" />
+            {/* Neural Graph & AI Code Stream inside window */}
+            <g transform="translate(110, 75)">
+              {/* Neural Synapse Nodes and Connectors */}
+              <g stroke="rgba(0,229,192,0.4)" strokeWidth="2" strokeDasharray="4 3">
+                <line x1="25" y1="35" x2="85" y2="20" />
+                <line x1="25" y1="35" x2="85" y2="55" />
+                <line x1="85" y1="20" x2="155" y2="35" />
+                <line x1="85" y1="55" x2="155" y2="35" />
+                <line x1="155" y1="35" x2="225" y2="35" />
+              </g>
 
-              {/* Interactive Component Card */}
-              <rect x="0" y="80" width="140" height="90" rx="10" fill="rgba(255,255,255,0.04)" stroke="#00e5c0" strokeWidth="2" />
-              <circle cx="35" cy="115" r="16" fill="rgba(0,229,192,0.2)" />
-              <polygon points="32,107 42,115 32,123" fill="#00e5c0" />
-              <rect x="62" y="108" width="60" height="8" rx="2" fill="#ffffff" />
-              <rect x="62" y="122" width="45" height="6" rx="2" fill="rgba(255,255,255,0.4)" />
+              {/* Neural Nodes with pulsing fills */}
+              <circle cx="25" cy="35" r="9" fill="#0e121d" stroke="#00e5c0" strokeWidth="2.5" />
+              <circle cx="25" cy="35" r="4" fill="#00e5c0" />
+
+              <circle cx="85" cy="20" r="8" fill="#0e121d" stroke="#e0115f" strokeWidth="2" />
+              <circle cx="85" cy="20" r="3.5" fill="#e0115f" />
+
+              <circle cx="85" cy="55" r="8" fill="#0e121d" stroke="#f2a922" strokeWidth="2" />
+              <circle cx="85" cy="55" r="3.5" fill="#f2a922" />
+
+              <circle cx="155" cy="35" r="10" fill="#0e121d" stroke="#00e5c0" strokeWidth="2.5" />
+              <circle cx="155" cy="35" r="4.5" fill="#00e5c0" />
+
+              <circle cx="225" cy="35" r="11" fill="#00e5c0" stroke="#ffffff" strokeWidth="2" />
+
+              {/* Code Snippets & AI Model Diagnostics */}
+              <g transform="translate(0, 90)" fontFamily="monospace" fontSize="10">
+                <rect x="0" y="0" width="245" height="105" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" />
+                <text x="12" y="24" fill="#00e5c0">&gt; model.pipeline(&quot;ComfyUI&quot;)</text>
+                <text x="12" y="44" fill="rgba(255,255,255,0.8)">&gt; agent.eval({`{`} latency: &quot;12ms&quot; {`}`})</text>
+                <text x="12" y="64" fill="#e0115f">&gt; generative.synthesize(60fps)</text>
+                <text x="12" y="86" fill="#f2a922">&gt; status: 100% DEPLOYED ONLINE</text>
+              </g>
             </g>
 
             {/* Nested Mobile Device Wireframe on the Right (Overlapping) */}
@@ -406,9 +432,11 @@ export const CategoryVectorShowcase: React.FC<CategoryVectorShowcaseProps> = ({
               <rect x="45" y="10" width="50" height="6" rx="3" fill="rgba(255,255,255,0.3)" />
               {/* Screen Aura */}
               <rect x="10" y="28" width="120" height="190" rx="14" fill="url(#purrweb-screen-aura)" />
-              <text x="25" y="75" fill="#ffffff" fontSize="22" fontWeight="bold">WEB</text>
-              <text x="25" y="105" fill="#00e5c0" fontSize="18" fontWeight="bold">NEXT.JS</text>
-              <text x="25" y="140" fill="rgba(255,255,255,0.8)" fontSize="10" fontFamily="monospace">60 FPS GSAP</text>
+              <text x="25" y="68" fill="#ffffff" fontSize="20" fontWeight="bold">AI DEV</text>
+              <text x="25" y="98" fill="#00e5c0" fontSize="15" fontWeight="bold">NEURAL</text>
+              <text x="25" y="125" fill="rgba(255,255,255,0.9)" fontSize="10" fontFamily="monospace">COMFYUI • LLM</text>
+              <text x="25" y="145" fill="rgba(255,255,255,0.8)" fontSize="10" fontFamily="monospace">NEXT.JS 16</text>
+              <text x="25" y="175" fill="#f2a922" fontSize="9" fontFamily="monospace">60 FPS TICKER</text>
               {/* Home indicator */}
               <rect x="45" y="228" width="50" height="4" rx="2" fill="#ffffff" />
             </g>

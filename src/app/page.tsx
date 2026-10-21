@@ -132,41 +132,20 @@ export default function Home() {
                     </span>{' '}
                     {locale === 'en' ? (
                       <>
-                        through motion, video,
+                        through motion graphics,
                         <br />
-                        and interactive web.
+                        kinetic typography &amp; 3D.
                       </>
                     ) : (
                       <>
-                        melalui motion, video,
+                        melalui motion graphic,
                         <br />
-                        dan web interaktif.
+                        tipografi kinetik &amp; 3D.
                       </>
                     )}
                   </>
                 )}
                 {activeCard === 1 && (
-                  <>
-                    {locale === 'en' ? 'I create ' : 'Saya menciptakan '}
-                    <span className="font-[family-name:var(--font-serif)] italic text-[#00e5c0] font-normal">
-                      {locale === 'en' ? 'unconventional' : 'antarmuka unik'}
-                    </span>{' '}
-                    {locale === 'en' ? (
-                      <>
-                        yet functional &amp; visually
-                        <br />
-                        pleasing interfaces for mobile and web.
-                      </>
-                    ) : (
-                      <>
-                        namun fungsional &amp;
-                        <br />
-                        memukau untuk mobile dan web.
-                      </>
-                    )}
-                  </>
-                )}
-                {activeCard === 2 && (
                   <>
                     {locale === 'en' ? 'I shape ' : 'Saya membentuk '}
                     <span className="font-[family-name:var(--font-serif)] italic text-[#00e5c0] font-normal">
@@ -174,36 +153,36 @@ export default function Home() {
                     </span>{' '}
                     {locale === 'en' ? (
                       <>
-                        &amp; dynamic systems
+                        &amp; graphic design systems
                         <br />
                         that stand the test of time.
                       </>
                     ) : (
                       <>
-                        &amp; sistem visual berkarakter
+                        &amp; sistem desain grafis
                         <br />
-                        yang abadi.
+                        berkarakter yang abadi.
                       </>
                     )}
                   </>
                 )}
-                {activeCard === 3 && (
+                {activeCard === 2 && (
                   <>
                     {locale === 'en' ? 'I engineer ' : 'Saya membangun '}
                     <span className="font-[family-name:var(--font-serif)] italic text-[#00e5c0] font-normal">
-                      {locale === 'en' ? 'interactive web' : 'web interaktif'}
+                      {locale === 'en' ? 'neural AI systems' : 'sistem AI cerdas'}
                     </span>{' '}
                     {locale === 'en' ? (
                       <>
-                        with fluid motion, 3D,
+                        uniting generative intelligence,
                         <br />
-                        and high-performance code.
+                        creative web &amp; performance.
                       </>
                     ) : (
                       <>
-                        dengan fluid motion, 3D,
+                        menyatukan inteligensi generatif,
                         <br />
-                        dan performa tinggi.
+                        web interaktif &amp; performa tinggi.
                       </>
                     )}
                   </>
@@ -213,10 +192,9 @@ export default function Home() {
               {/* Bottom metadata & scroll indicator matching bottom-left of reference frame t9.0s */}
               <div className="pt-16 sm:pt-24 space-y-8 font-mono">
                 <div className="text-[10px] sm:text-[11px] tracking-widest text-white/50 uppercase leading-relaxed whitespace-pre-line">
-                  {activeCard === 0 && 'MOTION GRAPHICS / VIDEO EDITING /\nVISUAL DESIGN & WEB'}
-                  {activeCard === 1 && 'WEB & MOBILE / UX&UI /\nBRANDING'}
-                  {activeCard === 2 && 'BRANDING / ART DIRECTION /\nIDENTITY SYSTEMS'}
-                  {activeCard === 3 && 'CREATIVE DEVELOPMENT / NEXT.JS /\nTHREE.JS & WEBGL'}
+                  {activeCard === 0 && 'MOTION GRAPHICS / 3D CGI /\nAFTER EFFECTS & CINEMA 4D'}
+                  {activeCard === 1 && 'DESIGN GRAPHIC / BRAND IDENTITY /\nEDITORIAL & TYPOGRAPHY'}
+                  {activeCard === 2 && 'AI DEVELOPMENT / AGENTIC WORKFLOWS /\nNEXT.JS & INTERACTIVE WEB'}
                 </div>
 
                 <div>

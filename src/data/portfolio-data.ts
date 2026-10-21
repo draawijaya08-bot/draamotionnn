@@ -7,25 +7,23 @@ import {
 
 export const siteIdentityData: SiteIdentity = {
   brandName: 'INDRA WIJAYA',
-  primaryRole: 'Creative Developer & Motion Designer',
+  primaryRole: 'Motion Designer, Graphic Designer & AI Developer',
   heroKinetic: {
     prefix: 'Creative ',
-    dynamicWords: ['developer', 'motion', 'visual', 'creative'],
+    dynamicWords: ['motion', 'graphic', 'ai dev', 'creative'],
     suffix: ' designer',
     subHeadline:
-      'Crafting high-voltage kinetic typography, commercial video edits, visual brand systems, and interactive creative web engineering.',
+      'Crafting high-voltage kinetic typography, graphic design identity systems, and generative AI development.',
     accentColor: '#E68A1E', // Warm amber / golden serif accent
   },
   metadataBar: {
-    specializations: 'MOTION GRAPHICS / VIDEO EDITING / VISUAL DESIGN / WEB',
+    specializations: 'MOTION GRAPHIC / DESIGN GRAPHIC / AI DEVELOPMENT',
     availabilityStatus: 'CURRENTLY AVAILABLE FOR FREELANCE & COLLABORATION',
     location: 'BASED IN INDONESIA (REMOTE WORLDWIDE)',
   },
   heroShowreel: {
-    ambientBlurVideoUrl:
-      'https://cdn.dribbble.com/userupload/3989861/file/original-1f1610f0a43c0aed537ab125d7ef8e45.mp4',
-    sharpRevealVideoUrl:
-      'https://cdn.dribbble.com/userupload/3989861/file/original-1f1610f0a43c0aed537ab125d7ef8e45.mp4',
+    ambientBlurVideoUrl: '/videos/hero/reference-purrweb.mp4',
+    sharpRevealVideoUrl: '/videos/hero/reference-purrweb.mp4',
     fallbackPosterUrl:
       'https://cdn.dribbble.com/userupload/3989861/file/still-a6e8bb4abb91f9ed2e4ccad1d3bd24bd.png',
     durationSeconds: 12,
@@ -42,13 +40,19 @@ export const siteIdentityData: SiteIdentity = {
         'Hello Indra, I came across your portfolio and would like to discuss an upcoming collaboration.',
       categoryContextMessages: {
         'motion-graphics':
-          'Hello Indra, I would like to discuss a Motion Graphics / Commercial Animation project for our brand.',
+          'Hello Indra, I would like to discuss a Motion Graphic project for our brand.',
+        'motion-graphic':
+          'Hello Indra, I would like to discuss a Motion Graphic project for our brand.',
+        'visual-design':
+          'Hello Indra, I am interested in discussing Graphic Design & Brand Identity with you.',
+        'graphic-design':
+          'Hello Indra, I am interested in discussing Graphic Design & Brand Identity with you.',
+        'ai-development':
+          'Hello Indra, I want to talk about an AI Development & Creative Web project with you.',
+        web:
+          'Hello Indra, I want to talk about an AI Development & Creative Web project with you.',
         'video-editing':
           'Hello Indra, I would like to collaborate on Video Editing & Post-Production for our campaign.',
-        'visual-design':
-          'Hello Indra, I am interested in discussing Visual Design & Brand Identity with you.',
-        web:
-          'Hello Indra, I want to talk about a Creative Web Development project built with high visual standards.',
       },
     },
     instagram: {
@@ -91,57 +95,45 @@ export const categoryFilterList: CategoryFilterItem[] = [
   {
     id: 'all',
     label: 'ALL',
-    description: 'Complete curated archive across all 4 creative disciplines.',
+    description: 'Complete curated archive across all creative disciplines.',
   },
   {
     id: 'motion-graphics',
-    label: 'MOTION GRAPHICS',
+    label: 'MOTION GRAPHIC',
     description: 'Dynamic kinetic typography, 3D commercial reels, and broadcast motion.',
   },
   {
-    id: 'video-editing',
-    label: 'VIDEO EDITING',
-    description: 'Cinematic pacing, commercial narrative cuts, and high-impact rhythm editing.',
-  },
-  {
     id: 'visual-design',
-    label: 'VISUAL DESIGN',
+    label: 'DESIGN GRAPHIC',
     description: 'Brand identity systems, brutalist typography posters, and art direction.',
   },
   {
     id: 'web',
-    label: 'WEB DEVELOPMENT',
-    description: 'Creative frontend engineering, GSAP animations, Next.js, and interactive web apps.',
+    label: 'AI DEVELOPMENT',
+    description: 'Generative AI pipelines, neural interfaces, Next.js, and interactive apps.',
+  },
+  {
+    id: 'video-editing',
+    label: 'VIDEO EDITING',
+    description: 'Cinematic pacing, commercial narrative cuts, and rhythm editing.',
   },
 ];
 
 export const heroStackedCategories: StackedCardCategory[] = [
   {
     category: 'motion-graphics',
-    title: 'MOTION GRAPHICS',
+    title: 'MOTION GRAPHIC',
     tagline: 'High-Voltage Commercials & Kinetic Rhythms',
-    previewVideoUrl:
-      'https://cdn.dribbble.com/userupload/3989861/file/original-1f1610f0a43c0aed537ab125d7ef8e45.mp4',
+    previewVideoUrl: '/videos/hero/reference-purrweb.mp4',
     previewImageUrl:
       'https://cdn.dribbble.com/userupload/3989861/file/still-a6e8bb4abb91f9ed2e4ccad1d3bd24bd.png',
-    posterUrl:
-      'https://cdn.dribbble.com/userupload/3989861/file/still-a6e8bb4abb91f9ed2e4ccad1d3bd24bd.png',
+    posterUrl: '/posters/hero-poster.webp',
     accentBadge: 'REEL FOCUS',
     routeUrl: '/work/motion-graphics',
   },
   {
-    category: 'video-editing',
-    title: 'VIDEO EDITING',
-    tagline: 'Cinematic Pacing, Commercial Narrative & Rhythm Cuts',
-    previewVideoUrl: '/videos/projects/zenith-preview.mp4',
-    previewImageUrl: '/posters/zenith-poster.webp',
-    posterUrl: '/posters/zenith-poster.webp',
-    accentBadge: 'POST PRODUCTION',
-    routeUrl: '/work/video-editing',
-  },
-  {
     category: 'visual-design',
-    title: 'VISUAL DESIGN',
+    title: 'DESIGN GRAPHIC',
     tagline: 'Avant-Garde Editorial & Brand Visual Systems',
     previewImageUrl: '/posters/chronos-poster.webp',
     posterUrl: '/posters/chronos-poster.webp',
@@ -150,12 +142,12 @@ export const heroStackedCategories: StackedCardCategory[] = [
   },
   {
     category: 'web',
-    title: 'WEB DEVELOPMENT',
-    tagline: 'Interactive Creative Frontend & High-Performance Web Apps',
+    title: 'AI DEVELOPMENT',
+    tagline: 'Generative AI Pipelines & Intelligent Web Architectures',
     previewVideoUrl: '/videos/projects/lumina-preview.mp4',
     previewImageUrl: '/posters/lumina-poster.webp',
     posterUrl: '/posters/lumina-poster.webp',
-    accentBadge: 'ENGINEERING',
+    accentBadge: 'AI & CODE',
     routeUrl: '/work/web',
   },
 ];
@@ -496,5 +488,93 @@ export const projectsDataset: ProjectItem[] = [
     ],
     featuredInHero: false,
     sortOrder: 8,
+  },
+
+  // 5. AI DEVELOPMENT
+  {
+    id: 'proj-ai-01',
+    slug: 'aura-neural-ai-agent',
+    title: 'Aura AI — Autonomous Motion & Generative Visual Agent',
+    titleId: 'Aura AI — Agen Motion Otonom & Visual Generatif',
+    category: 'ai-development',
+    year: 2026,
+    clientOrContext: 'Aura Neural Labs',
+    role: 'AI Engineer & Creative Technologist',
+    projectUrl: 'https://aura-motion.ai',
+    description: {
+      shortSnippet:
+        'Next-generation AI agent that converts natural language script directly into 60fps kinetic motion keyframes and generative video passes.',
+      detailedChallenge:
+        'Bridge the gap between probabilistic generative AI diffusion models and deterministic 60fps keyframe timelines.',
+      solutionApplied:
+        'Orchestrated multi-agent Claude 3.7 workflows connected with ComfyUI API nodes, generating vector SVG animation scripts and synchronized audio layers.',
+    },
+    descriptionId: {
+      shortSnippet:
+        'Agen AI generasi baru yang mengubah naskah bahasa alami langsung menjadi keyframe motion 60fps dan visual video generatif.',
+      detailedChallenge:
+        'Menjembatani model difusi AI generatif probabilistik dengan timeline animasi keyframe 60fps yang deterministik.',
+      solutionApplied:
+        'Mengorkestrasi agen multi-tahap Claude 3.7 yang terhubung dengan API ComfyUI, menghasilkan skrip animasi SVG dan lapisan audio tersinkronisasi.',
+    },
+    media: {
+      type: 'VIDEO_LOOP',
+      previewUrl: '/videos/hero/reference-purrweb.mp4',
+      fallbackPosterUrl: '/posters/hero-poster.webp',
+      fullMediaUrl: '/videos/hero/reference-purrweb.mp4',
+      aspectRatio: '16:9',
+      durationSeconds: 24,
+    },
+    tools: [
+      { name: 'ComfyUI', category: 'AI_TECH', isPrimary: true },
+      { name: 'Claude / GPT-4', category: 'AI_TECH', isPrimary: true },
+      { name: 'Runway Gen-3', category: 'AI_TECH' },
+      { name: 'Next.js', category: 'DEVELOPMENT', isPrimary: true },
+      { name: 'TypeScript', category: 'DEVELOPMENT' },
+    ],
+    featuredInHero: true,
+    sortOrder: 9,
+  },
+  {
+    id: 'proj-ai-02',
+    slug: 'comfyui-generative-video-rig',
+    title: 'Latent Motion Studio — ComfyUI Real-Time Video Rig',
+    titleId: 'Latent Motion Studio — Rig Video Real-Time ComfyUI',
+    category: 'ai-development',
+    year: 2026,
+    clientOrContext: 'Synthetic Vision Media',
+    role: 'AI Pipeline Architect',
+    description: {
+      shortSnippet:
+        'Custom modular ComfyUI node pipeline integrating AnimateDiff, ControlNet IP-Adapter, and WebGL realtime canvas previews.',
+      detailedChallenge:
+        'Maintain temporal coherence across high-speed camera pans without flickering or anatomical artifacts.',
+      solutionApplied:
+        'Engineered custom latent blend shaders with optical flow vectors and automated upscale interpolation.',
+    },
+    descriptionId: {
+      shortSnippet:
+        'Pipeline ComfyUI modular khusus yang mengintegrasikan AnimateDiff, ControlNet IP-Adapter, dan pratinjau kanvas real-time WebGL.',
+      detailedChallenge:
+        'Mempertahankan koherensi temporal pada gerakan kamera berkecepatan tinggi tanpa flicker atau artefak visual.',
+      solutionApplied:
+        'Merancang shader percampuran laten khusus dengan vektor aliran optik dan interpolasi peningkatan resolusi otomatis.',
+    },
+    media: {
+      type: 'VIDEO_LOOP',
+      previewUrl: '/videos/projects/lumina-preview.mp4',
+      fallbackPosterUrl: '/posters/lumina-poster.webp',
+      fullMediaUrl: '/videos/projects/lumina-preview.mp4',
+      aspectRatio: '16:9',
+      durationSeconds: 19,
+    },
+    tools: [
+      { name: 'ComfyUI', category: 'AI_TECH', isPrimary: true },
+      { name: 'Stable Diffusion', category: 'AI_TECH', isPrimary: true },
+      { name: 'React', category: 'DEVELOPMENT' },
+      { name: 'GSAP', category: 'DEVELOPMENT' },
+    ],
+    featuredInHero: false,
+    sortOrder: 10,
   },
 ];

@@ -18,15 +18,26 @@ interface CategoryPageProps {
 
 const validCategories: ProjectCategory[] = [
   'motion-graphics',
+  'motion-graphic',
   'video-editing',
   'visual-design',
+  'graphic-design',
   'web',
+  'ai-development',
 ];
 
 const categoryTitles: Record<string, { en: string; id: string; descEn: string; descId: string }> = {
   'motion-graphics': {
-    en: 'Motion Graphics',
-    id: 'Motion Graphics',
+    en: 'Motion Graphic',
+    id: 'Motion Graphic',
+    descEn:
+      'High-voltage commercial motion, kinetic typography, 3D broadcast reels, and kinetic brand idents.',
+    descId:
+      'Motion graphic komersial berenergi tinggi, tipografi kinetik, bumper siaran 3D, dan identitas brand dinamis.',
+  },
+  'motion-graphic': {
+    en: 'Motion Graphic',
+    id: 'Motion Graphic',
     descEn:
       'High-voltage commercial motion, kinetic typography, 3D broadcast reels, and kinetic brand idents.',
     descId:
@@ -41,20 +52,36 @@ const categoryTitles: Record<string, { en: string; id: string; descEn: string; d
       'Potongan komersial sinematik, ritme naratif, potongan ritme sosial format vertikal, dan grading warna.',
   },
   'visual-design': {
-    en: 'Visual Design',
-    id: 'Desain Visual',
+    en: 'Design Graphic',
+    id: 'Desain Grafis',
     descEn:
       'Brand identity systems, brutalist typography posters, art direction, and tactile editorial publications.',
     descId:
       'Sistem identitas brand, poster tipografi brutalis, pengarahan seni, dan publikasi editorial taktil.',
   },
-  web: {
-    en: 'Web Development',
-    id: 'Pengembangan Web',
+  'graphic-design': {
+    en: 'Design Graphic',
+    id: 'Desain Grafis',
     descEn:
-      'High-performance creative engineering, 60fps GSAP timelines, optical lens masking, and full-stack interactive applications.',
+      'Brand identity systems, brutalist typography posters, art direction, and tactile editorial publications.',
     descId:
-      'Rekayasa kreatif performa tinggi, animasi GSAP 60fps, masking lensa optik, dan aplikasi interaktif modern.',
+      'Sistem identitas brand, poster tipografi brutalis, pengarahan seni, dan publikasi editorial taktil.',
+  },
+  'ai-development': {
+    en: 'AI Development',
+    id: 'Pengembangan AI',
+    descEn:
+      'Generative AI workflows, neural motion pipelines, ComfyUI, LLM agents, and interactive web engineering.',
+    descId:
+      'Alur kerja AI generatif, pipeline motion neural, ComfyUI, agen LLM, dan rekayasa web interaktif modern.',
+  },
+  web: {
+    en: 'AI & Web Development',
+    id: 'Pengembangan AI & Web',
+    descEn:
+      'High-performance creative engineering, AI interfaces, 60fps GSAP timelines, and full-stack interactive applications.',
+    descId:
+      'Rekayasa kreatif performa tinggi, antarmuka AI, animasi GSAP 60fps, dan aplikasi interaktif modern.',
   },
 };
 
@@ -78,7 +105,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     descId: 'Koleksi kurasi proyek pada disiplin ini.',
   };
 
-  const projects = projectsDataset.filter((p) => p.category === category);
+  const projects = projectsDataset.filter((p) => {
+    if (category === 'graphic-design' || category === 'visual-design') {
+      return p.category === 'visual-design' || p.category === 'graphic-design';
+    }
+    if (category === 'motion-graphics' || category === 'motion-graphic') {
+      return p.category === 'motion-graphics' || p.category === 'motion-graphic';
+    }
+    if (category === 'ai-development' || category === 'web') {
+      return p.category === 'web' || p.category === 'ai-development';
+    }
+    return p.category === category;
+  });
 
   return (
     <div className="relative min-h-screen bg-transparent text-[#f5f5f7] flex flex-col selection:bg-amber-400 selection:text-black overflow-x-hidden">

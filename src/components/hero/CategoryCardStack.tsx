@@ -17,6 +17,7 @@ interface ShowcaseCard {
   id: ProjectCategory;
   title: string;
   nextPeek: string;
+  peekCode: string;
   route: string;
   type: 'video' | 'mockup' | 'image';
   videoUrl?: string;
@@ -27,29 +28,27 @@ interface ShowcaseCard {
 const showcaseCards: ShowcaseCard[] = [
   {
     id: 'motion-graphics',
-    title: 'ILLUSTRATIONS',
-    nextPeek: 'GRAPHIC DESIGN',
+    title: 'MOTION GRAPHIC',
+    nextPeek: 'DESIGN GRAPHIC',
+    peekCode: 'DES',
     route: '/work/motion-graphics',
     type: 'video',
-  },
-  {
-    id: 'video-editing',
-    title: 'MOBILE & WEB',
-    nextPeek: 'BRANDING',
-    route: '/work/video-editing',
-    type: 'video',
+    videoUrl: '/videos/hero/reference-purrweb.mp4',
+    posterUrl: '/posters/hero-poster.webp',
   },
   {
     id: 'visual-design',
-    title: 'BRANDING',
-    nextPeek: 'DEVELOPMENT',
+    title: 'DESIGN GRAPHIC',
+    nextPeek: 'AI DEVELOPMENT',
+    peekCode: 'AI DEV',
     route: '/work/visual-design',
     type: 'mockup',
   },
   {
     id: 'web',
-    title: 'DEVELOPMENT',
-    nextPeek: 'ILLUSTRATIONS',
+    title: 'AI DEVELOPMENT',
+    nextPeek: 'MOTION GRAPHIC',
+    peekCode: 'MOT',
     route: '/work/web',
     type: 'mockup',
   },
@@ -186,7 +185,7 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
                 <div className="flex-1 border-t border-white/40 mx-3 min-w-[20px]" />
 
                 <span className="font-extrabold text-white text-lg sm:text-2xl tracking-tight shrink-0">
-                  {card.nextPeek.substring(0, 3)}
+                  {card.peekCode || card.nextPeek.substring(0, 3)}
                 </span>
               </div>
 
@@ -208,7 +207,45 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
 
               {/* --- CARD MEDIA SHOWCASE BODY (1:1 with reference: full bar, bleeds to bottom edge) --- */}
               <div className="relative w-full flex-1 -mx-6 sm:-mx-8 overflow-hidden flex items-end justify-center">
-                <CategoryVectorShowcase category={card.id} isFront={isFront} />
+                {card.type === 'video' ? (
+                  <div className="relative w-full h-full flex flex-col items-center justify-end overflow-hidden pb-3 px-5 sm:px-8">
+                    <div className="relative w-full h-[230px] sm:h-[265px] rounded-2xl overflow-hidden border border-white/20 bg-[#08080a] shadow-2xl group/player">
+                      <video
+                        src={card.videoUrl || '/videos/hero/reference-purrweb.mp4'}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        poster={card.posterUrl || '/posters/hero-poster.webp'}
+                        className="w-full h-full object-cover object-center"
+                      >
+                        <source src="/videos/hero/reference-purrweb.mp4" type="video/mp4" />
+                        <source src="https://cdn.dribbble.com/userupload/3989861/file/original-1f1610f0a43c0aed537ab125d7ef8e45.mp4" type="video/mp4" />
+                      </video>
+                      
+                      {/* Subtle Vignette & Gradient Overlays */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/25 pointer-events-none" />
+
+                      {/* Live Motion Status Badge */}
+                      <div className="absolute top-3 left-3 flex items-center gap-2">
+                        <span className="px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/25 text-[10px] font-mono text-white flex items-center gap-1.5 shadow-lg">
+                          <span className="w-2 h-2 rounded-full bg-[#00e5c0] animate-pulse" />
+                          MOTION GRAPHIC • 60 FPS
+                        </span>
+                      </div>
+
+                      {/* Bottom Metadata Bar */}
+                      <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white font-mono text-[10px]">
+                        <span className="text-white/90 font-medium">INDRA WIJAYA / SHOWREEL</span>
+                        <span className="px-2 py-0.5 rounded bg-white/10 text-[#00e5c0] border border-white/15">
+                          AFTER EFFECTS + 3D
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <CategoryVectorShowcase category={card.id} isFront={isFront} />
+                )}
               </div>
             </div>
           );
