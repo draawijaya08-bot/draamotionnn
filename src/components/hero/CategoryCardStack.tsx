@@ -114,7 +114,7 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
             <div
               key={card.id}
               onClick={() => handleCardClick(idx)}
-              className="absolute inset-0 rounded-2xl sm:rounded-3xl border border-white/10 bg-[#08080a] p-6 sm:p-8 flex flex-col justify-between shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden cursor-pointer"
+              className="absolute inset-0 rounded-2xl sm:rounded-3xl border border-white/10 bg-black p-6 sm:p-8 pb-0 sm:pb-0 flex flex-col justify-between shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden cursor-pointer"
               style={{
                 transform: `translate3d(0, ${translateY}px, 0) scale(${scale})`,
                 filter: `blur(${blurAmount}px)`,
@@ -158,8 +158,8 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
                 </Link>
               </div>
 
-              {/* --- CARD MEDIA SHOWCASE BODY (1:1 with reference) --- */}
-              <div className="relative w-full flex-1 min-h-[190px] sm:min-h-[230px] mt-4 rounded-xl sm:rounded-2xl overflow-hidden bg-black/60 border border-white/5 flex items-center justify-center">
+              {/* --- CARD MEDIA SHOWCASE BODY (1:1 with reference: full bar, bleeds to bottom edge) --- */}
+              <div className="relative w-full flex-1 -mx-6 sm:-mx-8 overflow-hidden flex items-end justify-center">
                 <CategoryVectorShowcase category={card.id} isFront={isFront} />
               </div>
             </div>
