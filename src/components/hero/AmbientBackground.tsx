@@ -7,10 +7,19 @@ import React, { memo, useEffect, useState } from "react";
  * Slide 01: Deep Navy Spotlight from upper-right with fine film grain.
  * Slide 02: Rich Chromatic Liquid Aura (cyan, magenta, olive-gold, crimson) matching frames t7.0s & t9.0s.
  */
-function AmbientBackgroundComponent() {
-  const [scrollProgress, setScrollProgress] = useState(0);
+interface AmbientBackgroundProps {
+  forceSlide?: 1 | 2 | 3;
+}
+
+function AmbientBackgroundComponent({ forceSlide }: AmbientBackgroundProps) {
+  const [scrollProgress, setScrollProgress] = useState(forceSlide === 2 ? 1 : 0);
 
   useEffect(() => {
+    if (forceSlide !== undefined) {
+      setScrollProgress(forceSlide === 2 ? 1 : 0);
+      return;
+    }
+
     let ticking = false;
     const handleScroll = () => {
       if (!ticking) {
@@ -75,42 +84,32 @@ function AmbientBackgroundComponent() {
         className="absolute inset-0 transition-opacity duration-700 ease-out pointer-events-none"
         style={{ opacity: scrollProgress }}
       >
-        {/* Blob A: Cyan / Emerald Glow (Upper-Center & Right) */}
+        {/* Blob A: Vibrant Emerald / Cyan Glow (Upper-Left & Center-Left matching user screenshot) */}
         <div 
-          className="absolute top-[-10%] right-[10%] w-[70vw] h-[55vw] rounded-full pointer-events-none animate-ambient-slow"
+          className="absolute top-[-5%] left-[5%] w-[65vw] h-[55vw] rounded-full pointer-events-none animate-ambient-slow"
           style={{
-            background: 'radial-gradient(circle at 55% 45%, rgba(0, 185, 155, 0.50) 0%, rgba(0, 120, 105, 0.35) 40%, rgba(5, 6, 8, 0) 75%)',
-            filter: 'blur(60px)',
-            willChange: 'transform',
-          }}
-        />
-
-        {/* Blob B: Magenta / Violet Glow (Mid-Left & Upper-Left) */}
-        <div 
-          className="absolute top-[15%] left-[-15%] w-[65vw] h-[65vw] rounded-full pointer-events-none animate-ambient-medium"
-          style={{
-            background: 'radial-gradient(circle at 50% 50%, rgba(145, 18, 85, 0.55) 0%, rgba(95, 12, 55, 0.35) 45%, rgba(5, 6, 8, 0) 80%)',
+            background: 'radial-gradient(circle at 45% 45%, rgba(0, 215, 175, 0.65) 0%, rgba(0, 150, 130, 0.45) 35%, rgba(10, 50, 60, 0.25) 60%, rgba(5, 6, 8, 0) 80%)',
             filter: 'blur(65px)',
             willChange: 'transform',
           }}
         />
 
-        {/* Blob C: Deep Olive-Gold Glow (Lower-Left) */}
+        {/* Blob B: Magenta / Violet Deep Aura (Mid-Center) */}
         <div 
-          className="absolute bottom-[-15%] left-[5%] w-[60vw] h-[60vw] rounded-full pointer-events-none animate-ambient-fast"
+          className="absolute top-[20%] right-[10%] w-[55vw] h-[55vw] rounded-full pointer-events-none animate-ambient-medium"
           style={{
-            background: 'radial-gradient(circle at 50% 50%, rgba(185, 140, 0, 0.50) 0%, rgba(125, 90, 0, 0.30) 45%, rgba(5, 6, 8, 0) 75%)',
-            filter: 'blur(60px)',
+            background: 'radial-gradient(circle at 50% 50%, rgba(145, 18, 85, 0.45) 0%, rgba(95, 12, 55, 0.30) 45%, rgba(5, 6, 8, 0) 80%)',
+            filter: 'blur(70px)',
             willChange: 'transform',
           }}
         />
 
-        {/* Blob D: Fiery Crimson Glow (Lower-Right & Bottom-Center) */}
+        {/* Blob C: Warm Sunset Coral / Orange Glow (Lower edge matching user screenshot) */}
         <div 
-          className="absolute bottom-[-20%] right-[15%] w-[65vw] h-[55vw] rounded-full pointer-events-none"
+          className="absolute bottom-[-10%] left-[-5%] w-[110vw] h-[45vw] rounded-[100%] pointer-events-none"
           style={{
-            background: 'radial-gradient(circle at 50% 50%, rgba(160, 32, 20, 0.40) 0%, rgba(100, 18, 12, 0.25) 50%, rgba(5, 6, 8, 0) 80%)',
-            filter: 'blur(60px)',
+            background: 'radial-gradient(ellipse at 50% 60%, rgba(245, 75, 50, 0.65) 0%, rgba(225, 45, 75, 0.45) 35%, rgba(160, 25, 50, 0.25) 65%, rgba(5, 6, 8, 0) 85%)',
+            filter: 'blur(55px)',
             willChange: 'transform',
           }}
         />

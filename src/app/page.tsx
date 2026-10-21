@@ -23,6 +23,7 @@ export default function Home() {
   const [contactProjectTitle, setContactProjectTitle] = useState<string | undefined>(undefined);
 
   const [activeSection, setActiveSection] = useState<'hero' | 'playbook' | 'contacts'>('hero');
+  const [activeCard, setActiveCard] = useState(0);
 
   const { locale } = useLanguageStore();
   const t = translations[locale];
@@ -116,37 +117,106 @@ export default function Home() {
           className="relative min-h-screen flex items-center justify-center px-6 md:px-16 py-28 md:py-36 bg-transparent"
         >
           <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            {/* Sisi Kiri (lg:col-span-6): Clean Statement Typography (1:1 Frame t9.0s) */}
-            <div className="lg:col-span-6 flex flex-col justify-between py-4 select-none">
-              {/* Teks Perkenalan Purrweb Signature (No generic badges or extra paragraphs) */}
-              <h2 className="text-3xl sm:text-4xl lg:text-[36px] xl:text-[40px] font-sans font-normal text-white tracking-[-0.02em] leading-[1.3] max-w-2xl">
+            {/* Sisi Kiri (lg:col-span-6): Clean Statement Typography (1:1 Frame t9.0s & t11.5s) */}
+            <div className="lg:col-span-6 flex flex-col justify-between py-4 select-none min-h-[360px]">
+              {/* Teks Perkenalan Purrweb Signature (Dynamically syncs with active card) */}
+              <h2 className="text-3xl sm:text-4xl lg:text-[36px] xl:text-[40px] font-sans font-normal text-white tracking-[-0.02em] leading-[1.3] max-w-2xl transition-opacity duration-300">
                 {t.bio.statementPrefix}
                 <span className="text-white font-medium">{t.bio.statementName}</span>.
                 <br />
-                {locale === 'en' ? 'I turn ideas into ' : 'Saya mengubah ide menjadi '}
-                <span className="font-[family-name:var(--font-serif)] italic text-[#00e5c0] font-normal">
-                  {t.bio.statementAccent}
-                </span>{' '}
-                {locale === 'en' ? (
+                {activeCard === 0 && (
                   <>
-                    through motion, video,
-                    <br />
-                    and interactive web.
+                    {locale === 'en' ? 'I turn ideas into ' : 'Saya mengubah ide menjadi '}
+                    <span className="font-[family-name:var(--font-serif)] italic text-[#00e5c0] font-normal">
+                      {t.bio.statementAccent}
+                    </span>{' '}
+                    {locale === 'en' ? (
+                      <>
+                        through motion, video,
+                        <br />
+                        and interactive web.
+                      </>
+                    ) : (
+                      <>
+                        melalui motion, video,
+                        <br />
+                        dan web interaktif.
+                      </>
+                    )}
                   </>
-                ) : (
+                )}
+                {activeCard === 1 && (
                   <>
-                    melalui motion, video,
-                    <br />
-                    dan web interaktif.
+                    {locale === 'en' ? 'I create ' : 'Saya menciptakan '}
+                    <span className="font-[family-name:var(--font-serif)] italic text-[#00e5c0] font-normal">
+                      {locale === 'en' ? 'unconventional' : 'antarmuka unik'}
+                    </span>{' '}
+                    {locale === 'en' ? (
+                      <>
+                        yet functional &amp; visually
+                        <br />
+                        pleasing interfaces for mobile and web.
+                      </>
+                    ) : (
+                      <>
+                        namun fungsional &amp;
+                        <br />
+                        memukau untuk mobile dan web.
+                      </>
+                    )}
+                  </>
+                )}
+                {activeCard === 2 && (
+                  <>
+                    {locale === 'en' ? 'I shape ' : 'Saya membentuk '}
+                    <span className="font-[family-name:var(--font-serif)] italic text-[#00e5c0] font-normal">
+                      {locale === 'en' ? 'memorable visual identities' : 'identitas visual kuat'}
+                    </span>{' '}
+                    {locale === 'en' ? (
+                      <>
+                        &amp; dynamic systems
+                        <br />
+                        that stand the test of time.
+                      </>
+                    ) : (
+                      <>
+                        &amp; sistem visual berkarakter
+                        <br />
+                        yang abadi.
+                      </>
+                    )}
+                  </>
+                )}
+                {activeCard === 3 && (
+                  <>
+                    {locale === 'en' ? 'I engineer ' : 'Saya membangun '}
+                    <span className="font-[family-name:var(--font-serif)] italic text-[#00e5c0] font-normal">
+                      {locale === 'en' ? 'interactive web' : 'web interaktif'}
+                    </span>{' '}
+                    {locale === 'en' ? (
+                      <>
+                        with fluid motion, 3D,
+                        <br />
+                        and high-performance code.
+                      </>
+                    ) : (
+                      <>
+                        dengan fluid motion, 3D,
+                        <br />
+                        dan performa tinggi.
+                      </>
+                    )}
                   </>
                 )}
               </h2>
 
               {/* Bottom metadata & scroll indicator matching bottom-left of reference frame t9.0s */}
               <div className="pt-16 sm:pt-24 space-y-8 font-mono">
-                <div className="text-[10px] sm:text-[11px] tracking-widest text-white/50 uppercase leading-relaxed">
-                  MOTION GRAPHICS / VIDEO EDITING /<br />
-                  VISUAL DESIGN &amp; WEB
+                <div className="text-[10px] sm:text-[11px] tracking-widest text-white/50 uppercase leading-relaxed whitespace-pre-line">
+                  {activeCard === 0 && 'MOTION GRAPHICS / VIDEO EDITING /\nVISUAL DESIGN & WEB'}
+                  {activeCard === 1 && 'WEB & MOBILE / UX&UI /\nBRANDING'}
+                  {activeCard === 2 && 'BRANDING / ART DIRECTION /\nIDENTITY SYSTEMS'}
+                  {activeCard === 3 && 'CREATIVE DEVELOPMENT / NEXT.JS /\nTHREE.JS & WEBGL'}
                 </div>
 
                 <div>
@@ -167,6 +237,7 @@ export default function Home() {
             {/* Sisi Kanan (lg:col-span-6): Perspective Stacked Card Deck */}
             <div className="lg:col-span-6 flex justify-center lg:justify-end">
               <CategoryCardStack
+                onCardChange={(idx) => setActiveCard(idx)}
                 onSelectCategory={(category) => {
                   setPlaybookFilter(category);
                   handleScrollToPlaybook();
