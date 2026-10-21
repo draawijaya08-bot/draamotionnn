@@ -1,187 +1,111 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { ProjectCategory } from '@/types/portfolio';
-import { categoryFilterList, projectsDataset } from '@/data/portfolio-data';
+import { projectsDataset } from '@/data/portfolio-data';
 import { useLanguageStore, translations } from '@/stores/languageStore';
 import { AdaptiveProjectMedia } from '@/components/media/AdaptiveProjectMedia';
-import { getWhatsAppUrl } from '@/utils/contact-links';
-import { Layers, ArrowRight, MessageCircle, Wrench } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 
 export const ProjectExplorationSection: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<ProjectCategory | 'all'>('all');
   const { locale } = useLanguageStore();
   const t = translations[locale];
 
-  const filteredProjects = useMemo(() => {
-    if (activeTab === 'all') return projectsDataset;
-    return projectsDataset.filter((p) => p.category === activeTab);
-  }, [activeTab]);
+  const getCategoryLabel = (category: string) => {
+    switch (category) {
+      case 'motion-graphics':
+        return 'MOTION GRAPHIC';
+      case 'visual-design':
+        return 'DESIGN GRAPHIC';
+      case 'web':
+        return 'AI DEVELOPMENT';
+      case 'video-editing':
+        return 'VIDEO EDITING';
+      default:
+        return (
+          t.categories[category as keyof typeof t.categories] ||
+          category.replace('-', ' ').toUpperCase()
+        );
+    }
+  };
 
   return (
     <section
       id="section-playbook"
-      className="relative min-h-screen px-6 md:px-16 py-28 md:py-36 bg-transparent"
+      className="relative min-h-screen px-6 md:px-12 lg:px-16 py-28 md:py-36 bg-transparent"
     >
-      <div className="w-full max-w-7xl mx-auto space-y-12">
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-8">
-          <div className="space-y-3">
-            <div className="text-xs font-mono tracking-widest text-[#00e5c0] uppercase">
-              {t.slide3.eyebrow}
-            </div>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold text-white tracking-tight">
-              {t.slide3.title}
-            </h2>
-            <p className="max-w-2xl text-sm sm:text-base text-[#8e8e93] font-light leading-relaxed">
-              {t.slide3.subtitle}
-            </p>
-          </div>
-
-          {/* Quick link to view all 4 category archives */}
-          <div className="flex flex-wrap items-center gap-3">
-            {['motion-graphics', 'video-editing', 'visual-design', 'web'].map((catSlug) => (
-              <Link
-                key={catSlug}
-                href={`/work/${catSlug}`}
-                className="px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 hover:border-amber-400/40 hover:text-amber-400 text-[11px] font-mono uppercase tracking-wider text-[#8e8e93] transition-all"
-              >
-                {t.categories[catSlug as keyof typeof t.categories] || catSlug} →
-              </Link>
-            ))}
-          </div>
+      <div className="w-full max-w-7xl mx-auto space-y-12 sm:space-y-16">
+        {/* Section Header: Compact label, large heading, one short supporting description */}
+        <div className="space-y-3 sm:space-y-4 max-w-2xl select-none">
+          <p className="text-[11px] font-mono tracking-[0.25em] text-[#00e5c0] uppercase">
+            {t.slide3.eyebrow || 'THE PLAYBOOK'}
+          </p>
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-sans font-bold text-white tracking-[-0.03em] leading-[1.1]">
+            {t.slide3.title || 'Project Exploration'}
+          </h2>
+          <p className="text-sm sm:text-base text-[#8e8e93] font-normal leading-relaxed">
+            {t.slide3.subtitle ||
+              'A curated selection of motion graphics, visual identities, and creative engineering.'}
+          </p>
         </div>
 
-        {/* Category Filter Tabs Bar */}
-        <div className="flex flex-wrap items-center gap-2.5">
-          {categoryFilterList.map((cat) => {
-            const isActive = activeTab === cat.id;
-            const count =
-              cat.id === 'all'
-                ? projectsDataset.length
-                : projectsDataset.filter((p) => p.category === cat.id).length;
+        {/* Editorial Project Grid: Clean Two-Column on Desktop, Adapts on Tablet/Mobile */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 lg:gap-12">
+          {projectsDataset.map((project) => {
+            const projectTitle =
+              locale === 'id' && project.titleId ? project.titleId : project.title;
+            const projectUrl = `/work/${project.category}/${project.slug}`;
 
             return (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => setActiveTab(cat.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono uppercase tracking-wider transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-amber-400 text-black font-bold shadow-[0_0_20px_rgba(245,158,11,0.35)]'
-                    : 'border border-[#202024] bg-[#0f0f12] text-[#8e8e93] hover:text-white hover:border-[#38383e]'
-                }`}
+              <Link
+                key={project.id}
+                href={projectUrl}
+                className="group relative flex flex-col space-y-4 rounded-3xl p-2 sm:p-2.5 -m-2 sm:-m-2.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/80 focus-visible:ring-offset-4 focus-visible:ring-offset-black cursor-pointer select-none"
+                aria-label={`View project: ${projectTitle}`}
               >
-                <span>
-                  {cat.id === 'all'
-                    ? t.categories.all
-                    : t.categories[cat.id as keyof typeof t.categories] || cat.label}
-                </span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                    isActive ? 'bg-black text-amber-400' : 'bg-white/10 text-white/60'
-                  }`}
-                >
-                  {count}
-                </span>
-              </button>
+                {/* Visual Card: Large Image/Video Preview with Consistent Ratio */}
+                <div className="relative w-full aspect-[16/10] overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-[#0c0d12] shadow-2xl transition-all duration-500 group-hover:border-white/25 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+                  <div className="w-full h-full transform transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.03]">
+                    <AdaptiveProjectMedia
+                      media={project.media}
+                      title={project.title}
+                      isFeatured={project.featuredInHero}
+                      className="w-full h-full !aspect-auto !rounded-none !border-none"
+                    />
+                  </div>
+
+                  {/* Subtle Cinematic Vignette Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-40 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none" />
+
+                  {/* Simple Floating Arrow Indicator on Cover */}
+                  <div className="absolute top-4 right-4 sm:top-5 sm:right-5 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-white/80 flex items-center justify-center transition-all duration-300 group-hover:bg-white group-hover:text-black group-hover:border-white group-hover:scale-105 shadow-lg">
+                    <ArrowUpRight className="w-4 h-4 transition-transform duration-300 motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5" />
+                  </div>
+                </div>
+
+                {/* Minimal Card Footer: Title, Subtle Category Label, View Project Link */}
+                <div className="flex items-start justify-between gap-4 px-1">
+                  <div className="space-y-1 min-w-0 flex-1">
+                    <p className="text-[11px] font-mono tracking-widest text-[#00e5c0] uppercase truncate">
+                      {getCategoryLabel(project.category)}
+                      <span className="text-white/20 mx-2">•</span>
+                      <span className="text-white/40">{project.year}</span>
+                    </p>
+
+                    <h3 className="text-xl sm:text-2xl font-sans font-bold text-white tracking-tight transition-colors group-hover:text-amber-400 truncate">
+                      {projectTitle}
+                    </h3>
+                  </div>
+
+                  {/* View Project text link */}
+                  <div className="hidden sm:flex items-center gap-1 text-xs font-mono text-white/50 group-hover:text-white transition-colors shrink-0 pt-1">
+                    <span>View Project</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5" />
+                  </div>
+                </div>
+              </Link>
             );
           })}
-        </div>
-
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 lg:gap-10">
-          {filteredProjects.map((project) => (
-            <div
-              key={project.id}
-              className="group rounded-2xl border border-[#202024] bg-[#0d0e12]/95 backdrop-blur-xl overflow-hidden hover:border-amber-400/40 transition-all duration-300 flex flex-col justify-between"
-            >
-              {/* Media Preview Container with Aspect Ratio */}
-              <div className="relative w-full overflow-hidden bg-black/40">
-                <Link
-                  href={`/work/${project.category}/${project.slug}`}
-                  className="block relative overflow-hidden"
-                >
-                  <AdaptiveProjectMedia
-                    media={project.media}
-                    title={project.title}
-                    isFeatured={project.featuredInHero}
-                  />
-                  {/* Overlay Hover Icon */}
-                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                    <span className="px-4 py-2 rounded-full bg-white text-black font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-2xl">
-                      <span>EXPLORE PROJECT</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </span>
-                  </div>
-                </Link>
-              </div>
-
-              {/* Project Metadata Body */}
-              <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs font-mono text-[#8e8e93]">
-                    <Link
-                      href={`/work/${project.category}`}
-                      className="hover:text-amber-400 transition-colors uppercase tracking-wider"
-                    >
-                      {t.categories[project.category as keyof typeof t.categories] || project.category}
-                    </Link>
-                    <span>{project.year}</span>
-                  </div>
-
-                  <Link href={`/work/${project.category}/${project.slug}`} className="block group-hover:text-amber-400 transition-colors">
-                    <h3 className="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">
-                      {locale === 'id' && project.titleId ? project.titleId : project.title}
-                    </h3>
-                  </Link>
-
-                  <p className="text-xs sm:text-sm text-[#8e8e93] leading-relaxed line-clamp-2">
-                    {locale === 'id' && project.descriptionId
-                      ? project.descriptionId.shortSnippet
-                      : project.description.shortSnippet}
-                  </p>
-                </div>
-
-                {/* Tools Badges */}
-                <div className="pt-3 border-t border-[#202024]/80 flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <Wrench className="w-3.5 h-3.5 text-[#56565c] mr-1" />
-                    {project.tools.map((tool) => (
-                      <span
-                        key={tool.name}
-                        className="px-2 py-0.5 rounded-md border border-white/10 bg-white/5 text-[10px] font-mono text-[#8e8e93]"
-                      >
-                        {tool.name}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <a
-                      href={getWhatsAppUrl(project.category)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#8e8e93] hover:text-emerald-400 transition-colors"
-                      title="Direct WhatsApp Inquiry"
-                      aria-label="Direct WhatsApp Inquiry"
-                    >
-                      <MessageCircle className="w-4 h-4" />
-                    </a>
-
-                    <Link
-                      href={`/work/${project.category}/${project.slug}`}
-                      className="inline-flex items-center gap-1 text-xs font-mono text-white group-hover:text-amber-400 font-semibold"
-                    >
-                      <span>DETAILS</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </section>

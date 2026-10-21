@@ -61,82 +61,171 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
     return () => clearInterval(interval);
   }, [dynamicWords.length]);
 
-  // 3. Sinkronisasi 1:1 Koordinat Lensa Kaca & Magnifikasi Teks (RAF Throttled)
+  // 3. Sinkronisasi 1:1 Koordinat Lensa Kaca & Liquify Edge Pull Physics
+  const physicsRef = useRef({
+    targetX: 0,
+    targetY: 0,
+    prevTargetX: 0,
+    prevTargetY: 0,
+    smoothVx: 0,
+    smoothVy: 0,
+    dragX: 0,
+    dragY: 0,
+    skewX: 0,
+    skewY: 0,
+    dispScale: 0,
+    isNearby: false,
+    isInitialized: false,
+  });
+
   useEffect(() => {
     const container = heroContainerRef.current;
     if (!container) return;
 
-    // Posisi inisial di tengah typography
-    const initRect = container.getBoundingClientRect();
-    const initRelX = initRect.width * 0.48;
-    const initRelY = initRect.height * 0.45;
-
-    if (outerMaskRef.current) {
-      outerMaskRef.current.style.clipPath = `circle(120px at ${initRelX}px ${initRelY}px)`;
-      outerMaskRef.current.style.setProperty('-webkit-clip-path', `circle(120px at ${initRelX}px ${initRelY}px)`);
-      outerMaskRef.current.style.opacity = '1';
-    }
-    if (innerScaledRef.current) {
-      innerScaledRef.current.style.transformOrigin = `${initRelX}px ${initRelY}px`;
-      innerScaledRef.current.style.transform = 'scale(1.22)';
-    }
-    if (glassRingRef.current) {
-      glassRingRef.current.style.transform = `translate3d(${initRelX - 120}px, ${initRelY - 120}px, 0)`;
-      glassRingRef.current.style.opacity = '1';
-    }
+    if (outerMaskRef.current) outerMaskRef.current.style.opacity = '0';
+    if (glassRingRef.current) glassRingRef.current.style.opacity = '0';
 
     let rafId: number | null = null;
-    let latestE: MouseEvent | PointerEvent | null = null;
+    let lastMoveTime = performance.now();
 
-    const updateLens = () => {
-      if (!latestE || !heroContainerRef.current || !isHeroInView.current) {
+    const radius = 125;
+
+    const tick = () => {
+      if (!heroContainerRef.current || !isHeroInView.current) {
         rafId = null;
         return;
       }
 
+      const p = physicsRef.current;
       const rect = heroContainerRef.current.getBoundingClientRect();
-      const relX = latestE.clientX - rect.left;
-      const relY = latestE.clientY - rect.top;
+      const relX = p.targetX - rect.left;
+      const relY = p.targetY - rect.top;
 
-      const isNearby = 
-        latestE.clientX >= rect.left - 120 &&
-        latestE.clientX <= rect.right + 120 &&
-        latestE.clientY >= rect.top - 120 &&
-        latestE.clientY <= rect.bottom + 120;
+      // Instantaneous velocity calculation
+      const rawVx = p.targetX - p.prevTargetX;
+      const rawVy = p.targetY - p.prevTargetY;
+      p.prevTargetX = p.targetX;
+      p.prevTargetY = p.targetY;
 
+      // Smooth damped velocity (liquid inertia)
+      p.smoothVx += (rawVx - p.smoothVx) * 0.28;
+      p.smoothVy += (rawVy - p.smoothVy) * 0.28;
+
+      const speed = Math.hypot(p.smoothVx, p.smoothVy);
+
+      // Viscous edge pull / lag ("ketarikan di pinggir saat digeser")
+      const targetDragX = Math.max(-28, Math.min(28, -p.smoothVx * 0.45));
+      const targetDragY = Math.max(-20, Math.min(20, -p.smoothVy * 0.35));
+      p.dragX += (targetDragX - p.dragX) * 0.22;
+      p.dragY += (targetDragY - p.dragY) * 0.22;
+
+      // Liquify skew / angular pull along drag vector
+      const targetSkewX = Math.max(-13, Math.min(13, -p.smoothVx * 0.22));
+      const targetSkewY = Math.max(-9, Math.min(9, -p.smoothVy * 0.16));
+      p.skewX += (targetSkewX - p.skewX) * 0.22;
+      p.skewY += (targetSkewY - p.skewY) * 0.22;
+
+      // Dynamic convex liquid expansion
+      const dynamicScale = 1.12 + Math.min(speed * 0.0035, 0.10);
+
+      // SVG liquify displacement turbulence scale
+      const targetDisp = Math.min(speed * 0.45, 14);
+      p.dispScale += (targetDisp - p.dispScale) * 0.25;
+
+      // 1. Mask Layer: clipped to circle, with dark optical backing so background text never bleeds through
       if (outerMaskRef.current) {
-        outerMaskRef.current.style.clipPath = `circle(120px at ${relX}px ${relY}px)`;
-        outerMaskRef.current.style.setProperty('-webkit-clip-path', `circle(120px at ${relX}px ${relY}px)`);
-        outerMaskRef.current.style.opacity = isNearby ? '1' : '0';
+        outerMaskRef.current.style.clipPath = `circle(${radius}px at ${relX}px ${relY}px)`;
+        outerMaskRef.current.style.setProperty('-webkit-clip-path', `circle(${radius}px at ${relX}px ${relY}px)`);
+        outerMaskRef.current.style.background = `radial-gradient(circle ${radius}px at ${relX}px ${relY}px, rgba(14, 14, 18, 0.96) 0%, rgba(6, 6, 8, 0.98) 75%, rgba(2, 2, 4, 1) 100%)`;
+        outerMaskRef.current.style.opacity = p.isNearby ? '1' : '0';
       }
 
+      // 2. Inner Scaled Text: exact 1:1 origin, liquify drag & skew
       if (innerScaledRef.current) {
         innerScaledRef.current.style.transformOrigin = `${relX}px ${relY}px`;
+        innerScaledRef.current.style.transform = `translate3d(${p.dragX.toFixed(2)}px, ${p.dragY.toFixed(2)}px, 0) scale(${dynamicScale.toFixed(3)}) skewX(${p.skewX.toFixed(2)}deg) skewY(${p.skewY.toFixed(2)}deg)`;
       }
 
+      // 3. Dynamic SVG Displacement Ripple
+      const dispEl = document.getElementById('hero-liquify-disp');
+      if (dispEl) {
+        dispEl.setAttribute('scale', p.dispScale.toFixed(1));
+      }
+
+      // 4. Concentric Glass Ring with surface tension squish
       if (glassRingRef.current) {
-        glassRingRef.current.style.transform = `translate3d(${relX - 120}px, ${relY - 120}px, 0)`;
-        glassRingRef.current.style.opacity = isNearby ? '1' : '0';
+        const ringSquishX = 1 + Math.min(Math.abs(p.smoothVx) * 0.0015, 0.06);
+        const ringSquishY = 1 + Math.min(Math.abs(p.smoothVy) * 0.0015, 0.06);
+        glassRingRef.current.style.transform = `translate3d(${relX - radius}px, ${relY - radius}px, 0) scale(${ringSquishX.toFixed(3)}, ${ringSquishY.toFixed(3)})`;
+        glassRingRef.current.style.opacity = p.isNearby ? '1' : '0';
       }
 
-      rafId = null;
+      // Keep animation frame running while settling down or moving
+      const isSettling = 
+        speed > 0.06 || 
+        Math.abs(p.dragX) > 0.1 || 
+        Math.abs(p.skewX) > 0.1 || 
+        p.dispScale > 0.1;
+
+      if (isSettling || performance.now() - lastMoveTime < 160) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        rafId = null;
+      }
     };
 
     const handlePointerMove = (e: MouseEvent | PointerEvent) => {
-      if (!isHeroInView.current) return;
-      latestE = e;
-      if (rafId === null) {
-        rafId = requestAnimationFrame(updateLens);
+      if (!isHeroInView.current || !heroContainerRef.current) return;
+      const rect = heroContainerRef.current.getBoundingClientRect();
+      const p = physicsRef.current;
+
+      p.targetX = e.clientX;
+      p.targetY = e.clientY;
+
+      if (!p.isInitialized) {
+        p.prevTargetX = e.clientX;
+        p.prevTargetY = e.clientY;
+        p.isInitialized = true;
       }
+
+      p.isNearby = 
+        e.clientX >= rect.left - 100 &&
+        e.clientX <= rect.right + 100 &&
+        e.clientY >= rect.top - 100 &&
+        e.clientY <= rect.bottom + 100;
+
+      lastMoveTime = performance.now();
+
+      if (rafId === null) {
+        rafId = requestAnimationFrame(tick);
+      }
+    };
+
+    const handleScroll = () => {
+      if (!isHeroInView.current || !physicsRef.current.isInitialized) return;
+      lastMoveTime = performance.now();
+      if (rafId === null) {
+        rafId = requestAnimationFrame(tick);
+      }
+    };
+
+    const handleMouseLeave = () => {
+      physicsRef.current.isNearby = false;
+      if (outerMaskRef.current) outerMaskRef.current.style.opacity = '0';
+      if (glassRingRef.current) glassRingRef.current.style.opacity = '0';
     };
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
     window.addEventListener('mousemove', handlePointerMove, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    document.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
       if (rafId !== null) cancelAnimationFrame(rafId);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('mousemove', handlePointerMove);
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, []);
 
@@ -161,118 +250,130 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
       ref={heroSectionRef}
       className="relative w-full min-h-screen flex flex-col justify-between px-6 py-6 md:px-16 md:py-8 pt-28 md:pt-36 select-none overflow-hidden bg-transparent"
     >
+      {/* SVG Liquify Displacement Filter (Hardware Accelerated) */}
+      <svg className="absolute w-0 h-0 pointer-events-none" style={{ position: 'absolute', width: 0, height: 0 }} aria-hidden="true">
+        <defs>
+          <filter id="hero-liquify-filter" x="-20%" y="-20%" width="140%" height="140%" colorInterpolationFilters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.02 0.02" numOctaves="1" result="noise" />
+            <feDisplacementMap id="hero-liquify-disp" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
       
       {/* ======================================================== */}
       {/* 1. CENTER STAGGERED TYPOGRAPHY (1:1 PURRWEB DRIBBBLE)     */}
       {/* ======================================================== */}
-      <div 
-        ref={heroContainerRef}
-        className="relative my-auto w-full max-w-7xl mx-auto py-8 z-10 flex flex-col justify-center"
-      >
-        
-        {/* --- LAYER A: Base Headline (Normal Scale & Crisp White) --- */}
-        <div className="relative z-10">
-          {/* Baris 1: Creative + dynamic_word */}
-          <div className="flex flex-wrap items-baseline gap-x-4 sm:gap-x-7">
-            <span 
-              className="font-sans font-medium text-[#F3F4F6] tracking-[-0.03em] leading-[0.95]"
-              style={{ fontSize: 'clamp(4.2rem, 10vw, 9.5rem)' }}
-            >
-              Creative
-            </span>
-            <span 
-              className={`font-[family-name:var(--font-serif)] italic text-[#E68A1E] leading-none transition-all duration-300 transform ${
-                isTransitioning ? 'opacity-0 translate-y-3 blur-xs' : 'opacity-100 translate-y-0 blur-none'
-              }`}
-              style={{ fontSize: 'clamp(3rem, 6.5vw, 6rem)' }}
-            >
-              {activeWord}
-            </span>
-          </div>
-
-          {/* Baris 2: designer (Menjorok tepat di bawah huruf 't' dari Creative, 1:1 Dribbble reference) */}
-          <div 
-            className="w-full flex items-baseline leading-[0.95]"
-            style={{ paddingLeft: 'clamp(2.5rem, 11vw, 13rem)' }}
-          >
-            <span 
-              className="font-sans font-medium text-[#F3F4F6] tracking-[-0.03em]"
-              style={{ fontSize: 'clamp(4.2rem, 10vw, 9.5rem)' }}
-            >
-              designer
-            </span>
-          </div>
-        </div>
-
-        {/* --- LAYER B1: Outer Mask Wrapper (NO SCALE HERE to prevent offset) --- */}
+      <div className="relative my-auto w-full max-w-7xl mx-auto py-8 px-4 sm:px-8 z-10 flex flex-col justify-center">
+        {/* Master Coordinate Container: 0 Padding to guarantee 100.00% exact alignment between Layer A & Layer B */}
         <div 
-          ref={outerMaskRef}
-          className="absolute inset-0 pointer-events-none select-none z-20 overflow-hidden transition-opacity duration-200"
-          style={{
-            clipPath: 'circle(120px at 50% 50%)',
-            WebkitClipPath: 'circle(120px at 50% 50%)',
-            willChange: 'clip-path',
-          }}
+          ref={heroContainerRef}
+          className="relative w-full flex flex-col justify-center"
         >
-          {/* --- LAYER B2: Inner Scaled Text Wrapper (transformOrigin at exact relX, relY) --- */}
-          <div
-            ref={innerScaledRef}
-            className="w-full h-full flex flex-col justify-center"
-            style={{
-              transform: 'scale(1.22)',
-              transformOrigin: '50% 50%',
-              textShadow:
-                '-7px -2px 14px rgba(40, 190, 255, 0.95), 7px 2px 14px rgba(255, 120, 30, 0.95), -3px -1px 8px rgba(70, 220, 255, 0.7), 3px 1px 8px rgba(255, 140, 40, 0.7), 0px 0px 18px rgba(255, 255, 255, 0.4)',
-              filter: 'blur(2.8px) contrast(1.08)',
-              willChange: 'transform',
-            }}
-          >
-            {/* Baris 1 Magnified */}
+          {/* --- LAYER A: Base Headline (Normal Scale & Crisp White) --- */}
+          <div className="relative z-10 w-full">
+            {/* Baris 1: Creative + dynamic_word */}
             <div className="flex flex-wrap items-baseline gap-x-4 sm:gap-x-7">
               <span 
-                className="font-sans font-medium text-white tracking-[-0.03em] leading-[0.95]"
+                className="font-sans font-medium text-[#F3F4F6] tracking-[-0.03em] leading-[0.95]"
                 style={{ fontSize: 'clamp(4.2rem, 10vw, 9.5rem)' }}
               >
                 Creative
               </span>
               <span 
-                className="font-[family-name:var(--font-serif)] italic text-[#ff9d2e] leading-none"
+                className={`font-[family-name:var(--font-serif)] italic text-[#E68A1E] leading-none transition-all duration-300 transform ${
+                  isTransitioning ? 'opacity-0 translate-y-3 blur-xs' : 'opacity-100 translate-y-0 blur-none'
+                }`}
                 style={{ fontSize: 'clamp(3rem, 6.5vw, 6rem)' }}
               >
                 {activeWord}
               </span>
             </div>
 
-            {/* Baris 2 Magnified */}
+            {/* Baris 2: designer */}
             <div 
               className="w-full flex items-baseline leading-[0.95]"
               style={{ paddingLeft: 'clamp(2.5rem, 11vw, 13rem)' }}
             >
               <span 
-                className="font-sans font-medium text-white tracking-[-0.03em]"
+                className="font-sans font-medium text-[#F3F4F6] tracking-[-0.03em]"
                 style={{ fontSize: 'clamp(4.2rem, 10vw, 9.5rem)' }}
               >
                 designer
               </span>
             </div>
           </div>
+
+          {/* --- LAYER B1: Outer Mask Wrapper (Concentric with Glass Ring, Opaque Backing to Eliminate Ghosting) --- */}
+          <div 
+            ref={outerMaskRef}
+            className="absolute inset-0 pointer-events-none select-none z-20 transition-opacity duration-200"
+            style={{
+              clipPath: 'circle(125px at 50% 50%)',
+              WebkitClipPath: 'circle(125px at 50% 50%)',
+              willChange: 'clip-path, transform',
+              opacity: 0,
+            }}
+          >
+            {/* --- LAYER B2: Inner Scaled Text Wrapper with Liquify Edge Pull & Chromatic Glow --- */}
+            <div
+              ref={innerScaledRef}
+              className="relative w-full flex flex-col justify-center"
+              style={{
+                textShadow:
+                  '-6px -2px 14px rgba(40, 190, 255, 0.95), 6px 2px 14px rgba(255, 120, 30, 0.95), -3px -1px 8px rgba(70, 220, 255, 0.75), 3px 1px 8px rgba(255, 140, 40, 0.75), 0px 0px 18px rgba(255, 255, 255, 0.45)',
+                filter: 'url(#hero-liquify-filter) blur(1.8px) contrast(1.08)',
+                willChange: 'transform',
+              }}
+            >
+              {/* Baris 1 Magnified & Aligned */}
+              <div className="flex flex-wrap items-baseline gap-x-4 sm:gap-x-7">
+                <span 
+                  className="font-sans font-medium text-white tracking-[-0.03em] leading-[0.95]"
+                  style={{ fontSize: 'clamp(4.2rem, 10vw, 9.5rem)' }}
+                >
+                  Creative
+                </span>
+                <span 
+                  className={`font-[family-name:var(--font-serif)] italic text-[#ff9d2e] leading-none transition-all duration-300 transform ${
+                    isTransitioning ? 'opacity-0 translate-y-3 blur-xs' : 'opacity-100 translate-y-0 blur-none'
+                  }`}
+                  style={{ fontSize: 'clamp(3rem, 6.5vw, 6rem)' }}
+                >
+                  {activeWord}
+                </span>
+              </div>
+
+              {/* Baris 2 Magnified & Aligned */}
+              <div 
+                className="w-full flex items-baseline leading-[0.95]"
+                style={{ paddingLeft: 'clamp(2.5rem, 11vw, 13rem)' }}
+              >
+                <span 
+                  className="font-sans font-medium text-white tracking-[-0.03em]"
+                  style={{ fontSize: 'clamp(4.2rem, 10vw, 9.5rem)' }}
+                >
+                  designer
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* --- LAYER C: Synchronized Pure Optical Glass Ring --- */}
+          <div
+            ref={glassRingRef}
+            className="absolute top-0 left-0 rounded-full pointer-events-none z-30 transition-opacity duration-200"
+            style={{
+              width: '250px',
+              height: '250px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(255, 255, 255, 0.01) 0%, rgba(56, 189, 248, 0.04) 70%, rgba(255, 255, 255, 0.08) 100%)',
+              border: '1.5px solid rgba(255, 255, 255, 0.42)',
+              boxShadow: 'inset 0 0 25px rgba(255, 255, 255, 0.22), inset 0 0 50px rgba(56, 189, 248, 0.15), 0 0 35px rgba(0, 0, 0, 0.75)',
+              backdropFilter: 'blur(1.5px)',
+              willChange: 'transform',
+            }}
+          />
         </div>
-
-        {/* --- LAYER C: Synchronized Pure Optical Glass Ring --- */}
-        <div
-          ref={glassRingRef}
-          className="absolute top-0 left-0 rounded-full pointer-events-none z-30 transition-opacity duration-200"
-          style={{
-            width: '240px',
-            height: '240px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.08) 100%)',
-            border: '1px solid rgba(255, 255, 255, 0.35)',
-            boxShadow: 'inset 0 0 20px rgba(255, 255, 255, 0.08)',
-            willChange: 'transform',
-          }}
-        />
-
       </div>
 
       {/* ======================================================== */}
