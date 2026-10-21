@@ -288,4 +288,75 @@ export const projectsData: ProjectItemSchema[] = [
     featured: false,
     sortOrder: 8,
   },
+
+  // 9. ZENITH ICHIGO (VISUAL DESIGN)
+  {
+    id: 'proj-09',
+    slug: 'zenith-ichigo-visual-art',
+    title: 'Zenith Ichigo — Character Art & Dynamic Poster',
+    client: {
+      name: 'Anime & Character Concept Series',
+      industry: 'Concept Art & Character Illustration',
+    },
+    category: 'BRANDING_KINETIC',
+    year: 2026,
+    aspectRatio: '4:5',
+    media: {
+      previewLoopUrl: '/posters/zenith-ichigo.jpg',
+      posterThumbnailUrl: '/posters/zenith-ichigo.jpg',
+      fullVideoUrl: '/posters/zenith-ichigo.jpg',
+      videoDurationSeconds: 0,
+      hasAudio: false,
+    },
+    description: {
+      challengeSnippet: 'Capturing the visceral intensity and spiritual power of the character while maintaining sleek editorial poster balance.',
+      solutionSnippet: 'Layered high-contrast lighting passes, custom energy dispersion brushwork, and striking typographic framing.',
+    },
+    roles: [
+      { roleName: 'Digital Illustrator', percentageOrScope: 'Character Art & Shading' },
+      { roleName: 'Art Director', percentageOrScope: 'Poster Layout & Lighting' },
+    ],
+    toolsUsed: ['Adobe Photoshop', 'Digital Illustration'],
+    metrics: {
+      viewsOrReach: 'Character Art',
+      keyResult: 'Dynamic Poster Showcase',
+    },
+    featured: false,
+    sortOrder: 9,
+  },
+
+  // 10. POSTER GABUT (VISUAL DESIGN)
+  {
+    id: 'proj-10',
+    slug: 'creative-poster-visual-exploration',
+    title: 'Creative Poster Exploration — Avant-Garde Graphic Study',
+    client: {
+      name: 'Experimental Graphic Lab',
+      industry: 'Experimental Design & Typography',
+    },
+    category: 'BRANDING_KINETIC',
+    year: 2026,
+    aspectRatio: '4:5',
+    media: {
+      previewLoopUrl: '/posters/poster-gabut.jpg',
+      posterThumbnailUrl: '/posters/poster-gabut.jpg',
+      fullVideoUrl: '/posters/poster-gabut.jpg',
+      videoDurationSeconds: 0,
+      hasAudio: false,
+    },
+    description: {
+      challengeSnippet: 'Exploring untethered artistic creativity while maintaining rigorous graphic design rhythm and focal balance.',
+      solutionSnippet: 'Constructed with multi-layered scan textures, expressive typography experimentation, and deliberate negative space tension.',
+    },
+    roles: [
+      { roleName: 'Graphic Designer', percentageOrScope: 'Typography & Composition' },
+    ],
+    toolsUsed: ['Adobe Photoshop', 'Adobe Illustrator'],
+    metrics: {
+      viewsOrReach: 'Experimental Art',
+      keyResult: 'Typography Study',
+    },
+    featured: false,
+    sortOrder: 10,
+  },
 ];

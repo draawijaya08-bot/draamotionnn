@@ -471,4 +471,86 @@ export const projectsDataset: ProjectItem[] = [
     featuredInHero: false,
     sortOrder: 8,
   },
+
+  // 9. ZENITH ICHIGO (VISUAL DESIGN)
+  {
+    id: 'proj-zenith-ichigo',
+    slug: 'zenith-ichigo-visual-art',
+    title: 'Zenith Ichigo — Character Art & Dynamic Poster',
+    titleId: 'Zenith Ichigo — Seni Karakter & Poster Dinamis',
+    category: 'visual-design',
+    year: 2026,
+    clientOrContext: 'Anime & Character Concept Series',
+    role: 'Digital Illustrator & Art Director',
+    description: {
+      shortSnippet:
+        'High-energy character artwork merging bold kinetic linework, dramatic chiaroscuro contrast, and expressive anime aesthetics.',
+      detailedChallenge:
+        'Capturing the visceral intensity and spiritual power of the character while maintaining sleek editorial poster balance.',
+      solutionApplied:
+        'Layered high-contrast lighting passes, custom energy dispersion brushwork, and striking typographic framing.',
+    },
+    descriptionId: {
+      shortSnippet:
+        'Karya seni karakter berenergi tinggi yang memadukan garis kinetik berani, kontras chiaroscuro dramatis, dan estetika anime ekspresif.',
+      detailedChallenge:
+        'Menangkap intensitas karakter yang kuat sembari mempertahankan keseimbangan tata letak poster editorial yang modern.',
+      solutionApplied:
+        'Menyusun pencahayaan berkontras tinggi, kuas dispersi energi kustom, dan pembingkaian tipografi yang tegas.',
+    },
+    media: {
+      type: 'IMAGE_STILL',
+      previewUrl: '/posters/zenith-ichigo.jpg',
+      fallbackPosterUrl: '/posters/zenith-ichigo.jpg',
+      fullMediaUrl: '/posters/zenith-ichigo.jpg',
+      aspectRatio: '4:5',
+    },
+    tools: [
+      { name: 'Adobe Photoshop', category: 'CORE_CREATIVE', isPrimary: true },
+      { name: 'Digital Illustration', category: 'CORE_CREATIVE', isPrimary: true },
+    ],
+    featuredInHero: false,
+    sortOrder: 9,
+  },
+
+  // 10. POSTER GABUT (VISUAL DESIGN)
+  {
+    id: 'proj-poster-gabut',
+    slug: 'creative-poster-visual-exploration',
+    title: 'Creative Poster Exploration — Avant-Garde Graphic Study',
+    titleId: 'Eksplorasi Poster Kreatif — Studi Grafis Avant-Garde',
+    category: 'visual-design',
+    year: 2026,
+    clientOrContext: 'Experimental Graphic Lab',
+    role: 'Graphic Designer & Visual Experimenter',
+    description: {
+      shortSnippet:
+        'Spontaneous experimental poster exploration celebrating expressive typography, analog texture grain, and unrestricted compositional freedom.',
+      detailedChallenge:
+        'Exploring untethered artistic creativity while maintaining rigorous graphic design rhythm and focal balance.',
+      solutionApplied:
+        'Constructed with multi-layered scan textures, expressive typography experimentation, and deliberate negative space tension.',
+    },
+    descriptionId: {
+      shortSnippet:
+        'Eksplorasi poster eksperimental spontan yang merayakan tipografi ekspresif, butiran tekstur analog, dan kebebasan komposisi visual.',
+      detailedChallenge:
+        'Mengeksplorasi kreativitas artistik tanpa batas dengan tetap mempertahankan ritme desain grafis dan fokus visual yang kuat.',
+      solutionApplied:
+        'Dibangun dengan perpaduan tekstur scan multi-layer, eksperimen tipografi ekspresif, dan tensi ruang negatif yang terukur.',
+    },
+    media: {
+      type: 'IMAGE_STILL',
+      previewUrl: '/posters/poster-gabut.jpg',
+      fallbackPosterUrl: '/posters/poster-gabut.jpg',
+      fullMediaUrl: '/posters/poster-gabut.jpg',
+      aspectRatio: '4:5',
+    },
+    tools: [
+      { name: 'Adobe Photoshop', category: 'CORE_CREATIVE', isPrimary: true },
+      { name: 'Adobe Illustrator', category: 'CORE_CREATIVE' },
+    ],
+    featuredInHero: false,
+    sortOrder: 10,
+  },
 ];

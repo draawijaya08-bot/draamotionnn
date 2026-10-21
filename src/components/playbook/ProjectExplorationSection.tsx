@@ -525,15 +525,15 @@ export const ProjectExplorationSection: React.FC = () => {
   return (
     <section
       id="section-playbook"
-      className="relative min-h-screen px-6 md:px-12 lg:px-16 py-28 md:py-36 bg-transparent overflow-hidden"
+      className="relative min-h-screen px-4 sm:px-6 md:px-12 lg:px-16 py-16 sm:py-24 md:py-36 bg-transparent overflow-hidden"
     >
-      <div className="w-full max-w-7xl mx-auto space-y-10 sm:space-y-12">
+      <div className="w-full max-w-7xl mx-auto space-y-8 sm:space-y-12">
         {/* Section Header */}
-        <div className="space-y-3 sm:space-y-4 max-w-2xl select-none">
+        <div className="space-y-2.5 sm:space-y-4 max-w-2xl select-none">
           <p className="text-[11px] font-mono tracking-[0.25em] text-[#00e5c0] uppercase">
             {t.slide3.eyebrow || 'THE PLAYBOOK'}
           </p>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-sans font-bold text-white tracking-[-0.03em] leading-[1.1]">
+          <h2 className="text-2xl sm:text-5xl lg:text-6xl font-sans font-bold text-white tracking-[-0.03em] leading-[1.1]">
             {t.slide3.title || 'Project Exploration'}
           </h2>
           <p className="text-sm sm:text-base text-[#8e8e93] font-normal leading-relaxed">

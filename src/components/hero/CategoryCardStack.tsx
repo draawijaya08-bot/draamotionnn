@@ -64,6 +64,16 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
   const [isHovered, setIsHovered] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isInView, setIsInView] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleCheckMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    handleCheckMobile();
+    window.addEventListener('resize', handleCheckMobile);
+    return () => window.removeEventListener('resize', handleCheckMobile);
+  }, []);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -126,7 +136,7 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
       {/* ======================================================== */}
       {/* 1. STACKED CARDS CONTAINER (1:1 Frame t9.0s & t11.0s)    */}
       {/* ======================================================== */}
-      <div className="relative w-full h-[400px] sm:h-[450px] lg:h-[480px]">
+      <div className="relative w-full h-[320px] xs:h-[350px] sm:h-[450px] lg:h-[480px]">
         {showcaseCards.map((card, idx) => {
           // Calculate relative position to active card
           const count = showcaseCards.length;
@@ -150,8 +160,14 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
             transitionStr = 'transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.4s ease-out, filter 0.4s ease-out';
           } else {
             // Front card: scale(1), translateY(0), sharp
-            // Back cards: elevated translateY(-48px, -90px, -128px), scale(0.95, 0.90, 0.85)
-            const translateY = isFront ? 0 : pos === 1 ? -48 : pos === 2 ? -90 : -128;
+            // Back cards: elevated translateY(-48px, -90px, -128px on desktop, -26px, -48px, -68px on mobile)
+            const translateY = isFront 
+              ? 0 
+              : pos === 1 
+                ? (isMobile ? -26 : -48) 
+                : pos === 2 
+                  ? (isMobile ? -48 : -90) 
+                  : (isMobile ? -68 : -128);
             const scale = isFront ? 1 : pos === 1 ? 0.95 : pos === 2 ? 0.90 : 0.85;
             blurVal = isFront ? 0 : pos === 1 ? 2.5 : pos === 2 ? 5.5 : 9;
             opacityVal = isFront ? 1 : pos === 1 ? 0.92 : pos === 2 ? 0.75 : 0.45;
@@ -164,7 +180,7 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
             <div
               key={card.id}
               onClick={() => handleCardClick(idx)}
-              className="absolute inset-0 rounded-2xl sm:rounded-3xl border border-white/10 bg-black p-6 sm:p-8 pb-0 sm:pb-0 flex flex-col justify-between shadow-2xl overflow-hidden cursor-pointer"
+              className="absolute inset-0 rounded-2xl sm:rounded-3xl border border-white/10 bg-black p-4 sm:p-8 pb-0 sm:pb-0 flex flex-col justify-between shadow-2xl overflow-hidden cursor-pointer"
               style={{
                 transform: transformStr,
                 filter: `blur(${blurVal}px)`,
@@ -177,40 +193,40 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
             >
               {/* --- CARD HEADER (1:1 with reference) --- */}
               {/* Category Name ────── Horizontal Line ────── Next Peek Name (GRA) */}
-              <div className="relative z-20 flex items-center justify-between gap-3 sm:gap-4 font-sans overflow-hidden">
-                <span className="font-extrabold text-white text-lg sm:text-2xl tracking-tight shrink-0">
+              <div className="relative z-20 flex items-center justify-between gap-2.5 sm:gap-4 font-sans overflow-hidden">
+                <span className="font-extrabold text-white text-base sm:text-2xl tracking-tight shrink-0">
                   {card.title}
                 </span>
 
-                <div className="flex-1 border-t border-white/40 mx-3 min-w-[20px]" />
+                <div className="flex-1 border-t border-white/40 mx-2 sm:mx-3 min-w-[14px]" />
 
-                <span className="font-extrabold text-white text-lg sm:text-2xl tracking-tight shrink-0">
+                <span className="font-extrabold text-white text-base sm:text-2xl tracking-tight shrink-0">
                   {card.peekCode || card.nextPeek.substring(0, 3)}
                 </span>
               </div>
 
               {/* --- CIRCULAR ARROW ACTION BUTTON (1:1 with reference) --- */}
-              <div className="relative z-20 mt-3 sm:mt-4 flex items-center">
+              <div className="relative z-20 mt-2.5 sm:mt-4 flex items-center">
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleNext();
                   }}
-                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/50 hover:border-white hover:bg-white hover:text-black text-white flex items-center justify-center shrink-0 transition-all duration-200 group/btn cursor-pointer"
+                  className="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-white/50 hover:border-white hover:bg-white hover:text-black text-white flex items-center justify-center shrink-0 transition-all duration-200 group/btn cursor-pointer"
                   title={`Next: ${card.nextPeek}`}
                   aria-label={`Next: ${card.nextPeek}`}
                 >
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover/btn:text-black group-hover/btn:translate-x-0.5 transition-all" />
+                  <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-white group-hover/btn:text-black group-hover/btn:translate-x-0.5 transition-all" />
                 </button>
               </div>
 
               {/* --- CARD MEDIA SHOWCASE BODY (1:1 with reference: full bar, bleeds to bottom edge) --- */}
-              <div className="relative w-full flex-1 -mx-6 sm:-mx-8 overflow-hidden flex items-end justify-center">
+              <div className="relative w-full flex-1 -mx-4 sm:-mx-8 overflow-hidden flex items-end justify-center">
                 {card.id === 'motion-graphics' ? (
                   <div className="relative w-full h-full flex items-center justify-center overflow-hidden p-2 sm:p-4">
                     {/* Atmospheric soft teal glow perfectly centered */}
-                    <div className="absolute inset-0 m-auto w-[300px] sm:w-[400px] h-[180px] bg-[#00e5c0]/12 blur-3xl pointer-events-none rounded-full" />
+                    <div className="absolute inset-0 m-auto w-[240px] sm:w-[400px] h-[140px] sm:h-[180px] bg-[#00e5c0]/12 blur-3xl pointer-events-none rounded-full" />
                     
                     <div className="relative w-full h-full flex items-center justify-center">
                       <Image
@@ -219,7 +235,7 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
                         width={740}
                         height={493}
                         priority
-                        className="w-auto h-full max-h-[245px] sm:max-h-[285px] object-contain object-center drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)] select-none pointer-events-none transition-transform duration-500 hover:scale-[1.02]"
+                        className="w-auto h-full max-h-[190px] sm:max-h-[285px] object-contain object-center drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)] select-none pointer-events-none transition-transform duration-500 hover:scale-[1.02]"
                       />
                     </div>
                   </div>

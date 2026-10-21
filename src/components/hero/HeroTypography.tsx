@@ -89,7 +89,13 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
     let rafId: number | null = null;
     let lastMoveTime = performance.now();
 
-    const radius = 125;
+    const getRadius = () => (typeof window !== 'undefined' && window.innerWidth < 640 ? 80 : 125);
+    let radius = getRadius();
+
+    const handleResize = () => {
+      radius = getRadius();
+    };
+    window.addEventListener('resize', handleResize);
 
     const tick = () => {
       if (!heroContainerRef.current || !isHeroInView.current) {
@@ -225,6 +231,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
 
     return () => {
       if (rafId !== null) cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', handleResize);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('mousemove', handlePointerMove);
       window.removeEventListener('scroll', handleScroll);
@@ -251,7 +258,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
   return (
     <section 
       ref={heroSectionRef}
-      className="relative w-full min-h-screen flex flex-col justify-between px-6 py-6 md:px-16 md:py-8 pt-28 md:pt-36 select-none overflow-hidden bg-transparent"
+      className="relative w-full min-h-screen flex flex-col justify-between px-4 py-4 sm:px-6 sm:py-6 md:px-16 md:py-8 pt-24 sm:pt-28 md:pt-36 select-none overflow-hidden bg-transparent"
     >
       {/* SVG Liquify Displacement Filter (Hardware Accelerated) */}
       <svg className="absolute w-0 h-0 pointer-events-none" style={{ position: 'absolute', width: 0, height: 0 }} aria-hidden="true">
@@ -266,7 +273,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
       {/* ======================================================== */}
       {/* 1. CENTER STAGGERED TYPOGRAPHY (1:1 PURRWEB DRIBBBLE)     */}
       {/* ======================================================== */}
-      <div className="relative my-auto w-full max-w-7xl mx-auto py-8 px-4 sm:px-8 z-10 flex flex-col justify-center">
+      <div className="relative my-auto w-full max-w-7xl mx-auto py-6 sm:py-8 px-2 sm:px-8 z-10 flex flex-col justify-center">
         {/* Master Coordinate Container: 0 Padding to guarantee 100.00% exact alignment between Layer A & Layer B */}
         <div 
           ref={heroContainerRef}
@@ -275,18 +282,16 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
           {/* --- LAYER A: Base Headline (Normal Scale & Crisp White) --- */}
           <div ref={baseTextRef} className="relative z-10 w-full">
             {/* Baris 1: Creative + dynamic_word */}
-            <div className="flex flex-wrap items-baseline gap-x-4 sm:gap-x-7">
+            <div className="flex flex-wrap items-baseline gap-x-3 sm:gap-x-7">
               <span 
-                className="font-sans font-medium text-[#F3F4F6] tracking-[-0.03em] leading-[0.95]"
-                style={{ fontSize: 'clamp(4.2rem, 10vw, 9.5rem)' }}
+                className="font-sans font-medium text-[#F3F4F6] tracking-[-0.03em] leading-[0.95] text-[clamp(2.4rem,11.5vw,4.2rem)] sm:text-[clamp(4.2rem,10vw,9.5rem)]"
               >
                 Creative
               </span>
               <span 
-                className={`font-[family-name:var(--font-serif)] italic text-[#E68A1E] leading-none transition-all duration-300 transform ${
+                className={`font-[family-name:var(--font-serif)] italic text-[#E68A1E] leading-none transition-all duration-300 transform text-[clamp(1.8rem,8.5vw,3rem)] sm:text-[clamp(3rem,6.5vw,6rem)] ${
                   isTransitioning ? 'opacity-0 translate-y-3 blur-xs' : 'opacity-100 translate-y-0 blur-none'
                 }`}
-                style={{ fontSize: 'clamp(3rem, 6.5vw, 6rem)' }}
               >
                 {activeWord}
               </span>
@@ -294,12 +299,10 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
 
             {/* Baris 2: designer */}
             <div 
-              className="w-full flex items-baseline leading-[0.95]"
-              style={{ paddingLeft: 'clamp(2.5rem, 11vw, 13rem)' }}
+              className="w-full flex items-baseline leading-[0.95] pl-[clamp(1.2rem,6vw,2.5rem)] sm:pl-[clamp(2.5rem,11vw,13rem)]"
             >
               <span 
-                className="font-sans font-medium text-[#F3F4F6] tracking-[-0.03em]"
-                style={{ fontSize: 'clamp(4.2rem, 10vw, 9.5rem)' }}
+                className="font-sans font-medium text-[#F3F4F6] tracking-[-0.03em] text-[clamp(2.4rem,11.5vw,4.2rem)] sm:text-[clamp(4.2rem,10vw,9.5rem)]"
               >
                 designer
               </span>
@@ -329,18 +332,16 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
               }}
             >
               {/* Baris 1 Magnified & Aligned */}
-              <div className="flex flex-wrap items-baseline gap-x-4 sm:gap-x-7">
+              <div className="flex flex-wrap items-baseline gap-x-3 sm:gap-x-7">
                 <span 
-                  className="font-sans font-medium text-white tracking-[-0.03em] leading-[0.95]"
-                  style={{ fontSize: 'clamp(4.2rem, 10vw, 9.5rem)' }}
+                  className="font-sans font-medium text-white tracking-[-0.03em] leading-[0.95] text-[clamp(2.4rem,11.5vw,4.2rem)] sm:text-[clamp(4.2rem,10vw,9.5rem)]"
                 >
                   Creative
                 </span>
                 <span 
-                  className={`font-[family-name:var(--font-serif)] italic text-[#ff9d2e] leading-none transition-all duration-300 transform ${
+                  className={`font-[family-name:var(--font-serif)] italic text-[#ff9d2e] leading-none transition-all duration-300 transform text-[clamp(1.8rem,8.5vw,3rem)] sm:text-[clamp(3rem,6.5vw,6rem)] ${
                     isTransitioning ? 'opacity-0 translate-y-3 blur-xs' : 'opacity-100 translate-y-0 blur-none'
                   }`}
-                  style={{ fontSize: 'clamp(3rem, 6.5vw, 6rem)' }}
                 >
                   {activeWord}
                 </span>
@@ -348,12 +349,10 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
 
               {/* Baris 2 Magnified & Aligned */}
               <div 
-                className="w-full flex items-baseline leading-[0.95]"
-                style={{ paddingLeft: 'clamp(2.5rem, 11vw, 13rem)' }}
+                className="w-full flex items-baseline leading-[0.95] pl-[clamp(1.2rem,6vw,2.5rem)] sm:pl-[clamp(2.5rem,11vw,13rem)]"
               >
                 <span 
-                  className="font-sans font-medium text-white tracking-[-0.03em]"
-                  style={{ fontSize: 'clamp(4.2rem, 10vw, 9.5rem)' }}
+                  className="font-sans font-medium text-white tracking-[-0.03em] text-[clamp(2.4rem,11.5vw,4.2rem)] sm:text-[clamp(4.2rem,10vw,9.5rem)]"
                 >
                   designer
                 </span>
@@ -364,10 +363,8 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
           {/* --- LAYER C: Synchronized Pure Optical Glass Ring --- */}
           <div
             ref={glassRingRef}
-            className="absolute top-0 left-0 rounded-full pointer-events-none z-30 transition-opacity duration-200"
+            className="absolute top-0 left-0 rounded-full pointer-events-none z-30 transition-opacity duration-200 w-[160px] h-[160px] sm:w-[250px] sm:h-[250px]"
             style={{
-              width: '250px',
-              height: '250px',
               borderRadius: '50%',
               background: 'radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, rgba(56, 189, 248, 0.05) 70%, rgba(255, 255, 255, 0.08) 100%)',
               border: '1.5px solid rgba(255, 255, 255, 0.38)',

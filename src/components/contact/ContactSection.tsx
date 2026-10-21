@@ -54,7 +54,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuickConta
   return (
     <section 
       id="contacts"
-      className="relative w-full py-28 sm:py-36 px-4 sm:px-6 md:px-12 flex items-center justify-center overflow-hidden bg-transparent"
+      className="relative w-full py-16 sm:py-36 px-3 sm:px-6 md:px-12 flex items-center justify-center overflow-hidden bg-transparent"
     >
       {/* Subtle Atmospheric Spotlight / Seamless Mesh Glow Merging with Section Above */}
       <div className="absolute inset-0 pointer-events-none select-none">
@@ -63,16 +63,16 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuickConta
       </div>
 
       {/* Main Banner Card - Styled like the 3 category cards (Dark, Sleek, border-white/10) */}
-      <div className="relative z-10 w-full max-w-4xl mx-auto rounded-[32px] sm:rounded-[40px] bg-[#0c0d12]/90 backdrop-blur-2xl border border-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.6),0_10px_30px_rgba(0,0,0,0.4)] p-8 sm:p-14 md:p-16 flex flex-col items-center text-center space-y-7 sm:space-y-8 select-none">
+      <div className="relative z-10 w-full max-w-4xl mx-auto rounded-[24px] sm:rounded-[40px] bg-[#0c0d12]/90 backdrop-blur-2xl border border-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.6),0_10px_30px_rgba(0,0,0,0.4)] p-6 sm:p-14 md:p-16 flex flex-col items-center text-center space-y-6 sm:space-y-8 select-none">
         
         {/* Top Status Pill: ● Available for New Project */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.07] border border-white/15 shadow-sm text-xs font-semibold text-white/90 tracking-tight transition-transform hover:scale-105">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 sm:px-4 sm:py-1.5 rounded-full bg-white/[0.07] border border-white/15 shadow-sm text-[11px] sm:text-xs font-semibold text-white/90 tracking-tight transition-transform hover:scale-105">
           <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
           <span>Available for New Project</span>
         </div>
 
         {/* Large Bold Headline: HAVE A PROJECT IN MIND? */}
-        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-black tracking-[-0.03em] text-white uppercase font-sans leading-[1.08] max-w-2xl">
+        <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[54px] font-black tracking-[-0.03em] text-white uppercase font-sans leading-[1.08] max-w-2xl">
           HAVE A PROJECT IN MIND?
         </h2>
 

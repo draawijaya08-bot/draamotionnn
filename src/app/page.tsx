@@ -131,13 +131,13 @@ export default function Home() {
         {/* ======================================================== */}
         <section 
           id="section-works"
-          className="relative min-h-screen flex items-center justify-center px-6 md:px-16 py-28 md:py-36 bg-transparent"
+          className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-16 py-16 sm:py-24 md:py-36 bg-transparent"
         >
-          <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
             {/* Sisi Kiri (lg:col-span-6): Clean Statement Typography (1:1 Frame t9.0s & t11.5s) */}
-            <div className="lg:col-span-6 flex flex-col justify-between py-4 select-none min-h-[360px]">
+            <div className="lg:col-span-6 flex flex-col justify-between py-2 sm:py-4 select-none min-h-auto sm:min-h-[360px]">
               {/* Teks Perkenalan Purrweb Signature (Dynamically syncs with active card) */}
-              <h2 className="text-3xl sm:text-4xl lg:text-[36px] xl:text-[40px] font-sans font-normal text-white tracking-[-0.02em] leading-[1.3] max-w-2xl transition-opacity duration-300">
+              <h2 className="text-2xl sm:text-4xl lg:text-[36px] xl:text-[40px] font-sans font-normal text-white tracking-[-0.02em] leading-[1.3] max-w-2xl transition-opacity duration-300">
                 {t.bio.statementPrefix}
                 <span className="text-white font-medium">{t.bio.statementName}</span>.
                 <br />
@@ -207,7 +207,7 @@ export default function Home() {
               </h2>
 
               {/* Bottom metadata & scroll indicator matching bottom-left of reference frame t9.0s */}
-              <div className="pt-16 sm:pt-24 space-y-8 font-mono">
+              <div className="pt-8 sm:pt-24 space-y-6 sm:space-y-8 font-mono">
                 <div className="text-[10px] sm:text-[11px] tracking-widest text-white/50 uppercase leading-relaxed whitespace-pre-line">
                   {activeCard === 0 && 'MOTION GRAPHICS / 3D CGI /\nAFTER EFFECTS & CINEMA 4D'}
                   {activeCard === 1 && 'DESIGN GRAPHIC / BRAND IDENTITY /\nEDITORIAL & TYPOGRAPHY'}

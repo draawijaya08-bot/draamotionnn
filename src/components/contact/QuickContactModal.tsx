@@ -49,7 +49,7 @@ export const QuickContactModal: React.FC<QuickContactModalProps> = ({
 
       {/* Modal Card - Compact, Dark, Elegant, Personal Panel */}
       <div
-        className="relative w-full max-w-[420px] rounded-3xl border border-white/[0.08] bg-[#0c0d10] p-7 sm:p-9 shadow-[0_20px_50px_rgba(0,0,0,0.7)] z-10 select-none animate-in fade-in zoom-in-[0.97] duration-200 ease-out"
+        className="relative w-full max-w-[420px] rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-[#0c0d10] p-6 sm:p-9 shadow-[0_20px_50px_rgba(0,0,0,0.7)] z-10 select-none animate-in fade-in zoom-in-[0.97] duration-200 ease-out"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Simple Minimalist X Close Button */}
