@@ -289,7 +289,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
                 Creative
               </span>
               <span 
-                className={`font-[family-name:var(--font-serif)] italic text-[#7db4ff] leading-none transition-all duration-300 transform text-[clamp(1.8rem,8.5vw,3rem)] sm:text-[clamp(3rem,6.5vw,6rem)] ${
+                className={`font-[family-name:var(--font-serif)] italic text-[#E68A1E] leading-none transition-all duration-300 transform text-[clamp(1.8rem,8.5vw,3rem)] sm:text-[clamp(3rem,6.5vw,6rem)] ${
                   isTransitioning ? 'opacity-0 translate-y-3 blur-xs' : 'opacity-100 translate-y-0 blur-none'
                 }`}
               >
@@ -326,7 +326,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
               className="relative w-full flex flex-col justify-center"
               style={{
                 textShadow:
-                  '-4px -2px 10px rgba(46, 107, 255, 0.55), 4px 2px 10px rgba(125, 180, 255, 0.45), 0px 0px 18px rgba(10, 27, 77, 0.45)',
+                  '-6px -2px 14px rgba(40, 190, 255, 0.95), 6px 2px 14px rgba(255, 120, 30, 0.95), -3px -1px 8px rgba(70, 220, 255, 0.75), 3px 1px 8px rgba(255, 140, 40, 0.75), 0px 0px 18px rgba(255, 255, 255, 0.45)',
                 filter: 'url(#hero-liquify-filter) blur(1.8px) contrast(1.08)',
                 willChange: 'transform',
               }}
@@ -339,7 +339,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
                   Creative
                 </span>
                 <span 
-                  className={`font-[family-name:var(--font-serif)] italic text-[#9dc4ff] leading-none transition-all duration-300 transform text-[clamp(1.8rem,8.5vw,3rem)] sm:text-[clamp(3rem,6.5vw,6rem)] ${
+                  className={`font-[family-name:var(--font-serif)] italic text-[#ff9d2e] leading-none transition-all duration-300 transform text-[clamp(1.8rem,8.5vw,3rem)] sm:text-[clamp(3rem,6.5vw,6rem)] ${
                     isTransitioning ? 'opacity-0 translate-y-3 blur-xs' : 'opacity-100 translate-y-0 blur-none'
                   }`}
                 >
@@ -414,9 +414,9 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ onScrollToWorks 
             aria-label="Scroll to Works & Bio"
           >
             <div 
-              className="w-[1px] h-[56px] bg-white/40 group-hover:bg-[#2e6bff] group-hover:h-[64px] transition-all duration-300 animate-pulse"
+              className="w-[1px] h-[56px] bg-white/40 group-hover:bg-amber-400 group-hover:h-[64px] transition-all duration-300 animate-pulse"
             />
-            <ArrowDown className="w-3.5 h-3.5 text-white/60 group-hover:text-[#7db4ff] group-hover:translate-y-1 transition-all" />
+            <ArrowDown className="w-3.5 h-3.5 text-white/60 group-hover:text-amber-400 group-hover:translate-y-1 transition-all" />
           </button>
         </div>
 

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Syne, Playfair_Display, JetBrains_Mono } from "next/font/google";
+import { Inter, Syne, Playfair_Display } from "next/font/google";
 import { SmoothScrollProvider } from "@/components/layout/SmoothScrollProvider";
 import "./globals.css";
 
@@ -19,15 +19,8 @@ const syne = Syne({
 const playfair = Playfair_Display({
   variable: "--font-serif",
   subsets: ["latin"],
+  display: "swap",
   style: ["italic", "normal"],
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -79,11 +72,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${syne.variable} ${playfair.variable} ${jetbrainsMono.variable} dark`}
-    >
-      <body className="min-h-screen bg-[#030407] text-[#f2f5fa] antialiased selection:bg-[#2e6bff] selection:text-white">
+    <html lang="en" className={`${inter.variable} ${syne.variable} ${playfair.variable} dark`}>
+      <body className="min-h-screen bg-[#050608] text-[#f5f5f7] antialiased selection:bg-amber-400 selection:text-black">
         <SmoothScrollProvider>
           {children}
         </SmoothScrollProvider>

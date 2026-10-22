@@ -14,7 +14,7 @@ export const siteIdentityData: SiteIdentity = {
     suffix: ' designer',
     subHeadline:
       'Crafting high-voltage kinetic typography, graphic design identity systems, and generative AI development.',
-    accentColor: '#7DB4FF', // Electric-blue identity: ice blue serif accent
+    accentColor: '#E68A1E', // Warm amber / golden serif accent
   },
   metadataBar: {
     specializations: 'MOTION GRAPHIC / DESIGN GRAPHIC / AI DEVELOPMENT',

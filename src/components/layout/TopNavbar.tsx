@@ -46,7 +46,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           <MagneticButton strength={0.2}>
             <Link
               href="/"
-              className="text-[#FFFFFF] hover:text-[#7db4ff] transition-colors uppercase font-bold tracking-wider text-[0.72rem] sm:text-[0.85rem]"
+              className="text-[#FFFFFF] hover:text-amber-400 transition-colors uppercase font-bold tracking-wider text-[0.72rem] sm:text-[0.85rem]"
               style={{
                 fontWeight: 700,
                 letterSpacing: '0.04em',
@@ -155,14 +155,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           <button
             type="button"
             onClick={toggleLocale}
-            className="flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 rounded-full border border-white/15 bg-white/5 hover:border-[#2e6bff]/50 hover:bg-white/10 text-[9px] sm:text-[10px] font-mono tracking-wider transition-colors cursor-pointer text-white/90 shrink-0"
+            className="flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 rounded-full border border-white/15 bg-white/5 hover:border-amber-400/50 hover:bg-white/10 text-[9px] sm:text-[10px] font-mono tracking-wider transition-colors cursor-pointer text-white/90 shrink-0"
             title="Switch Language / Ganti Bahasa"
             aria-label="Switch Language"
           >
-            <Globe className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#7db4ff]" />
-            <span className={locale === 'en' ? 'text-[#7db4ff] font-bold' : 'text-white/60'}>EN</span>
+            <Globe className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-400" />
+            <span className={locale === 'en' ? 'text-amber-400 font-bold' : 'text-white/60'}>EN</span>
             <span className="text-white/30">/</span>
-            <span className={locale === 'id' ? 'text-[#7db4ff] font-bold' : 'text-white/60'}>ID</span>
+            <span className={locale === 'id' ? 'text-amber-400 font-bold' : 'text-white/60'}>ID</span>
           </button>
         </div>
       </nav>
