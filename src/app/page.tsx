@@ -7,7 +7,6 @@ import { AmbientBackground } from '@/components/hero/AmbientBackground';
 import { HeroTypography } from '@/components/hero/HeroTypography';
 import { CategoryCardStack } from '@/components/hero/CategoryCardStack';
 import { ProjectExplorationSection } from '@/components/playbook/ProjectExplorationSection';
-import { CursorLens } from '@/components/interactive/CursorLens';
 import { PlaybookModal } from '@/components/playbook/PlaybookModal';
 import { QuickContactModal } from '@/components/contact/QuickContactModal';
 import { ContactSection } from '@/components/contact/ContactSection';
@@ -105,9 +104,6 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen bg-transparent text-[#f5f5f7] flex flex-col selection:bg-amber-400 selection:text-black overflow-x-hidden">
-      {/* 1. Custom Interactive Magnifying Lens Cursor (True Optical Lens with RGB Aberration) */}
-      <CursorLens />
-
       {/* 2. Global Purrweb 4-Column Top Navigation with Active Underline */}
       <TopNavbar
         activeNav={activeSection}
@@ -134,7 +130,7 @@ export default function Home() {
         >
           <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
             {/* Sisi Kiri (lg:col-span-6): Clean Statement Typography (1:1 Frame t9.0s & t11.5s) */}
-            <div className="lg:col-span-6 flex flex-col justify-between py-2 sm:py-4 select-none min-h-auto sm:min-h-[360px]">
+            <div className="lg:col-span-6 flex flex-col justify-between py-2 sm:py-4 min-h-auto sm:min-h-[360px]">
               {/* Teks Perkenalan Purrweb Signature (Dynamically syncs with active card) */}
               <h2 className="text-2xl sm:text-4xl lg:text-[36px] xl:text-[40px] font-sans font-normal text-white tracking-[-0.02em] leading-[1.3] max-w-2xl transition-opacity duration-300">
                 {t.bio.statementPrefix}
