@@ -1,11 +1,16 @@
 "use client";
 
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useState, useRef } from "react";
+import { ChromaticWaveCanvas } from "./ChromaticWaveCanvas";
 
 /**
- * AmbientBackground - 1:1 Cinematic Reference Recreation
- * Slide 01: Deep Navy Spotlight from upper-right with fine film grain.
- * Slide 02: Rich Chromatic Liquid Aura (cyan, magenta, olive-gold, crimson) matching frames t7.0s & t9.0s.
+ * AmbientBackground - Kinetic 3D Tactile Velvet Dunes & Fluid Chromatic Wave
+ * - 60fps WebGL Fluid S-Curve Gradient Wave (recreating YouTube reference -niUBSx3PKQ)
+ * - 3D Tactile Velvet Sand Dunes landscape texture
+ * - Living Tactile Grain: Real-time 12fps micro-particle jitter
+ * - Full spectrum chromatic flow: Electric Cyan -> Cobalt -> Violet -> Magenta -> Sunset Coral
+ * - Interactive cursor-driven fluid ripples and mouse spotlight
+ * - Cinematic contrast falloffs for crisp readability
  */
 interface AmbientBackgroundProps {
   forceSlide?: 1 | 2 | 3;
@@ -13,7 +18,10 @@ interface AmbientBackgroundProps {
 
 function AmbientBackgroundComponent({ forceSlide }: AmbientBackgroundProps) {
   const [scrollProgress, setScrollProgress] = useState(forceSlide === 2 ? 1 : 0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const cursorSpotlightRef = useRef<HTMLDivElement>(null);
 
+  // 1. Scroll tracking for section transitions
   useEffect(() => {
     if (forceSlide !== undefined) {
       setScrollProgress(forceSlide === 2 ? 1 : 0);
@@ -26,7 +34,6 @@ function AmbientBackgroundComponent({ forceSlide }: AmbientBackgroundProps) {
         requestAnimationFrame(() => {
           const scrollY = window.scrollY;
           const vh = window.innerHeight;
-          // Progress from 0 (Slide 01) to 1 (Slide 02)
           const p = Math.min(Math.max((scrollY - vh * 0.15) / (vh * 0.7), 0), 1);
           setScrollProgress(p);
           ticking = false;
@@ -35,117 +42,158 @@ function AmbientBackgroundComponent({ forceSlide }: AmbientBackgroundProps) {
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [forceSlide]);
+
+  // 2. Interactive Cursor Spotlight on Desktop
+  useEffect(() => {
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    if (isTouch) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (cursorSpotlightRef.current) {
+        cursorSpotlightRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+        cursorSpotlightRef.current.style.opacity = "0.6";
+      }
+    };
+
+    const handleMouseLeave = () => {
+      if (cursorSpotlightRef.current) {
+        cursorSpotlightRef.current.style.opacity = "0";
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    document.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+    };
   }, []);
 
   return (
     <div
-      className="fixed inset-0 z-0 overflow-hidden bg-[#050608] pointer-events-none select-none"
+      ref={containerRef}
+      className="fixed inset-0 z-0 overflow-hidden bg-[#040508] pointer-events-none select-none"
       style={{
-        contain: 'strict',
-        transform: 'translate3d(0, 0, 0)',
-        backfaceVisibility: 'hidden',
+        contain: "strict",
+        transform: "translate3d(0, 0, 0)",
+        backfaceVisibility: "hidden",
       }}
     >
       {/* ======================================================== */}
-      {/* 1. SLIDE 01: DIAGONAL DEEP NAVY SPOTLIGHT (Frame t0.0s)   */}
+      {/* 1. 60FPS WEBGL CHROMATIC FLUID WAVE (YouTube Reference)   */}
+      {/* ======================================================== */}
+      <div className="absolute inset-0 w-full h-full">
+        <ChromaticWaveCanvas scrollProgress={scrollProgress} />
+      </div>
+
+      {/* ======================================================== */}
+      {/* 2. 3D TACTILE VELVET DUNES TEXTURE OVERLAY                */}
       {/* ======================================================== */}
       <div
-        className="absolute inset-0 transition-opacity duration-700 ease-out pointer-events-none"
-        style={{ opacity: 1 - scrollProgress * 0.8 }}
+        className="absolute -inset-6 w-[calc(100%+3rem)] h-[calc(100%+3rem)] animate-dune-float pointer-events-none"
+        style={{
+          mixBlendMode: "overlay",
+          opacity: 0.65 - scrollProgress * 0.15,
+          filter: "contrast(1.2) brightness(0.95)",
+        }}
       >
-        {/* Navy Spotlight Beam (From Top-Right down across center) */}
-        <div
-          className="absolute top-[-20%] right-[-10%] w-[95vw] h-[75vw] rounded-[100%] pointer-events-none"
-          style={{
-            transform: 'translate3d(0, 0, 0) rotate(-28deg)',
-            background: 'radial-gradient(ellipse at 65% 35%, rgba(28, 68, 105, 0.75) 0%, rgba(18, 48, 76, 0.55) 30%, rgba(12, 34, 56, 0.30) 55%, rgba(5, 6, 8, 0) 80%)',
-            filter: 'blur(55px)',
-            willChange: 'transform',
-          }}
+        <img
+          src="/textures/velvet-dunes.jpg"
+          alt="3D Tactile Velvet Dunes Texture"
+          className="w-full h-full object-cover object-center pointer-events-none"
+          loading="eager"
         />
+      </div>
 
-        {/* Ambient Dark Navy Fill */}
-        <div
-          className="absolute top-[40%] left-[-15%] w-[60vw] h-[60vw] rounded-full pointer-events-none animate-ambient-medium"
-          style={{
-            background: 'radial-gradient(circle at 50% 50%, rgba(14, 38, 64, 0.45) 0%, rgba(10, 24, 40, 0.25) 50%, rgba(5, 6, 8, 0) 75%)',
-            filter: 'blur(50px)',
-            willChange: 'transform',
-          }}
+      {/* Secondary Soft-Light Texture Depth for Shadow Contours */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          mixBlendMode: "soft-light",
+          opacity: 0.45,
+        }}
+      >
+        <img
+          src="/textures/velvet-dunes.jpg"
+          alt="Velvet Texture Shading"
+          className="w-full h-full object-cover object-center pointer-events-none"
+          loading="eager"
         />
       </div>
 
       {/* ======================================================== */}
-      {/* 2. SLIDE 02: CHROMATIC LIQUID AURA (Frames t7.0s & t9.0s) */}
+      {/* 3. VOLUMETRIC AURORA LIGHT BEAMS (Harmonic Depth)        */}
       {/* ======================================================== */}
       <div
-        className="absolute inset-0 transition-opacity duration-700 ease-out pointer-events-none"
-        style={{ opacity: scrollProgress }}
-      >
-        {/* Blob A: Vibrant Emerald / Cyan Glow (Upper-Left & Center-Left matching user screenshot) */}
-        <div
-          className="absolute top-[-5%] left-[5%] w-[65vw] h-[55vw] rounded-full pointer-events-none animate-ambient-slow"
-          style={{
-            background: 'radial-gradient(circle at 45% 45%, rgba(0, 215, 175, 0.65) 0%, rgba(0, 150, 130, 0.45) 35%, rgba(10, 50, 60, 0.25) 60%, rgba(5, 6, 8, 0) 80%)',
-            filter: 'blur(65px)',
-            willChange: 'transform',
-          }}
-        />
-
-        {/* Blob B: Magenta / Violet Deep Aura (Mid-Center) */}
-        <div
-          className="absolute top-[20%] right-[10%] w-[55vw] h-[55vw] rounded-full pointer-events-none animate-ambient-medium"
-          style={{
-            background: 'radial-gradient(circle at 50% 50%, rgba(145, 18, 85, 0.45) 0%, rgba(95, 12, 55, 0.30) 45%, rgba(5, 6, 8, 0) 80%)',
-            filter: 'blur(70px)',
-            willChange: 'transform',
-          }}
-        />
-
-        {/* Blob C: Warm Sunset Coral / Orange Glow (Lower edge matching user screenshot) */}
-        <div
-          className="absolute bottom-[-10%] left-[-5%] w-[110vw] h-[45vw] rounded-[100%] pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse at 50% 60%, rgba(245, 75, 50, 0.65) 0%, rgba(225, 45, 75, 0.45) 35%, rgba(160, 25, 50, 0.25) 65%, rgba(5, 6, 8, 0) 85%)',
-            filter: 'blur(55px)',
-            willChange: 'transform',
-          }}
-        />
-      </div>
-
-      {/* ======================================================== */}
-      {/* 3. VIGNETTE & ENHANCED TACTILE FILM GRAIN OVERLAYS       */}
-      {/* ======================================================== */}
-      <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute top-[20%] left-[-15%] w-[120vw] h-[35vw] pointer-events-none animate-crest-beam"
         style={{
-          background: 'radial-gradient(circle at 50% 45%, rgba(5, 6, 8, 0) 25%, rgba(5, 6, 8, 0.65) 100%)',
+          background:
+            "linear-gradient(90deg, transparent 0%, rgba(217, 70, 239, 0.08) 25%, rgba(244, 114, 182, 0.28) 50%, rgba(6, 215, 230, 0.22) 75%, transparent 100%)",
+          filter: "blur(30px)",
+          mixBlendMode: "screen",
         }}
       />
 
-      {/* Layer A: High-Contrast Overlay Grain (Tactile analog film texture across luminous gradients) */}
+      {/* ======================================================== */}
+      {/* 4. INTERACTIVE CURSOR CHROMATIC SPOTLIGHT                */}
+      {/* ======================================================== */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        ref={cursorSpotlightRef}
+        className="absolute -top-40 -left-40 w-80 h-80 rounded-full pointer-events-none transition-opacity duration-500 ease-out will-change-transform"
         style={{
-          opacity: 0.15,
-          mixBlendMode: 'overlay',
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grainNoiseA'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grainNoiseA)'/%3E%3C/svg%3E")`,
-          backgroundRepeat: 'repeat',
-          backgroundSize: '160px 160px',
+          background:
+            "radial-gradient(circle at center, rgba(168, 85, 247, 0.16) 0%, rgba(6, 215, 230, 0.08) 45%, transparent 70%)",
+          filter: "blur(25px)",
+          mixBlendMode: "screen",
+          opacity: 0,
         }}
       />
 
-      {/* Layer B: Soft-Light Deep Shadow Grain (Ensures rich grain texture across deep dark tones) */}
+      {/* ======================================================== */}
+      {/* 5. CINEMATIC VIGNETTES & CONTRAST GRADIENTS              */}
+      {/* ======================================================== */}
+      {/* Top Navbar Falloff (Ensures pristine navigation readability) */}
+      <div
+        className="absolute top-0 inset-x-0 h-44 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(4, 5, 8, 0.85) 0%, rgba(4, 5, 8, 0.35) 60%, transparent 100%)",
+        }}
+      />
+
+      {/* Bottom Soft Edge Falloff */}
+      <div
+        className="absolute bottom-0 inset-x-0 h-52 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(4, 5, 8, 0.85) 0%, rgba(4, 5, 8, 0.3) 60%, transparent 100%)",
+        }}
+      />
+
+      {/* Radial Peripheral Vignette */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          opacity: 0.12,
-          mixBlendMode: 'soft-light',
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grainNoiseB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1.2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grainNoiseB)'/%3E%3C/svg%3E")`,
-          backgroundRepeat: 'repeat',
-          backgroundSize: '180px 180px',
+          background:
+            "radial-gradient(circle at 50% 50%, transparent 35%, rgba(4, 5, 8, 0.55) 100%)",
+        }}
+      />
+
+      {/* ======================================================== */}
+      {/* 6. LIVING TACTILE GRAIN SHIMMER (12fps Micro-Particles)  */}
+      {/* ======================================================== */}
+      <div
+        className="absolute -inset-10 w-[calc(100%+5rem)] h-[calc(100%+5rem)] pointer-events-none animate-grain-jitter"
+        style={{
+          opacity: 0.16,
+          mixBlendMode: "overlay",
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grainJitterA'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grainJitterA)'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "135px 135px",
         }}
       />
     </div>
