@@ -54,7 +54,7 @@ const showcaseCards: ShowcaseCard[] = [
   },
 ];
 
-export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({ 
+export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
   onSelectCategory,
   onCardChange,
   initialIndex = 0,
@@ -92,7 +92,7 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
 
   const transitionTo = (newIndex: number) => {
     if (newIndex === activeIndex || exitingIndex !== null) return;
-    
+
     // Set currently active card as exiting to the right (1:1 Frame t9.6s & t9.8s)
     setExitingIndex(activeIndex);
     onCardChange?.(newIndex);
@@ -127,8 +127,8 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
   };
 
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="relative w-full max-w-[620px] flex flex-col items-end"
@@ -161,12 +161,12 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
           } else {
             // Front card: scale(1), translateY(0), sharp
             // Back cards: elevated translateY(-48px, -90px, -128px on desktop, -26px, -48px, -68px on mobile)
-            const translateY = isFront 
-              ? 0 
-              : pos === 1 
-                ? (isMobile ? -26 : -48) 
-                : pos === 2 
-                  ? (isMobile ? -48 : -90) 
+            const translateY = isFront
+              ? 0
+              : pos === 1
+                ? (isMobile ? -26 : -48)
+                : pos === 2
+                  ? (isMobile ? -48 : -90)
                   : (isMobile ? -68 : -128);
             const scale = isFront ? 1 : pos === 1 ? 0.95 : pos === 2 ? 0.90 : 0.85;
             blurVal = isFront ? 0 : pos === 1 ? 2.5 : pos === 2 ? 5.5 : 9;
@@ -227,7 +227,7 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
                   <div className="relative w-full h-full flex items-center justify-center overflow-hidden p-2 sm:p-4">
                     {/* Atmospheric soft teal glow perfectly centered */}
                     <div className="absolute inset-0 m-auto w-[240px] sm:w-[400px] h-[140px] sm:h-[180px] bg-[#00e5c0]/12 blur-3xl pointer-events-none rounded-full" />
-                    
+
                     <div className="relative w-full h-full flex items-center justify-center">
                       <Image
                         src="/posters/motion-graphic-banner.png"
@@ -260,11 +260,10 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
               key={dotIdx}
               type="button"
               onClick={() => transitionTo(dotIdx)}
-              className={`transition-all duration-300 cursor-pointer ${
-                isActive
+              className={`transition-all duration-300 cursor-pointer ${isActive
                   ? 'w-7 h-2 rounded-full bg-[#00e5c0] shadow-[0_0_12px_rgba(0,229,192,0.6)]'
                   : 'w-2 h-2 rounded-full border border-white/40 hover:border-white/80'
-              }`}
+                }`}
               title={`View slide ${dotIdx + 1}`}
               aria-label={`View slide ${dotIdx + 1}`}
             />
