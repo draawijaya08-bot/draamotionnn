@@ -33,7 +33,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     <header className="fixed top-0 left-0 right-0 z-50 pointer-events-auto">
       {/* 4-Column CSS Grid Aligned Horizontally Across Top */}
       <nav 
-        className="w-full grid grid-cols-4 items-center px-3 sm:px-6 md:px-16 py-3 sm:py-6 md:py-8 font-sans select-none"
+        className="w-full grid grid-cols-4 items-center px-3 sm:px-6 md:px-16 py-3 sm:py-6 md:py-8 font-sans"
         style={{
           paddingLeft: 'clamp(0.75rem, 3.5vw, 4rem)',
           paddingRight: 'clamp(0.75rem, 3.5vw, 4rem)',

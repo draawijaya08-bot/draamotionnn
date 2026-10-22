@@ -51,7 +51,7 @@ export const ContactSection: React.FC = () => {
       </div>
 
       {/* Main Banner Card - Styled like the 3 category cards (Dark, Sleek, border-white/10) */}
-      <div className="relative z-10 w-full max-w-4xl mx-auto rounded-[24px] sm:rounded-[40px] bg-[#0c0d12]/90 backdrop-blur-2xl border border-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.6),0_10px_30px_rgba(0,0,0,0.4)] p-6 sm:p-14 md:p-16 flex flex-col items-center text-center space-y-6 sm:space-y-8 select-none">
+      <div className="relative z-10 w-full max-w-4xl mx-auto rounded-[24px] sm:rounded-[40px] bg-[#0c0d12]/90 backdrop-blur-2xl border border-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.6),0_10px_30px_rgba(0,0,0,0.4)] p-6 sm:p-14 md:p-16 flex flex-col items-center text-center space-y-6 sm:space-y-8 select-text">
         
         {/* Top Status Pill: ● Available for New Project */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1 sm:px-4 sm:py-1.5 rounded-full bg-white/[0.07] border border-white/15 shadow-sm text-[11px] sm:text-xs font-semibold text-white/90 tracking-tight transition-transform hover:scale-105">

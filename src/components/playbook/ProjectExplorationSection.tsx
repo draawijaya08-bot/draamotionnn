@@ -529,7 +529,7 @@ export const ProjectExplorationSection: React.FC = () => {
     >
       <div className="w-full max-w-7xl mx-auto space-y-8 sm:space-y-12">
         {/* Section Header */}
-        <div className="space-y-2.5 sm:space-y-4 max-w-2xl select-none">
+        <div className="space-y-2.5 sm:space-y-4 max-w-2xl select-text">
           <p className="text-[11px] font-mono tracking-[0.25em] text-[#7db4ff] uppercase">
             {t.slide3.eyebrow || 'THE PLAYBOOK'}
           </p>

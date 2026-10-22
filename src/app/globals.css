@@ -52,8 +52,8 @@ body {
 }
 
 ::selection {
-  background: var(--accent);
-  color: #ffffff;
+  background: #E68A1E;
+  color: #000000;
 }
 
 /* Custom Minimalist Scrollbar */

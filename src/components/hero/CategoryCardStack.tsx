@@ -131,7 +131,7 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
       ref={containerRef} 
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative w-full max-w-[620px] flex flex-col items-end select-none"
+      className="relative w-full max-w-[620px] flex flex-col items-end"
     >
       {/* ======================================================== */}
       {/* 1. STACKED CARDS CONTAINER (1:1 Frame t9.0s & t11.0s)    */}
