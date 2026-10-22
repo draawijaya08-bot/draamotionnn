@@ -124,7 +124,7 @@ export const siteIdentityData: SiteIdentitySchema = {
     {
       platform: 'WHATSAPP',
       label: 'Direct WhatsApp',
-      url: 'https://wa.me/6281234567890',
+      url: 'https://wa.me/6287801355883',
       isPrimaryContact: true,
     },
   ],

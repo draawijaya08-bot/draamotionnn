@@ -28,8 +28,11 @@ export function getWhatsAppUrl(
     textMessage = categoryContextMessages[category];
   }
 
-  // Bersihkan format nomor dari karakter non-numerik
-  const cleanPhone = phoneNumber.replace(/[^0-9]/g, '');
+  // Bersihkan format nomor dari karakter non-numerik dan pastikan kode negara 62
+  let cleanPhone = phoneNumber.replace(/[^0-9]/g, '');
+  if (cleanPhone.startsWith('0')) {
+    cleanPhone = '62' + cleanPhone.slice(1);
+  }
 
   return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(textMessage)}`;
 }

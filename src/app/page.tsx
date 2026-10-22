@@ -250,7 +250,7 @@ export default function Home() {
         {/* ======================================================== */}
         {/* SLIDE 04: Contact Section (1:1 Reference Image 1)        */}
         {/* ======================================================== */}
-        <ContactSection onOpenQuickContact={() => handleOpenContact('motion-graphics')} />
+        <ContactSection />
       </main>
 
       {/* 5. Playbook Drawer / Modal Archive (Fast Exploration) */}

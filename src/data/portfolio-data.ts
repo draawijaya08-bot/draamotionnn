@@ -34,7 +34,7 @@ export const siteIdentityData: SiteIdentity = {
       { id: 'contacts', label: 'CONTACTS', targetAnchor: '#contacts' },
     ],
     whatsapp: {
-      phoneNumber: '6281234567890',
+      phoneNumber: '6287801355883',
       defaultMessage:
         'Hello Indra, I came across your portfolio and would like to discuss an upcoming collaboration.',
       categoryContextMessages: {
@@ -74,7 +74,7 @@ export const siteIdentityData: SiteIdentity = {
       {
         platform: 'WHATSAPP',
         label: 'WhatsApp',
-        url: 'https://wa.me/6281234567890',
+        url: 'https://wa.me/6287801355883',
       },
     ],
   },

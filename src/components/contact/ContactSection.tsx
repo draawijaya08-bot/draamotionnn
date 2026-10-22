@@ -4,11 +4,7 @@ import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { getWhatsAppUrl } from '@/utils/contact-links';
 
-interface ContactSectionProps {
-  onOpenQuickContact?: () => void;
-}
-
-export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuickContact }) => {
+export const ContactSection: React.FC = () => {
   // Only active platforms: Instagram, Behance, WhatsApp
   const socialLinks = [
     {
@@ -43,14 +39,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuickConta
     },
   ];
 
-  const handleContactClick = () => {
-    if (onOpenQuickContact) {
-      onOpenQuickContact();
-    } else {
-      window.open(getWhatsAppUrl('motion-graphics'), '_blank');
-    }
-  };
-
   return (
     <section 
       id="contacts"
@@ -81,18 +69,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuickConta
           Together, we can create something clear and impactful. Let’s collaborate to bring our ideas to life in a way that resonates with everyone.
         </p>
 
-        {/* Primary CTA Button: Contact Me ↗ */}
+        {/* Primary CTA Button: Contact Me ↗ (Direct WhatsApp Chat) */}
         <div className="pt-1 sm:pt-2">
-          <button
-            type="button"
-            onClick={handleContactClick}
+          <a
+            href={getWhatsAppUrl('motion-graphics')}
+            target="_blank"
+            rel="noopener noreferrer"
             className="group px-7 sm:px-8 py-3.5 rounded-full bg-white hover:bg-neutral-200 text-black text-xs sm:text-sm font-semibold tracking-wide flex items-center gap-2.5 shadow-[0_12px_28px_rgba(255,255,255,0.12)] hover:shadow-[0_16px_36px_rgba(255,255,255,0.2)] hover:scale-[1.03] active:scale-[0.98] transition-all duration-200 cursor-pointer"
-            title="Get in touch with Indra Wijaya"
-            aria-label="Contact Me"
+            title="Chat directly via WhatsApp with Indra Wijaya"
+            aria-label="Contact Me via WhatsApp"
           >
             <span>Contact Me</span>
             <ArrowUpRight className="w-4 h-4 text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </button>
+          </a>
         </div>
 
         {/* Bottom Row of Pills (Avatar + Social Platforms) */}
