@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { siteIdentityData } from '@/data/portfolio-data';
 import { MagneticButton } from '@/components/interactive/MagneticButton';
+import { HeaderBrandLogo } from '@/components/layout/HeaderBrandLogo';
 import { useLanguageStore, translations } from '@/stores/languageStore';
 import { ArrowUpRight, Globe } from 'lucide-react';
 
@@ -44,28 +45,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         {/* Kolom 1 (Kiri): BRAND ANIMATED VIDEO LOGO (DRAMOTION) */}
         <div className="flex items-center">
           <MagneticButton strength={0.15}>
-            <Link
-              href="/"
-              className="flex items-center group cursor-pointer focus:outline-none"
-              title={`${brandName} — Home`}
-              aria-label={`${brandName} — Home`}
-            >
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="auto"
-                className="h-7 xs:h-8 sm:h-9 md:h-10 lg:h-11 w-auto max-w-[150px] sm:max-w-[190px] object-contain transition-transform duration-300 group-hover:scale-105 mix-blend-screen select-none"
-                style={{
-                  pointerEvents: 'none',
-                  willChange: 'transform',
-                }}
-              >
-                <source src="/brand/dramotion-header.mp4" type="video/mp4" />
-                <source src="/brand/dramotion-header.webm" type="video/webm" />
-              </video>
-            </Link>
+            <HeaderBrandLogo brandName={brandName} />
           </MagneticButton>
         </div>
 
