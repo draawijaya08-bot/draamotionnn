@@ -41,18 +41,30 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           paddingBottom: 'clamp(0.85rem, 2.5vw, 2rem)',
         }}
       >
-        {/* Kolom 1 (Kiri): INDRA WIJAYA */}
+        {/* Kolom 1 (Kiri): BRAND ANIMATED VIDEO LOGO (DRAMOTION) */}
         <div className="flex items-center">
           <MagneticButton strength={0.2}>
             <Link
               href="/"
-              className="text-[#FFFFFF] hover:text-amber-400 transition-colors uppercase font-bold tracking-wider text-[0.72rem] sm:text-[0.85rem]"
-              style={{
-                fontWeight: 700,
-                letterSpacing: '0.04em',
-              }}
+              className="flex items-center group cursor-pointer focus:outline-none"
+              title={`${brandName} — Home`}
+              aria-label={`${brandName} — Home`}
             >
-              {brandName}
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                className="h-6 xs:h-7 sm:h-8 md:h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105 mix-blend-screen"
+                style={{
+                  aspectRatio: '1100 / 320',
+                  pointerEvents: 'none',
+                }}
+              >
+                <source src="/brand/dramotion-header.webm" type="video/webm" />
+                <source src="/brand/dramotion-header.mp4" type="video/mp4" />
+              </video>
             </Link>
           </MagneticButton>
         </div>
