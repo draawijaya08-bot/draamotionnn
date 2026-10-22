@@ -58,8 +58,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuickConta
     >
       {/* Subtle Atmospheric Spotlight / Seamless Mesh Glow Merging with Section Above */}
       <div className="absolute inset-0 pointer-events-none select-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[#00e5c0]/[0.05] rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-1/3 w-[500px] h-[300px] bg-amber-400/[0.03] rounded-full blur-[100px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[#2e6bff]/[0.05] rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 left-1/3 w-[500px] h-[300px] bg-[#7db4ff]/[0.03] rounded-full blur-[100px]" />
       </div>
 
       {/* Main Banner Card - Styled like the 3 category cards (Dark, Sleek, border-white/10) */}
@@ -100,7 +100,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuickConta
           
           {/* Avatar Name Pill: [Avatar] Indra Wijaya */}
           <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-white shadow-md text-xs font-semibold select-none">
-            <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 flex items-center justify-center text-[9px] font-black text-black">
+            <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#2e6bff] to-[#7db4ff] flex items-center justify-center text-[9px] font-black text-white">
               IW
             </div>
             <span>Indra Wijaya</span>

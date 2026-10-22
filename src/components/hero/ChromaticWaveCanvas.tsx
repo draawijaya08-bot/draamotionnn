@@ -4,9 +4,8 @@ import React, { useEffect, useRef } from "react";
 
 /**
  * ChromaticWaveCanvas
- * 60fps WebGL fluid gradient wave recreation inspired by:
- * - YouTube reference: "Gradient Loop Background" (-niUBSx3PKQ)
- * - Fluid undulating S-curve chromatic ribbon (Electric Cyan -> Cobalt -> Violet -> Magenta -> Sunset Coral)
+ * 60fps WebGL fluid gradient wave in the electric-blue identity:
+ * - Fluid undulating S-curve chromatic ribbon (Deep Blue -> Electric Blue -> Ice Blue)
  * - Living tactile sand/film grain synthesis
  * - Interactive cursor-driven fluid ripples and mouse tracking
  */
@@ -79,33 +78,30 @@ const FRAGMENT_SHADER_SRC = `
     float ribbonCore = smoothstep(0.18, 0.0, dist);
     float ambientAura = smoothstep(0.85, 0.0, dist);
 
-    // 6. Color Flow Mapping along the wave (bottom-left to top-right)
+    // 6. Color Flow Mapping along the wave (deep blue -> electric -> ice)
     float flow = clamp((p.x + 0.9) / 1.8, 0.0, 1.0);
 
-    // Reference Color Palette:
-    // Cyan -> Cobalt -> Violet -> Magenta -> Sunset Coral -> Warm Peach
-    vec3 colCyan    = vec3(0.00, 0.88, 1.00); // #00e0ff Electric Cyan
-    vec3 colCobalt  = vec3(0.10, 0.25, 0.95); // #1a40f2 Deep Royal Blue
-    vec3 colViolet  = vec3(0.55, 0.12, 0.94); // #8c1ff0 Electric Violet
-    vec3 colMagenta = vec3(0.94, 0.14, 0.52); // #f02485 Hot Neon Magenta
-    vec3 colCoral   = vec3(1.00, 0.36, 0.20); // #ff5c33 Sunset Coral Orange
-    vec3 colPeach   = vec3(1.00, 0.56, 0.38); // #ff8f61 Glowing Peach
+    // Electric Blue Identity Palette:
+    // Deep Blue -> Royal -> Electric Blue -> Ice Blue -> Near-White Ice
+    vec3 colDeep    = vec3(0.039, 0.106, 0.302); // #0A1B4D Deep Blue
+    vec3 colRoyal   = vec3(0.090, 0.220, 0.670); // #1738AB Royal Blue
+    vec3 colElec    = vec3(0.180, 0.420, 1.000); // #2E6BFF Electric Blue
+    vec3 colIce     = vec3(0.490, 0.706, 1.000); // #7DB4FF Ice Blue
+    vec3 colFrost   = vec3(0.870, 0.930, 1.000); // #DEEDFF Frost White
 
     vec3 waveColor;
-    if (flow < 0.20) {
-      waveColor = mix(colCyan, colCobalt, flow / 0.20);
-    } else if (flow < 0.45) {
-      waveColor = mix(colCobalt, colViolet, (flow - 0.20) / 0.25);
-    } else if (flow < 0.70) {
-      waveColor = mix(colViolet, colMagenta, (flow - 0.45) / 0.25);
-    } else if (flow < 0.88) {
-      waveColor = mix(colMagenta, colCoral, (flow - 0.70) / 0.18);
+    if (flow < 0.25) {
+      waveColor = mix(colDeep, colRoyal, flow / 0.25);
+    } else if (flow < 0.55) {
+      waveColor = mix(colRoyal, colElec, (flow - 0.25) / 0.30);
+    } else if (flow < 0.85) {
+      waveColor = mix(colElec, colIce, (flow - 0.55) / 0.30);
     } else {
-      waveColor = mix(colCoral, colPeach, (flow - 0.88) / 0.12);
+      waveColor = mix(colIce, colFrost, (flow - 0.85) / 0.15);
     }
 
-    // 7. Background: Deep Luxury Obsidian / Midnight Violet
-    vec3 bgColor = vec3(0.024, 0.020, 0.038);
+    // 7. Background: Deep Cinematic Obsidian with a blue undertone
+    vec3 bgColor = vec3(0.012, 0.016, 0.030);
 
     // 8. Composite Wave with Luminous Layering
     vec3 color = mix(bgColor, waveColor, ribbon * 0.88 + ribbonCore * 0.35);
@@ -113,7 +109,7 @@ const FRAGMENT_SHADER_SRC = `
 
     // Subtle breathing highlight along the upper crest
     float crestHighlight = smoothstep(0.04, 0.0, abs(p.y - waveOffset - 0.08)) * 0.28;
-    color += vec3(1.0, 0.7, 0.8) * crestHighlight * ribbon;
+    color += vec3(0.72, 0.86, 1.0) * crestHighlight * ribbon;
 
     // 9. Real-time Living Grain / Sand Shimmer in Shader (at 60fps)
     vec2 grainCoord = v_uv * u_resolution.xy;
@@ -142,7 +138,7 @@ export const ChromaticWaveCanvas: React.FC<ChromaticWaveCanvasProps> = ({
     if (!canvas) return;
 
     // Try WebGL context
-    let gl: WebGLRenderingContext | null =
+    const gl: WebGLRenderingContext | null =
       canvas.getContext("webgl", { alpha: false, antialias: true, powerPreference: "high-performance" }) ||
       (canvas.getContext("experimental-webgl") as WebGLRenderingContext | null);
 
@@ -225,7 +221,7 @@ export const ChromaticWaveCanvas: React.FC<ChromaticWaveCanvasProps> = ({
 
     // Render loop
     let animId: number;
-    let startTime = performance.now();
+    const startTime = performance.now();
     let isVisible = true;
 
     const handleVisibilityChange = () => {

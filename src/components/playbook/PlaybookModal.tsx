@@ -41,7 +41,7 @@ export const PlaybookModal: React.FC<PlaybookModalProps> = ({
         {/* Top Header: Judul & Tombol Tutup */}
         <div className="flex items-start justify-between border-b border-[#202024] pb-6">
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full border border-amber-400/30 bg-amber-400/10 text-amber-400 text-[10px] font-mono tracking-widest uppercase">
+            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full border border-[#2e6bff]/30 bg-[#2e6bff]/10 text-[#7db4ff] text-[10px] font-mono tracking-widest uppercase">
               <Layers className="w-3.5 h-3.5" />
               <span>THE PLAYBOOK ARCHIVE</span>
             </div>
@@ -82,14 +82,14 @@ export const PlaybookModal: React.FC<PlaybookModalProps> = ({
                 onClick={() => setActiveTab(cat.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono uppercase tracking-wider transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-amber-400 text-black font-bold shadow-[0_0_15px_rgba(245,158,11,0.35)]'
+                    ? 'bg-[#2e6bff] text-white font-bold shadow-[0_0_15px_rgba(46,107,255,0.35)]'
                     : 'border border-[#202024] bg-[#0f0f12] text-[#8e8e93] hover:text-white hover:border-[#38383e]'
                 }`}
               >
                 <span>{cat.label}</span>
                 <span
                   className={`text-[10px] px-1.5 py-0.2 rounded ${
-                    isActive ? 'bg-black/20 text-black' : 'bg-[#1b1b20] text-[#8e8e93]'
+                    isActive ? 'bg-black/25 text-white' : 'bg-[#1b1b20] text-[#8e8e93]'
                   }`}
                 >
                   {count}
@@ -111,7 +111,7 @@ export const PlaybookModal: React.FC<PlaybookModalProps> = ({
             return (
               <article
                 key={project.id}
-                className="group rounded-2xl border border-[#202024] bg-[#0e0e12]/80 hover:border-amber-400/40 transition-all duration-300 p-4 flex flex-col justify-between space-y-4 shadow-xl"
+                className="group rounded-2xl border border-[#1c2436] bg-[#0a0c12]/80 hover:border-[#2e6bff]/40 transition-all duration-300 p-4 flex flex-col justify-between space-y-4 shadow-xl"
               >
                 {/* Media Container Adaptif */}
                 <div className="relative overflow-hidden rounded-xl">
@@ -125,7 +125,7 @@ export const PlaybookModal: React.FC<PlaybookModalProps> = ({
                 {/* Konten Metadata */}
                 <div className="space-y-2 flex-1">
                   <div className="flex items-center justify-between text-[11px] font-mono text-[#8e8e93]">
-                    <span className="uppercase text-amber-400 font-semibold tracking-wider">
+                    <span className="uppercase text-[#7db4ff] font-semibold tracking-wider">
                       {project.category.replace('-', ' ')}
                     </span>
                     <span>{project.year} • {project.clientOrContext}</span>
@@ -149,7 +149,7 @@ export const PlaybookModal: React.FC<PlaybookModalProps> = ({
                         key={tool.name}
                         className={`px-2 py-0.5 rounded text-[10px] font-mono tracking-tight ${
                           tool.category === 'AI_TECH'
-                            ? 'border border-violet-500/30 bg-violet-500/10 text-violet-300'
+                            ? 'border border-[#7db4ff]/30 bg-[#2e6bff]/10 text-[#7db4ff]'
                             : 'border border-white/10 bg-[#161619] text-[#a1a1aa]'
                         }`}
                       >

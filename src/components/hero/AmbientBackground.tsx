@@ -23,10 +23,7 @@ function AmbientBackgroundComponent({ forceSlide }: AmbientBackgroundProps) {
 
   // 1. Scroll tracking for section transitions
   useEffect(() => {
-    if (forceSlide !== undefined) {
-      setScrollProgress(forceSlide === 2 ? 1 : 0);
-      return;
-    }
+    if (forceSlide !== undefined) return;
 
     let ticking = false;
     const handleScroll = () => {
@@ -132,7 +129,7 @@ function AmbientBackgroundComponent({ forceSlide }: AmbientBackgroundProps) {
         className="absolute top-[20%] left-[-15%] w-[120vw] h-[35vw] pointer-events-none animate-crest-beam"
         style={{
           background:
-            "linear-gradient(90deg, transparent 0%, rgba(217, 70, 239, 0.08) 25%, rgba(244, 114, 182, 0.28) 50%, rgba(6, 215, 230, 0.22) 75%, transparent 100%)",
+            "linear-gradient(90deg, transparent 0%, rgba(10, 27, 77, 0.10) 25%, rgba(46, 107, 255, 0.26) 50%, rgba(125, 180, 255, 0.20) 75%, transparent 100%)",
           filter: "blur(30px)",
           mixBlendMode: "screen",
         }}
@@ -146,7 +143,7 @@ function AmbientBackgroundComponent({ forceSlide }: AmbientBackgroundProps) {
         className="absolute -top-40 -left-40 w-80 h-80 rounded-full pointer-events-none transition-opacity duration-500 ease-out will-change-transform"
         style={{
           background:
-            "radial-gradient(circle at center, rgba(168, 85, 247, 0.16) 0%, rgba(6, 215, 230, 0.08) 45%, transparent 70%)",
+            "radial-gradient(circle at center, rgba(46, 107, 255, 0.14) 0%, rgba(125, 180, 255, 0.07) 45%, transparent 70%)",
           filter: "blur(25px)",
           mixBlendMode: "screen",
           opacity: 0,

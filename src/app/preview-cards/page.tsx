@@ -63,7 +63,7 @@ function PreviewCardsContent() {
               <span className="text-white font-medium">{t.bio.statementName}</span>.
               <br />
               {locale === 'en' ? currentStmt.leadEn : currentStmt.leadId}
-              <span className="font-[family-name:var(--font-serif)] italic text-[#00e5c0] font-normal">
+              <span className="font-[family-name:var(--font-serif)] italic text-[#7db4ff] font-normal">
                 {locale === 'en' ? currentStmt.accentEn : currentStmt.accentId}
               </span>{' '}
               <span className="whitespace-pre-line">

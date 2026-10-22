@@ -54,7 +54,6 @@ export default function Home() {
       const el = document.getElementById('section-works');
       if (el) {
         el.scrollIntoView({ behavior: 'instant' });
-        setActiveSection('about');
       }
     }
 
@@ -105,7 +104,7 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen bg-transparent text-[#f5f5f7] flex flex-col selection:bg-amber-400 selection:text-black overflow-x-hidden">
+    <div className="relative min-h-screen bg-transparent text-[#f5f5f7] flex flex-col selection:bg-[#2e6bff] selection:text-white overflow-x-hidden">
       {/* 1. Custom Interactive Magnifying Lens Cursor (True Optical Lens with RGB Aberration) */}
       <CursorLens />
 
@@ -144,7 +143,7 @@ export default function Home() {
                 {activeCard === 0 && (
                   <>
                     {locale === 'en' ? 'I turn ideas into ' : 'Saya mengubah ide menjadi '}
-                    <span className="font-[family-name:var(--font-serif)] italic text-[#00e5c0] font-normal">
+                    <span className="font-[family-name:var(--font-serif)] italic text-[#7db4ff] font-normal">
                       {t.bio.statementAccent}
                     </span>{' '}
                     {locale === 'en' ? (
@@ -165,7 +164,7 @@ export default function Home() {
                 {activeCard === 1 && (
                   <>
                     {locale === 'en' ? 'I shape ' : 'Saya membentuk '}
-                    <span className="font-[family-name:var(--font-serif)] italic text-[#00e5c0] font-normal">
+                    <span className="font-[family-name:var(--font-serif)] italic text-[#7db4ff] font-normal">
                       {locale === 'en' ? 'memorable visual identities' : 'identitas visual kuat'}
                     </span>{' '}
                     {locale === 'en' ? (
@@ -186,7 +185,7 @@ export default function Home() {
                 {activeCard === 2 && (
                   <>
                     {locale === 'en' ? 'I engineer ' : 'Saya membangun '}
-                    <span className="font-[family-name:var(--font-serif)] italic text-[#00e5c0] font-normal">
+                    <span className="font-[family-name:var(--font-serif)] italic text-[#7db4ff] font-normal">
                       {locale === 'en' ? 'neural AI systems' : 'sistem AI cerdas'}
                     </span>{' '}
                     {locale === 'en' ? (
@@ -222,8 +221,8 @@ export default function Home() {
                     title="Scroll to Playbook Projects"
                     aria-label="Scroll to Playbook Projects"
                   >
-                    <div className="w-[1px] h-10 bg-white/30 group-hover:bg-[#00e5c0] group-hover:h-12 transition-all duration-300" />
-                    <ArrowDown className="w-3.5 h-3.5 text-white/50 group-hover:text-[#00e5c0] group-hover:translate-y-1 transition-all" />
+                    <div className="w-[1px] h-10 bg-white/30 group-hover:bg-[#2e6bff] group-hover:h-12 transition-all duration-300" />
+                    <ArrowDown className="w-3.5 h-3.5 text-white/50 group-hover:text-[#7db4ff] group-hover:translate-y-1 transition-all" />
                   </button>
                 </div>
               </div>

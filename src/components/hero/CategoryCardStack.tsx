@@ -226,7 +226,7 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
                 {card.id === 'motion-graphics' ? (
                   <div className="relative w-full h-full flex items-center justify-center overflow-hidden p-2 sm:p-4">
                     {/* Atmospheric soft teal glow perfectly centered */}
-                    <div className="absolute inset-0 m-auto w-[240px] sm:w-[400px] h-[140px] sm:h-[180px] bg-[#00e5c0]/12 blur-3xl pointer-events-none rounded-full" />
+                    <div className="absolute inset-0 m-auto w-[240px] sm:w-[400px] h-[140px] sm:h-[180px] bg-[#2e6bff]/12 blur-3xl pointer-events-none rounded-full" />
                     
                     <div className="relative w-full h-full flex items-center justify-center">
                       <Image
@@ -250,7 +250,7 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
 
       {/* ======================================================== */}
       {/* 2. THREE PAGINATION DOTS (1:1 Frame t9.0s & t11.0s)      */}
-      {/* Active dot: cyan pill [#00e5c0], Inactive: circles       */}
+      {/* Active dot: electric blue pill, Inactive: circles       */}
       {/* ======================================================== */}
       <div className="flex items-center gap-2.5 mt-8 mr-2 z-30">
         {showcaseCards.map((_, dotIdx) => {
@@ -262,7 +262,7 @@ export const CategoryCardStack: React.FC<CategoryCardStackProps> = ({
               onClick={() => transitionTo(dotIdx)}
               className={`transition-all duration-300 cursor-pointer ${
                 isActive
-                  ? 'w-7 h-2 rounded-full bg-[#00e5c0] shadow-[0_0_12px_rgba(0,229,192,0.6)]'
+                  ? 'w-7 h-2 rounded-full bg-[#2e6bff] shadow-[0_0_12px_rgba(46,107,255,0.6)]'
                   : 'w-2 h-2 rounded-full border border-white/40 hover:border-white/80'
               }`}
               title={`View slide ${dotIdx + 1}`}

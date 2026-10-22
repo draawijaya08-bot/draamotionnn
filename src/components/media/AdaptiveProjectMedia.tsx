@@ -79,7 +79,7 @@ export const AdaptiveProjectMedia: React.FC<AdaptiveProjectMediaProps> = ({
     <div
       ref={containerRef}
       className={`relative w-full ${aspectClass} overflow-hidden rounded-xl bg-[#0a0a0d] border ${
-        isFeatured ? 'border-amber-400/40 shadow-[0_0_25px_rgba(245,158,11,0.12)]' : 'border-[#202024]'
+        isFeatured ? 'border-[#2e6bff]/40 shadow-[0_0_25px_rgba(46,107,255,0.12)]' : 'border-[#202024]'
       } group ${className}`}
       style={{
         contain: 'paint layout',
@@ -141,7 +141,7 @@ export const AdaptiveProjectMedia: React.FC<AdaptiveProjectMediaProps> = ({
               e.stopPropagation();
               setShowComparison(!showComparison);
             }}
-            className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/80 backdrop-blur-md border border-amber-400/30 text-[10px] font-mono text-amber-300 hover:bg-amber-400 hover:text-black transition-all flex items-center gap-1 cursor-pointer"
+            className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/80 backdrop-blur-md border border-[#2e6bff]/30 text-[10px] font-mono text-[#7db4ff] hover:bg-[#2e6bff] hover:text-black transition-all flex items-center gap-1 cursor-pointer"
           >
             <Sparkles className="w-3 h-3" />
             <span>{showComparison ? 'SHOW FINAL' : 'SHOW RAW/PROMPT'}</span>

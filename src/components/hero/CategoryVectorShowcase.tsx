@@ -25,10 +25,10 @@ export const CategoryVectorShowcase: React.FC<CategoryVectorShowcaseProps> = ({
         <defs>
           {/* Laptop Screen Gradient for Card 2 & 4 */}
           <linearGradient id="purrweb-screen-aura" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#00b99b" />
-            <stop offset="30%" stopColor="#125688" />
-            <stop offset="65%" stopColor="#8a185b" />
-            <stop offset="100%" stopColor="#d91b5c" />
+            <stop offset="0%" stopColor="#0a1b4d" />
+            <stop offset="35%" stopColor="#1738ab" />
+            <stop offset="70%" stopColor="#2e6bff" />
+            <stop offset="100%" stopColor="#7db4ff" />
           </linearGradient>
 
           <linearGradient id="gold-metal-ferrule" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -96,7 +96,7 @@ export const CategoryVectorShowcase: React.FC<CategoryVectorShowcaseProps> = ({
                 CINEMATIC
               </text>
               <text x="160" y="195" fill="#ffffff" fontSize="44" fontWeight="800" letterSpacing="-0.03em">
-                EDITING <tspan fill="#00e5c0" fontStyle="italic" fontFamily="serif" fontWeight="normal">motion</tspan>
+                EDITING <tspan fill="#7db4ff" fontStyle="italic" fontFamily="serif" fontWeight="normal">motion</tspan>
               </text>
               <text x="160" y="235" fill="rgba(255,255,255,0.7)" fontSize="11" fontFamily="monospace">
                 COLOR GRADING / TIMELINE CUTS / AUDIO VISUAL
@@ -170,7 +170,7 @@ export const CategoryVectorShowcase: React.FC<CategoryVectorShowcaseProps> = ({
               <text x="0" y="140" fill="#ffffff" fontSize="90" fontFamily="serif" fontStyle="italic" fontWeight="bold">
                 Aa
               </text>
-              <text x="150" y="110" fill="#00e5c0" fontSize="40" fontFamily="sans-serif" fontWeight="900" letterSpacing="-0.03em">
+              <text x="150" y="110" fill="#2e6bff" fontSize="40" fontFamily="sans-serif" fontWeight="900" letterSpacing="-0.03em">
                 GRAPHIC
               </text>
               <text x="150" y="148" fill="#ffffff" fontSize="32" fontFamily="sans-serif" fontWeight="800" letterSpacing="-0.02em">
@@ -181,27 +181,27 @@ export const CategoryVectorShowcase: React.FC<CategoryVectorShowcaseProps> = ({
               <line x1="0" y1="165" x2="380" y2="165" stroke="#ffffff" strokeWidth="2" strokeDasharray="6 4" />
               <line x1="135" y1="50" x2="135" y2="280" stroke="#ffffff" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.3" />
 
-              {/* Golden Spiral Geometric Arc in Magenta */}
+              {/* Golden Spiral Geometric Arc in Electric Blue */}
               <path
                 d="M 280 260 A 80 80 0 0 1 360 180 A 50 50 0 0 1 410 230"
-                stroke="#e0115f"
+                stroke="#2e6bff"
                 strokeWidth="3"
                 fill="none"
               />
 
-              {/* Isometric Palette Color Swatches */}
+              {/* Isometric Palette Color Swatches (brand electric-blue family) */}
               <g transform="translate(160, 190)">
-                <rect x="0" y="0" width="65" height="55" rx="5" fill="#f2a922" stroke="#ffffff" strokeWidth="2" />
+                <rect x="0" y="0" width="65" height="55" rx="5" fill="#0a1b4d" stroke="#ffffff" strokeWidth="2" />
                 <rect x="0" y="35" width="65" height="20" rx="3" fill="#ffffff" />
-                <text x="6" y="50" fill="#000000" fontSize="9" fontFamily="monospace" fontWeight="bold">#F2A922</text>
+                <text x="6" y="50" fill="#000000" fontSize="9" fontFamily="monospace" fontWeight="bold">#0A1B4D</text>
 
-                <rect x="75" y="0" width="65" height="55" rx="5" fill="#00e5c0" stroke="#ffffff" strokeWidth="2" />
+                <rect x="75" y="0" width="65" height="55" rx="5" fill="#2e6bff" stroke="#ffffff" strokeWidth="2" />
                 <rect x="75" y="35" width="65" height="20" rx="3" fill="#ffffff" />
-                <text x="81" y="50" fill="#000000" fontSize="9" fontFamily="monospace" fontWeight="bold">#00E5C0</text>
+                <text x="81" y="50" fill="#000000" fontSize="9" fontFamily="monospace" fontWeight="bold">#2E6BFF</text>
 
-                <rect x="150" y="0" width="65" height="55" rx="5" fill="#e0115f" stroke="#ffffff" strokeWidth="2" />
+                <rect x="150" y="0" width="65" height="55" rx="5" fill="#7db4ff" stroke="#ffffff" strokeWidth="2" />
                 <rect x="150" y="35" width="65" height="20" rx="3" fill="#ffffff" />
-                <text x="156" y="50" fill="#000000" fontSize="9" fontFamily="monospace" fontWeight="bold">#E0115F</text>
+                <text x="156" y="50" fill="#000000" fontSize="9" fontFamily="monospace" fontWeight="bold">#7DB4FF</text>
               </g>
             </g>
           </g>
@@ -237,7 +237,7 @@ export const CategoryVectorShowcase: React.FC<CategoryVectorShowcaseProps> = ({
             {/* Neural Graph & AI Code Stream inside window */}
             <g transform="translate(110, 75)">
               {/* Neural Synapse Nodes and Connectors */}
-              <g stroke="rgba(0,229,192,0.4)" strokeWidth="2" strokeDasharray="4 3">
+              <g stroke="rgba(46,107,255,0.4)" strokeWidth="2" strokeDasharray="4 3">
                 <line x1="25" y1="35" x2="85" y2="20" />
                 <line x1="25" y1="35" x2="85" y2="55" />
                 <line x1="85" y1="20" x2="155" y2="35" />
@@ -246,27 +246,27 @@ export const CategoryVectorShowcase: React.FC<CategoryVectorShowcaseProps> = ({
               </g>
 
               {/* Neural Nodes with pulsing fills */}
-              <circle cx="25" cy="35" r="9" fill="#0e121d" stroke="#00e5c0" strokeWidth="2.5" />
-              <circle cx="25" cy="35" r="4" fill="#00e5c0" />
+              <circle cx="25" cy="35" r="9" fill="#0e121d" stroke="#2e6bff" strokeWidth="2.5" />
+              <circle cx="25" cy="35" r="4" fill="#2e6bff" />
 
-              <circle cx="85" cy="20" r="8" fill="#0e121d" stroke="#e0115f" strokeWidth="2" />
-              <circle cx="85" cy="20" r="3.5" fill="#e0115f" />
+              <circle cx="85" cy="20" r="8" fill="#0e121d" stroke="#7db4ff" strokeWidth="2" />
+              <circle cx="85" cy="20" r="3.5" fill="#7db4ff" />
 
-              <circle cx="85" cy="55" r="8" fill="#0e121d" stroke="#f2a922" strokeWidth="2" />
-              <circle cx="85" cy="55" r="3.5" fill="#f2a922" />
+              <circle cx="85" cy="55" r="8" fill="#0e121d" stroke="#1738ab" strokeWidth="2" />
+              <circle cx="85" cy="55" r="3.5" fill="#1738ab" />
 
-              <circle cx="155" cy="35" r="10" fill="#0e121d" stroke="#00e5c0" strokeWidth="2.5" />
-              <circle cx="155" cy="35" r="4.5" fill="#00e5c0" />
+              <circle cx="155" cy="35" r="10" fill="#0e121d" stroke="#2e6bff" strokeWidth="2.5" />
+              <circle cx="155" cy="35" r="4.5" fill="#2e6bff" />
 
-              <circle cx="225" cy="35" r="11" fill="#00e5c0" stroke="#ffffff" strokeWidth="2" />
+              <circle cx="225" cy="35" r="11" fill="#2e6bff" stroke="#ffffff" strokeWidth="2" />
 
               {/* Code Snippets & AI Model Diagnostics */}
               <g transform="translate(0, 90)" fontFamily="monospace" fontSize="10">
                 <rect x="0" y="0" width="245" height="105" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" />
-                <text x="12" y="24" fill="#00e5c0">&gt; model.pipeline(&quot;ComfyUI&quot;)</text>
+                <text x="12" y="24" fill="#7db4ff">&gt; model.pipeline(&quot;ComfyUI&quot;)</text>
                 <text x="12" y="44" fill="rgba(255,255,255,0.8)">&gt; agent.eval({`{`} latency: &quot;12ms&quot; {`}`})</text>
-                <text x="12" y="64" fill="#e0115f">&gt; generative.synthesize(60fps)</text>
-                <text x="12" y="86" fill="#f2a922">&gt; status: 100% DEPLOYED ONLINE</text>
+                <text x="12" y="64" fill="#2e6bff">&gt; generative.synthesize(60fps)</text>
+                <text x="12" y="86" fill="#7db4ff">&gt; status: 100% DEPLOYED ONLINE</text>
               </g>
             </g>
 
@@ -279,7 +279,7 @@ export const CategoryVectorShowcase: React.FC<CategoryVectorShowcaseProps> = ({
                 height="245"
                 rx="24"
                 fill="#000000"
-                stroke="#00e5c0"
+                stroke="#2e6bff"
                 strokeWidth="3.5"
               />
               {/* Speaker notch */}
@@ -287,10 +287,10 @@ export const CategoryVectorShowcase: React.FC<CategoryVectorShowcaseProps> = ({
               {/* Screen Aura */}
               <rect x="10" y="28" width="120" height="190" rx="14" fill="url(#purrweb-screen-aura)" />
               <text x="25" y="68" fill="#ffffff" fontSize="20" fontWeight="bold">AI DEV</text>
-              <text x="25" y="98" fill="#00e5c0" fontSize="15" fontWeight="bold">NEURAL</text>
+              <text x="25" y="98" fill="#7db4ff" fontSize="15" fontWeight="bold">NEURAL</text>
               <text x="25" y="125" fill="rgba(255,255,255,0.9)" fontSize="10" fontFamily="monospace">COMFYUI • LLM</text>
               <text x="25" y="145" fill="rgba(255,255,255,0.8)" fontSize="10" fontFamily="monospace">NEXT.JS 16</text>
-              <text x="25" y="175" fill="#f2a922" fontSize="9" fontFamily="monospace">60 FPS TICKER</text>
+              <text x="25" y="175" fill="#7db4ff" fontSize="9" fontFamily="monospace">60 FPS TICKER</text>
               {/* Home indicator */}
               <rect x="45" y="228" width="50" height="4" rx="2" fill="#ffffff" />
             </g>
