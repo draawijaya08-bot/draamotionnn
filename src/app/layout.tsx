@@ -54,6 +54,15 @@ export const metadata: Metadata = {
     title: "INDRA WIJAYA — Motion Designer & Art Director",
     description: "Sculpting Kinetic Rhythm, High-Voltage Commercial Motion & AI Creative Pipelines for Bold Brands.",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.png", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   robots: {
     index: true,
     follow: true,
